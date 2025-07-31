@@ -30,6 +30,7 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation project(":global")
 
     compileOnly 'org.projectlombok:lombok'
 
@@ -48,3 +49,6 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+bootJar.enabled = true
+jar.enabled = false
