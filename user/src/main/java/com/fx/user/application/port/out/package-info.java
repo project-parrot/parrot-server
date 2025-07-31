@@ -1,0 +1,1 @@
+package com.fx.user.application.port.out;

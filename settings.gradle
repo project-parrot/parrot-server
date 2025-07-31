@@ -1,0 +1,6 @@
+rootProject.name = 'parrot'
+
+include 'user'
+include 'gateway'
+include 'eureka'
+include 'chat'
