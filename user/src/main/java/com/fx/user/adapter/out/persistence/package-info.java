@@ -1,1 +1,0 @@
-package com.fx.user.adapter.out.persistence;
