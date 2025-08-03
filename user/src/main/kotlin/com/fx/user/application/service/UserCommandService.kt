@@ -31,7 +31,10 @@ class UserCommandService(
 
         // 등록
         val savedUser = userPersistencePort.save(User.createUser(signUpCommand))
-        profilePersistencePort.save(Profile.createProfile(savedUser.id, signUpCommand.nickname))
+        savedUser.id?.let { userId ->
+            profilePersistencePort.save(Profile.createProfile(userId, signUpCommand.nickname))
+        } ?: throw IllegalStateException("User ID must not be null")
+
         return savedUser
     }
 

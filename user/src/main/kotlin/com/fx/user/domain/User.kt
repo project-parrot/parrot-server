@@ -8,8 +8,8 @@ data class User(
     val email: String,
     val password: String,
     val phone: String?,
-    val OAuthProvider: String? = null,
-    val OAuthId: Long? = null,
+    val oAuthProvider: String? = null,
+    val oAuthId: Long? = null,
     val createdAt: LocalDateTime? = null,
     val updatedAt: LocalDateTime? = null
 ) {
