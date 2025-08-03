@@ -7,7 +7,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Type;
 
 @Getter
 @Entity
@@ -33,18 +32,20 @@ public class ProfileEntity  extends BaseEntity {
             .mediaId(profile.getMediaId())
             .nickname(profile.getNickname())
             .statusMessage(profile.getStatusMessage())
-            .isPrivate(profile.getIsPrivate())
+            .isPrivate(profile.isPrivate())
             .build();
     }
 
     public Profile toDomain() {
-        return Profile.builder()
-            .id(this.id)
-            .userId(this.userId)
-            .nickname(this.nickname)
-            .statusMessage(this.statusMessage)
-            .isPrivate(this.isPrivate)
-            .build();
+        return new Profile(
+            this.id,
+            this.userId,
+            this.mediaId,
+            this.nickname,
+            this.statusMessage,
+            this.isPrivate,
+            this.createdAt,
+            this.updatedAt
+        );
     }
-
 }

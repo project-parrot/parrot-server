@@ -33,14 +33,16 @@ public class UserEntity extends BaseEntity{
     }
 
     public User toDomain() {
-        return User.builder()
-            .id(this.id)
-            .email(this.email)
-            .password(this.password)
-            .phone(this.phone)
-            .OAuthProvider(this.OAuthProvider)
-            .OAuthId(this.OAuthId)
-            .build();
+        return new User(
+            this.getId(),
+            this.email,
+            this.password,
+            this.phone,
+            this.OAuthProvider,
+            this.OAuthId,
+            this.createdAt,
+            this.updatedAt
+        );
     }
 
 }
