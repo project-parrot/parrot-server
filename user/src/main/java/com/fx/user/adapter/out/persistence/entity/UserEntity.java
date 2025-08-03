@@ -20,9 +20,9 @@ public class UserEntity extends BaseEntity{
 
     private String phone;
 
-    private String OAuthProvider;
+    private String oAuthProvider;
 
-    private Long OAuthId;
+    private Long oAuthId;
 
     public static UserEntity fromDomain(User user) {
         return UserEntity.builder()
@@ -33,14 +33,16 @@ public class UserEntity extends BaseEntity{
     }
 
     public User toDomain() {
-        return User.builder()
-            .id(this.id)
-            .email(this.email)
-            .password(this.password)
-            .phone(this.phone)
-            .OAuthProvider(this.OAuthProvider)
-            .OAuthId(this.OAuthId)
-            .build();
+        return new User(
+            this.getId(),
+            this.email,
+            this.password,
+            this.phone,
+            this.oAuthProvider,
+            this.oAuthId,
+            this.createdAt,
+            this.updatedAt
+        );
     }
 
 }
