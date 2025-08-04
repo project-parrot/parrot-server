@@ -29,11 +29,16 @@ extra["springCloudVersion"] = "2025.0.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
     implementation(project(":global"))
 
     compileOnly("org.projectlombok:lombok")

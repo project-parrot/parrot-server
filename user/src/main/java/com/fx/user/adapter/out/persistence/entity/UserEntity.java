@@ -1,7 +1,10 @@
 package com.fx.user.adapter.out.persistence.entity;
 
+import com.fx.global.dto.user.UserRole;
 import com.fx.user.domain.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,13 +25,19 @@ public class UserEntity extends BaseEntity{
 
     private String oAuthProvider;
 
-    private Long oAuthId;
+    private String oAuthId;
+
+    private String oAuthProfileImageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public static UserEntity fromDomain(User user) {
         return UserEntity.builder()
             .email(user.getEmail())
             .password(user.getPassword())
             .phone(user.getPhone())
+            .role(user.getRole())
             .build();
     }
 
@@ -40,6 +49,8 @@ public class UserEntity extends BaseEntity{
             this.phone,
             this.oAuthProvider,
             this.oAuthId,
+            this.oAuthProfileImageUrl,
+            this.role,
             this.createdAt,
             this.updatedAt
         );

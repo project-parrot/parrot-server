@@ -19,4 +19,8 @@ class UserPersistenceAdapter(
         return userRepository.existsByEmail(email)
     }
 
+    override fun findByEmail(email: String): User? {
+        return userRepository.findByEmail(email)?.orElse(null)?.toDomain()
+    }
+
 }
