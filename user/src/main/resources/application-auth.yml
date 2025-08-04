@@ -1,0 +1,7 @@
+jwt:
+  secret:
+    key: aaaaaabbbbbbcccccddddddeeeee!!!!
+  access-token:
+    plus-hour: 24 # 1일
+  refresh-token:
+    plus-hour: 168 # 7일

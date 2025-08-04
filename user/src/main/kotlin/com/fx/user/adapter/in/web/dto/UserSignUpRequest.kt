@@ -8,12 +8,12 @@ data class UserSignUpRequest(
     val phone: String,
     val nickname: String
 ) {
-    fun toCommand(signUpRequest: UserSignUpRequest): UserSignUpCommand {
+    fun toCommand(): UserSignUpCommand {
         return UserSignUpCommand(
-            email = signUpRequest.email,
-            password = signUpRequest.password,
-            phone = signUpRequest.phone,
-            nickname = signUpRequest.nickname
+            email = this.email,
+            password = this.password,
+            phone = this.phone,
+            nickname = this.nickname
         )
     }
 }
