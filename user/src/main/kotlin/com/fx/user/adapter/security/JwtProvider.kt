@@ -1,6 +1,7 @@
 package com.fx.user.adapter.security
 
-import com.fx.user.application.out.UserSecurityPort
+import com.fx.global.dto.user.UserRole
+import com.fx.user.application.out.JwtProviderPort
 import com.fx.user.domain.TokenInfo
 import com.fx.user.domain.User
 import io.jsonwebtoken.Claims
@@ -17,7 +18,7 @@ class JwtProvider(
     @Value("\${jwt.secret.key}") private val secretKey: String,
     @Value("\${jwt.access-token.plus-hour}") private val accessTokenPlusHour: Long,
     @Value("\${jwt.refresh-token.plus-hour}") private val refreshTokenPlusHour: Long
-) : UserSecurityPort {
+) : JwtProviderPort {
 
     override fun generateTokens(user: User): TokenInfo {
         val access = createToken(user, accessTokenPlusHour)
@@ -31,26 +32,26 @@ class JwtProvider(
         )
     }
 
-    /**
-     * Access Token 생성
-     */
     fun createAccessToken(user: User): JwtToken {
         return createToken(user, accessTokenPlusHour)
     }
 
-    /**
-     * Refresh Token 생성
-     */
     fun createRefreshToken(user: User): JwtToken {
         return createToken(user, refreshTokenPlusHour)
     }
 
-    fun getUserId(accessToken: String): Long {
+    override fun getUserId(accessToken: String): Long {
         val claims = parseClaims(accessToken)
         return claims["userId"].toString().toLong()
     }
 
-    fun validateToken(token: String): Boolean {
+    override fun getUserRole(accessToken: String): UserRole {
+        val claims = parseClaims(accessToken)
+        val roleString = claims["role"].toString()
+        return UserRole.valueOf(roleString)
+    }
+
+    override fun validateToken(token: String): Boolean {
         try {
             Jwts.parser()
                 .verifyWith(Keys.hmacShaKeyFor(secretKey.toByteArray()))

@@ -5,13 +5,13 @@ import com.fx.user.application.`in`.dto.UserLoginCommand
 import com.fx.user.application.`in`.dto.UserSignUpCommand
 import com.fx.user.application.out.ProfilePersistencePort
 import com.fx.user.application.out.UserPersistencePort
-import com.fx.user.application.out.UserSecurityPort
+import com.fx.user.application.out.JwtProviderPort
+import com.fx.user.application.out.PasswordEncoderPort
 import com.fx.user.domain.Profile
 import com.fx.user.domain.TokenInfo
 import com.fx.user.domain.User
 import com.fx.user.exception.UserException
 import com.fx.user.exception.errorcode.UserErrorCode
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional
 class UserCommandService(
     private val userPersistencePort: UserPersistencePort,
     private val profilePersistencePort: ProfilePersistencePort,
-    private val userSecurityPort: UserSecurityPort,
-    private val passwordEncoder: PasswordEncoder
+    private val jwtProviderPort: JwtProviderPort,
+    private val passwordEncoderPort: PasswordEncoderPort
 ) : UserCommandUseCase {
 
     @Transactional
@@ -36,7 +36,7 @@ class UserCommandService(
         }
 
         // 암호화
-        signUpCommand.password = passwordEncoder.encode(signUpCommand.password)
+        signUpCommand.password = passwordEncoderPort.encode(signUpCommand.password)
 
         // 등록
         val savedUser = userPersistencePort.save(User.createUser(signUpCommand))
@@ -52,12 +52,12 @@ class UserCommandService(
         val user = userPersistencePort.findByEmail(loginCommand.email)
             ?: throw RuntimeException("사용자가 존재하지 않음")
 
-        if (!passwordEncoder.matches(loginCommand.password, user.password)) {
+        if (!passwordEncoderPort.matches(loginCommand.password, user.password)) {
             throw RuntimeException("비밀번호 다름")
         }
 
 
-        return userSecurityPort.generateTokens(user)
+        return jwtProviderPort.generateTokens(user)
     }
 
 }
