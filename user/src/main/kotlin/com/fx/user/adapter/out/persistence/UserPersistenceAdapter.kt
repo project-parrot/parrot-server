@@ -11,16 +11,17 @@ class UserPersistenceAdapter(
     private val userRepository: UserRepository
 ) : UserPersistencePort {
 
-    override fun save(user: User): User {
-        return userRepository.save(UserEntity.fromDomain(user)).toDomain()
-    }
+    override fun save(user: User): User =
+        userRepository.save(UserEntity.fromDomain(user)).toDomain()
 
-    override fun existsByEmail(email: String): Boolean {
-        return userRepository.existsByEmail(email)
-    }
+    override fun existsByEmail(email: String): Boolean =
+        userRepository.existsByEmail(email)
 
-    override fun findByEmail(email: String): User? {
-        return userRepository.findByEmail(email)?.orElse(null)?.toDomain()
-    }
+
+    override fun findByEmail(email: String): User? =
+        userRepository.findByEmail(email)?.orElse(null)?.toDomain()
+
+    override fun findByOauthId(oauthId: String): User? =
+        userRepository.findByOauthId(oauthId).orElse(null)?.toDomain()
 
 }
