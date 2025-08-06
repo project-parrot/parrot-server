@@ -24,6 +24,15 @@ data class Profile(
             )
         }
 
+        @JvmStatic
+        fun createOAuthProfile(userId: Long, nickname: String): Profile {
+            return Profile(
+                userId = userId,
+                nickname = nickname,
+                isPrivate = false
+            )
+        }
+
     }
 
 }

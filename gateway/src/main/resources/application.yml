@@ -34,3 +34,20 @@ spring:
                 - Path=/chat-service/**
               filters:
                 - RewritePath=/chat-service/(?<segment>.*), /$\{segment}
+
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                # allowed-origins 가 '*' 인 경우 false
+                allow-credentials: true
+                allowed-origins:
+                  - http://localhost:3000
+                allowed-methods:
+                  - POST
+                  - GET
+                  - PUT
+                  - PATCH
+                  - DELETE
+                  - OPTIONS
+                allowed-headers:
+                  - '*'

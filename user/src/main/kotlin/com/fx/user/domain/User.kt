@@ -1,17 +1,16 @@
 package com.fx.user.domain
 
 import com.fx.global.dto.user.UserRole
+import com.fx.user.application.`in`.dto.UserOAuthCommand
 import com.fx.user.application.`in`.dto.UserSignUpCommand
 import java.time.LocalDateTime
 
 data class User(
     val id: Long? = null,
     val email: String,
-    val password: String,
-    val phone: String?,
-    val oAuthProvider: String? = null,
-    val oAuthId: String? = null,
-    val oAuthProfileImageUrl: String? = null,
+    val password: String? = null,
+    val phone: String? = null,
+    val oauthId: String? = null,
     val role: UserRole? = null,
     val createdAt: LocalDateTime? = null,
     val updatedAt: LocalDateTime? = null
@@ -29,14 +28,12 @@ data class User(
             )
         }
 
-        fun createOAuthUser(email: String, provider: String, oAuthId: String, profileImageUrl: String?): User {
+        @JvmStatic
+        fun createOAuthUser(oauthCommand: UserOAuthCommand): User {
             return User(
-                email = email,
-                password = "oauth2user",
-                phone = null,
-                oAuthProvider = provider,
-                oAuthId = oAuthId,
-                oAuthProfileImageUrl = profileImageUrl,
+                email = oauthCommand.email,
+                oauthId = oauthCommand.oauthId,
+                phone = oauthCommand.phone,
                 role = UserRole.USER
             )
         }

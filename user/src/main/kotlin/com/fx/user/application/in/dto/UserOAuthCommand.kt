@@ -1,8 +1,8 @@
 package com.fx.user.application.`in`.dto
 
-import java.security.AuthProvider
-
 data class UserOAuthCommand(
-    val oAuthProvider: AuthProvider
-) {
-}
+    val oauthId: String,
+    val email: String,
+    val nickname: String,
+    val phone: String?
+)

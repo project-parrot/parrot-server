@@ -10,4 +10,6 @@ interface UserPersistencePort {
 
     fun findByEmail(email: String): User?
 
+    fun findByOauthId(oauthId: String): User?
+
 }

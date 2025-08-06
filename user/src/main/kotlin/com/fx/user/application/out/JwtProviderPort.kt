@@ -6,7 +6,7 @@ import com.fx.user.domain.User
 
 interface JwtProviderPort {
 
-    fun generateTokens(user: User): TokenInfo
+    fun generateTokens(userId: Long, role: UserRole): TokenInfo
 
     fun validateToken(token: String): Boolean
 

@@ -3,7 +3,6 @@ package com.fx.user.adapter.security
 import com.fx.global.dto.user.UserRole
 import com.fx.user.application.out.JwtProviderPort
 import com.fx.user.domain.TokenInfo
-import com.fx.user.domain.User
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -20,24 +19,14 @@ class JwtProvider(
     @Value("\${jwt.refresh-token.plus-hour}") private val refreshTokenPlusHour: Long
 ) : JwtProviderPort {
 
-    override fun generateTokens(user: User): TokenInfo {
-        val access = createToken(user, accessTokenPlusHour)
-        val refresh = createToken(user, refreshTokenPlusHour)
+    override fun generateTokens(userId: Long, role: UserRole): TokenInfo {
+        val accessToken = createToken(userId, role, accessTokenPlusHour)
+        val refreshToken = createToken(userId, role, refreshTokenPlusHour)
 
         return TokenInfo(
-            accessToken = access.token,
-            accessTokenExpiredAt = access.expiredAt,
-            refreshToken = refresh.token,
-            refreshTokenExpiredAt = refresh.expiredAt
+            accessToken = accessToken,
+            refreshToken = refreshToken,
         )
-    }
-
-    fun createAccessToken(user: User): JwtToken {
-        return createToken(user, accessTokenPlusHour)
-    }
-
-    fun createRefreshToken(user: User): JwtToken {
-        return createToken(user, refreshTokenPlusHour)
     }
 
     override fun getUserId(accessToken: String): Long {
@@ -78,26 +67,19 @@ class JwtProvider(
     /**
      * JWT 생성
      */
-    private fun createToken(user: User, expireHour: Long): JwtToken {
+    private fun createToken(userId: Long, role: UserRole, expireHour: Long): String {
         val claims = mutableMapOf<String, Any>()
-        claims["userId"] = user.id!!
-        claims["role"] = user.role.toString()
+        claims["userId"] = userId
+        claims["role"] = role.toString()
 
         val expiredLocalDateTime = LocalDateTime.now().plusHours(expireHour)
         val expiredAt = Date.from(expiredLocalDateTime.atZone(ZoneId.systemDefault()).toInstant())
 
-        val token = Jwts.builder()
+        return Jwts.builder()
             .signWith(Keys.hmacShaKeyFor(secretKey.toByteArray()))
             .claims(claims)
             .expiration(expiredAt)
             .compact()
-
-        return JwtToken(token, expiredLocalDateTime)
     }
-
-    data class JwtToken(
-        val token: String,
-        val expiredAt: LocalDateTime
-    )
 
 }

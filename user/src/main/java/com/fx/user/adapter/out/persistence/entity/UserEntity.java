@@ -23,11 +23,7 @@ public class UserEntity extends BaseEntity{
 
     private String phone;
 
-    private String oAuthProvider;
-
-    private String oAuthId;
-
-    private String oAuthProfileImageUrl;
+    private String oauthId;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -37,6 +33,7 @@ public class UserEntity extends BaseEntity{
             .email(user.getEmail())
             .password(user.getPassword())
             .phone(user.getPhone())
+            .oauthId(user.getOauthId())
             .role(user.getRole())
             .build();
     }
@@ -47,9 +44,7 @@ public class UserEntity extends BaseEntity{
             this.email,
             this.password,
             this.phone,
-            this.oAuthProvider,
-            this.oAuthId,
-            this.oAuthProfileImageUrl,
+            this.oauthId,
             this.role,
             this.createdAt,
             this.updatedAt
