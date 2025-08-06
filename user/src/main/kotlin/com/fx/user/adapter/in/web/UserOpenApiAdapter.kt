@@ -7,6 +7,7 @@ import com.fx.user.adapter.`in`.web.dto.UserIdResponse
 import com.fx.user.adapter.`in`.web.dto.UserLoginRequest
 import com.fx.user.adapter.`in`.web.dto.UserSignUpRequest
 import com.fx.user.application.`in`.UserCommandUseCase
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -19,7 +20,7 @@ class UserOpenApiAdapter(
 ) {
 
     @PostMapping("/signup")
-    fun signUp(@RequestBody signUpRequest: UserSignUpRequest): ResponseEntity<Api<UserIdResponse>> {
+    fun signUp(@RequestBody @Valid signUpRequest: UserSignUpRequest): ResponseEntity<Api<UserIdResponse>> {
         val user = userCommandUseCase.signUp(signUpRequest.toCommand())
         return Api.OK(UserIdResponse(user.id))
     }

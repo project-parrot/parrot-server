@@ -75,5 +75,18 @@ class Api<T>(
                         data = null
                     )
                 )
+
+        @JvmStatic
+        fun ERROR(message: String, httpStatus: HttpStatus): ResponseEntity<Api<String>> =
+            ResponseEntity
+                .status(httpStatus)
+                .body(
+                    Api(
+                        success = false,
+                        code = httpStatus.value(),
+                        message = message,
+                        data = null
+                    )
+                )
     }
 }
