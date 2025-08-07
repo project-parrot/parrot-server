@@ -1,13 +1,17 @@
 package com.fx.post.application.service
 
 import com.fx.post.application.`in`.PostCommandUseCase
+import com.fx.post.application.`in`.dto.CommentCreateCommand
 import com.fx.post.application.`in`.dto.PostCreateCommand
 import com.fx.post.application.out.CommentPersistencePort
 import com.fx.post.application.out.LikePersistencePort
 import com.fx.post.application.out.PostMediaPersistencePort
 import com.fx.post.application.out.PostPersistencePort
+import com.fx.post.domain.Comment
 import com.fx.post.domain.Post
+import com.fx.post.exception.CommentException
 import com.fx.post.exception.PostException
+import com.fx.post.exception.errorcode.CommentErrorCode
 import com.fx.post.exception.errorcode.PostErrorCode
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -30,11 +34,27 @@ class PostCommandService(
         val end = today.atTime(LocalTime.MAX)
 
         if (postPersistencePort.existsByUserIdAndCreatedAtBetween(userId, start, end)) {
-            throw PostException(PostErrorCode.DuplicateDailyPost)
+            throw PostException(PostErrorCode.DUPLICATE_DAILY_POST)
         }
 
         val savedPost = postPersistencePort.save(Post.createPost(postCreateCommand))
         return savedPost
+    }
+
+    @Transactional
+    override fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment {
+        if (!postPersistencePort.existsById(postId))
+            throw PostException(PostErrorCode.POST_NOT_EXIST)
+        val parentId = commentCreateCommand.parentId
+        return if (parentId != null) {
+            if (!commentPersistencePort.existsById(parentId)) {
+                throw CommentException(CommentErrorCode.PARENT_NOT_EXIST)
+            }
+            commentPersistencePort.save(Comment.createComment(postId, commentCreateCommand))
+        } else {
+            commentPersistencePort.save(Comment.createComment(postId, commentCreateCommand))
+        }
+
     }
 
 }
