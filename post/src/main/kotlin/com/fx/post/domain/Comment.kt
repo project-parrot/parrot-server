@@ -1,9 +1,11 @@
 package com.fx.post.domain
 
+import com.fx.post.adapter.`in`.web.dto.CommentCreateRequest
+import com.fx.post.application.`in`.dto.CommentCreateCommand
 import java.time.LocalDateTime
 
 data class Comment(
-    val id: Long,
+    val id: Long? = null,
     val userId: Long,
     val postId: Long,
     val parentId: Long? = null,
@@ -14,6 +16,14 @@ data class Comment(
 ) {
 
     companion object {
-
+        @JvmStatic
+        fun createComment(postId: Long, commentCreateCommand: CommentCreateCommand): Comment {
+            return Comment(
+                userId = commentCreateCommand.userId,
+                postId = postId,
+                parentId = commentCreateCommand.parentId,
+                content = commentCreateCommand.content
+            )
+        }
     }
 }

@@ -18,4 +18,6 @@ class PostPersistenceAdapter(
     override fun existsByUserIdAndCreatedAtBetween(userId:Long, start: LocalDateTime, end: LocalDateTime): Boolean =
         postRepository.existsByUserIdAndCreatedAtBetween(userId, start, end)
 
+    override fun existsById(postId: Long): Boolean =
+        postRepository.existsById(postId)
 }

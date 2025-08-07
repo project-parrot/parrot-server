@@ -6,5 +6,8 @@ import java.time.LocalDateTime
 interface PostPersistencePort {
 
     fun save(post: Post): Post
-    fun existsByUserIdAndCreatedAtBetween(userId:Long, start: LocalDateTime, end: LocalDateTime): Boolean
+
+    fun existsByUserIdAndCreatedAtBetween(userId: Long, start: LocalDateTime, end: LocalDateTime): Boolean
+
+    fun existsById(postId: Long): Boolean
 }
