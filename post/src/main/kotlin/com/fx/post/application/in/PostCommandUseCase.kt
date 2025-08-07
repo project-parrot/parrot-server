@@ -1,5 +1,6 @@
 package com.fx.post.application.`in`
 
+import com.fx.post.adapter.`in`.web.dto.LikeDto
 import com.fx.post.application.`in`.dto.CommentCreateCommand
 import com.fx.post.application.`in`.dto.PostCreateCommand
 import com.fx.post.domain.Comment
@@ -11,4 +12,5 @@ interface PostCommandUseCase {
 
     fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment
 
+    fun addLike(postId:Long, likeDto: LikeDto)
 }
