@@ -34,7 +34,7 @@ class PostCommandService(
         val end = today.atTime(LocalTime.MAX)
 
         if (postPersistencePort.existsByUserIdAndCreatedAtBetween(userId, start, end)) {
-            throw PostException(PostErrorCode.DuplicateDailyPost)
+            throw PostException(PostErrorCode.DUPLICATE_DAILY_POST)
         }
 
         val savedPost = postPersistencePort.save(Post.createPost(postCreateCommand))
