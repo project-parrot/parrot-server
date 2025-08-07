@@ -1,5 +1,6 @@
 package com.fx.post.application.service
 
+import com.fx.post.adapter.`in`.web.dto.LikeDto
 import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.dto.CommentCreateCommand
 import com.fx.post.application.`in`.dto.PostCreateCommand
@@ -8,10 +9,13 @@ import com.fx.post.application.out.LikePersistencePort
 import com.fx.post.application.out.PostMediaPersistencePort
 import com.fx.post.application.out.PostPersistencePort
 import com.fx.post.domain.Comment
+import com.fx.post.domain.Like
 import com.fx.post.domain.Post
 import com.fx.post.exception.CommentException
+import com.fx.post.exception.LikeException
 import com.fx.post.exception.PostException
 import com.fx.post.exception.errorcode.CommentErrorCode
+import com.fx.post.exception.errorcode.LikeErrorCode
 import com.fx.post.exception.errorcode.PostErrorCode
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -45,7 +49,9 @@ class PostCommandService(
     override fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment {
         if (!postPersistencePort.existsById(postId))
             throw PostException(PostErrorCode.POST_NOT_EXIST)
+
         val parentId = commentCreateCommand.parentId
+
         return if (parentId != null) {
             if (!commentPersistencePort.existsById(parentId)) {
                 throw CommentException(CommentErrorCode.PARENT_NOT_EXIST)
@@ -57,4 +63,17 @@ class PostCommandService(
 
     }
 
+    @Transactional
+    override fun addLike(postId: Long, likeDto: LikeDto) {
+        if (!postPersistencePort.existsById(postId))
+            throw PostException(PostErrorCode.POST_NOT_EXIST)
+
+        val userId = likeDto.userId
+
+        if (likePersistencePort.existsByPostIdAndUserId(postId, userId)) {
+            throw LikeException(LikeErrorCode.LIKE_EXIST)
+        }
+
+        likePersistencePort.save(Like.createLike(postId, userId))
+    }
 }

@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@Table(name = "like")
+@Table(name = "likes")
 @SuperBuilder
 @NoArgsConstructor
 public class LikeEntity extends BaseEntity {
