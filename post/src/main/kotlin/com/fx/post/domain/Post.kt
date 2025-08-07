@@ -1,5 +1,6 @@
 package com.fx.post.domain
 
+import com.fx.post.application.`in`.dto.PostCreateCommand
 import java.time.LocalDateTime
 
 data class Post(
@@ -12,6 +13,13 @@ data class Post(
 
 ) {
     companion object {
+        @JvmStatic
+        fun createPost(postCreateCommand: PostCreateCommand): Post {
+            return Post(
+                userId = postCreateCommand.userId,
+                content = postCreateCommand.content
+            )
+        }
 
     }
 }
