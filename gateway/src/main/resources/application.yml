@@ -35,6 +35,13 @@ spring:
               filters:
                 - RewritePath=/chat-service/(?<segment>.*), /$\{segment}
 
+            - id: post-service
+              uri: lb://post-service
+              predicates:
+                - Path=/post-service/**
+              filters:
+                - RewritePath=/post-service/(?<segment>.*), /$\{segment}
+
           globalcors:
             cors-configurations:
               '[/**]':
