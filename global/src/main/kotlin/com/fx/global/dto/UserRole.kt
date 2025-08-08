@@ -1,4 +1,4 @@
-package com.fx.global.dto.user
+package com.fx.global.dto
 
 enum class UserRole(
     private val key: String,

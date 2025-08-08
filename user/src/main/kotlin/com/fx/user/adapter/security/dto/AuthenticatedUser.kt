@@ -1,6 +1,6 @@
 package com.fx.user.adapter.security.dto
 
-import com.fx.global.dto.user.UserRole
+import com.fx.global.dto.UserRole
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.oauth2.core.user.OAuth2User

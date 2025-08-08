@@ -1,6 +1,6 @@
 package com.fx.user.adapter.out.persistence.entity;
 
-import com.fx.global.dto.user.UserRole;
+import com.fx.global.dto.UserRole;
 import com.fx.user.domain.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -26,12 +26,11 @@ class JwtAuthenticationFilter(
             val token = header.removePrefix("Bearer ").trim()
 
             if (securityPort.validateToken(token)) {
-                val userId = securityPort.getUserId(token)
-                val userRole = securityPort.getUserRole(token)
+                val authenticatedUserInfo = securityPort.getAuthenticatedUserInfo(token)
 
                 val userDetails = AuthenticatedUser(
-                    userId = userId,
-                    role = userRole
+                    userId = authenticatedUserInfo.userId,
+                    role = authenticatedUserInfo.role
                 )
 
                 val authentication =

@@ -38,7 +38,8 @@ class SecurityConfig(
             .authorizeHttpRequests { auth ->
                 auth
                     .requestMatchers(
-                        "/open-api/**"
+                        "/open-api/**",
+                        "/internal/**"
                     )
                     .permitAll()
                     .anyRequest().authenticated()
