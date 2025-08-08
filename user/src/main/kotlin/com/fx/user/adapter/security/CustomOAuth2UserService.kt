@@ -6,6 +6,8 @@ import com.fx.user.adapter.security.dto.NaverOAuthDto
 import com.fx.user.adapter.security.dto.OAuth2Dto
 import com.fx.user.application.`in`.UserCommandUseCase
 import com.fx.user.application.`in`.dto.UserOAuthCommand
+import com.fx.user.exception.UserException
+import com.fx.user.exception.errorcode.UserErrorCode
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -24,7 +26,7 @@ class CustomOAuth2UserService(
         val oauth2Dto: OAuth2Dto = when (registrationId) {
             "naver" -> NaverOAuthDto(loadUser.attributes)
             "google" -> GoogleOAuthDto(loadUser.attributes)
-            else -> throw RuntimeException("OAuth2 Provider 를 특정할 수 없습니다.")
+            else -> throw UserException(UserErrorCode.UNSUPPORTED_OAUTH_PROVIDER)
         }
 
         val oauthId = oauth2Dto.getProvider() + ":" + oauth2Dto.getProviderId()
