@@ -1,7 +1,8 @@
 package com.fx.user.adapter.security
 
-import com.fx.global.dto.user.UserRole
+import com.fx.global.dto.UserRole
 import com.fx.user.application.out.JwtProviderPort
+import com.fx.user.domain.AuthenticatedUserInfo
 import com.fx.user.domain.TokenInfo
 import com.fx.user.exception.JwtException
 import com.fx.user.exception.errorcode.JwtErrorCode
@@ -35,13 +36,16 @@ class JwtProvider(
         )
     }
 
-    override fun getUserId(accessToken: String): Long {
-        return parseTokenSafely(accessToken)["userId"].toString().toLong()
-    }
+    override fun getAuthenticatedUserInfo(accessToken: String): AuthenticatedUserInfo {
+        val claims = parseTokenSafely(accessToken)
 
-    override fun getUserRole(accessToken: String): UserRole {
-        val role = parseTokenSafely(accessToken)["role"].toString()
-        return UserRole.valueOf(role)
+        val userId = claims["userId"].toString().toLong()
+        val role = UserRole.valueOf(claims["role"].toString())
+
+        return AuthenticatedUserInfo(
+            userId = userId,
+            role = role
+        )
     }
 
     override fun validateToken(token: String): Boolean {
