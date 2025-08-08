@@ -3,9 +3,13 @@ package com.fx.user.adapter.security
 import com.fx.global.dto.user.UserRole
 import com.fx.user.application.out.JwtProviderPort
 import com.fx.user.domain.TokenInfo
+import com.fx.user.exception.JwtException
+import com.fx.user.exception.errorcode.JwtErrorCode
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.SignatureException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -19,6 +23,8 @@ class JwtProvider(
     @Value("\${jwt.refresh-token.plus-hour}") private val refreshTokenPlusHour: Long
 ) : JwtProviderPort {
 
+    private val key = Keys.hmacShaKeyFor(secretKey.toByteArray())
+
     override fun generateTokens(userId: Long, role: UserRole): TokenInfo {
         val accessToken = createToken(userId, role, accessTokenPlusHour)
         val refreshToken = createToken(userId, role, refreshTokenPlusHour)
@@ -30,37 +36,32 @@ class JwtProvider(
     }
 
     override fun getUserId(accessToken: String): Long {
-        val claims = parseClaims(accessToken)
-        return claims["userId"].toString().toLong()
+        return parseTokenSafely(accessToken)["userId"].toString().toLong()
     }
 
     override fun getUserRole(accessToken: String): UserRole {
-        val claims = parseClaims(accessToken)
-        val roleString = claims["role"].toString()
-        return UserRole.valueOf(roleString)
+        val role = parseTokenSafely(accessToken)["role"].toString()
+        return UserRole.valueOf(role)
     }
 
     override fun validateToken(token: String): Boolean {
-        try {
-            Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(secretKey.toByteArray()))
-                .build()
-                .parseSignedClaims(token)
-            return true
-        } catch (exception: Exception) {
-            throw RuntimeException("예외처리")
-        }
+        parseTokenSafely(token) // 예외 없으면 유효한 토큰
+        return true
     }
 
-    private fun parseClaims(accessToken: String): Claims {
-        try {
-            return Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(secretKey.toByteArray()))
+    private fun parseTokenSafely(token: String): Claims {
+        return try {
+            Jwts.parser()
+                .verifyWith(key)
                 .build()
-                .parseSignedClaims(accessToken)
+                .parseSignedClaims(token)
                 .payload
-        } catch (exception: Exception) {
-            throw RuntimeException("예외처리")
+        } catch (e: Exception) {
+            throw when (e) {
+                is SignatureException -> JwtException(JwtErrorCode.INVALID_TOKEN)
+                is ExpiredJwtException -> JwtException(JwtErrorCode.EXPIRED_TOKEN)
+                else -> JwtException(JwtErrorCode.TOKEN_EXCEPTION)
+            }
         }
     }
 
@@ -76,7 +77,7 @@ class JwtProvider(
         val expiredAt = Date.from(expiredLocalDateTime.atZone(ZoneId.systemDefault()).toInstant())
 
         return Jwts.builder()
-            .signWith(Keys.hmacShaKeyFor(secretKey.toByteArray()))
+            .signWith(key)
             .claims(claims)
             .expiration(expiredAt)
             .compact()

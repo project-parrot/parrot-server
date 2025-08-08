@@ -3,6 +3,8 @@ package com.fx.user.adapter.security
 import com.fx.global.dto.user.UserRole
 import com.fx.user.adapter.security.dto.AuthenticatedUser
 import com.fx.user.application.out.JwtProviderPort
+import com.fx.user.exception.UserException
+import com.fx.user.exception.errorcode.UserErrorCode
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -27,7 +29,7 @@ class CustomSuccessHandler(
 
         val role = authentication.authorities
             .firstOrNull()
-            ?.authority ?: throw RuntimeException("권한이 존재하지 않습니다")
+            ?.authority ?: throw UserException(UserErrorCode.ROLE_NOT_FOUND)
 
         val tokenInfo =
             jwtProviderPort.generateTokens(authenticatedUser.userId, UserRole.valueOf(role))

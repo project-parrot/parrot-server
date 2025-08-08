@@ -43,7 +43,7 @@ class UserCommandService(
         val savedUser = userPersistencePort.save(User.createUser(signUpCommand))
         savedUser.id?.let { userId ->
             profilePersistencePort.save(Profile.createProfile(userId, signUpCommand.nickname))
-        } ?: throw IllegalStateException("User ID must not be null")
+        } ?: throw UserException(UserErrorCode.USER_ID_NULL)
 
         return savedUser
     }
@@ -52,10 +52,10 @@ class UserCommandService(
     override fun login(loginCommand: UserLoginCommand): TokenInfo {
 
         val user = userPersistencePort.findByEmail(loginCommand.email)
-            ?: throw RuntimeException("사용자가 존재하지 않음")
+            ?: throw UserException(UserErrorCode.USER_NOT_FOUND)
 
         if (!passwordEncoderPort.matches(loginCommand.password, user.password!!)) {
-            throw RuntimeException("비밀번호 다름")
+            throw UserException(UserErrorCode.INVALID_PASSWORD)
         }
 
 
