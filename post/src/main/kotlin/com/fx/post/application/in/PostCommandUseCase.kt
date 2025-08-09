@@ -15,4 +15,6 @@ interface PostCommandUseCase {
     fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment
 
     fun addLike(postId:Long, userId: Long)
+
+    fun cancelLike(postId:Long, userId:Long)
 }
