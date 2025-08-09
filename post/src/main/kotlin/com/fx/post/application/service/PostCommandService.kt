@@ -1,8 +1,10 @@
 package com.fx.post.application.service
 
+import com.fx.global.dto.UserRole
 import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.dto.CommentCreateCommand
 import com.fx.post.application.`in`.dto.PostCreateCommand
+import com.fx.post.application.`in`.dto.PostUpdateCommand
 import com.fx.post.application.out.CommentPersistencePort
 import com.fx.post.application.out.LikePersistencePort
 import com.fx.post.application.out.PostMediaPersistencePort
@@ -18,6 +20,7 @@ import com.fx.post.exception.errorcode.LikeErrorCode
 import com.fx.post.exception.errorcode.PostErrorCode
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -41,6 +44,23 @@ class PostCommandService(
         }
 
         val savedPost = postPersistencePort.save(Post.createPost(postCreateCommand))
+        return savedPost
+    }
+
+    @Transactional
+    override fun updatePost(postId:Long, postUpdateCommand: PostUpdateCommand): Post {
+        val post = postPersistencePort.findByIdAndIsDeletedNot(postId)?: throw PostException(PostErrorCode.POST_NOT_EXIST)
+
+        if (postUpdateCommand.userId != post.userId && postUpdateCommand.role != UserRole.ADMIN) {
+            throw PostException(PostErrorCode.POST_FORBIDDEN)
+        }
+
+        val today: LocalDateTime = LocalDateTime.now()
+        val createdAt: LocalDateTime? = post.createdAt
+
+        if (today.toLocalDate() != createdAt?.toLocalDate()) throw PostException(PostErrorCode.POST_EDIT_DATE_MISMATCH)
+
+        val savedPost = postPersistencePort.save(Post.updatePost(postId, post.userId, today, postUpdateCommand))
         return savedPost
     }
 

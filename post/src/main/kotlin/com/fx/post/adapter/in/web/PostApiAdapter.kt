@@ -10,6 +10,7 @@ import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import java.util.Objects
@@ -29,6 +30,17 @@ class PostApiAdapter(
         return Api.OK(PostCreateResponse(post.id))
     }
 
+    @PutMapping("/posts/{postId}")
+    fun updatePost(
+        @PathVariable postId: Long,
+        @RequestBody @Valid postUpdateRequest: PostUpdateRequest,
+        @AuthenticatedUser authUser: AuthUser
+    ): ResponseEntity<Api<PostUpdateResponse>> {
+        val post = postCommandUseCase.updatePost(postId, postUpdateRequest.toCommand(authUser))
+        return Api.OK(PostUpdateResponse(post.id))
+    }
+
+
     @PostMapping("/posts/{postId}/comments")
     fun createComment(
         @PathVariable postId: Long,
@@ -43,7 +55,6 @@ class PostApiAdapter(
         @PathVariable postId: Long,
         @AuthenticatedUser authUser: AuthUser
         ): ResponseEntity<Api<Unit?>> {
-        // 인가 처리 완료 시 likeDto 대신 인가 객체로 변경 예정
         postCommandUseCase.addLike(postId, authUser.userId)
         return Api.OK(null)
     }

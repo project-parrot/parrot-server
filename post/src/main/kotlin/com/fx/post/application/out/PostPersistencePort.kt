@@ -10,4 +10,6 @@ interface PostPersistencePort {
     fun existsByUserIdAndCreatedAtBetween(userId: Long, start: LocalDateTime, end: LocalDateTime): Boolean
 
     fun existsById(postId: Long): Boolean
+
+    fun findByIdAndIsDeletedNot(postId: Long): Post?
 }
