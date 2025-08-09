@@ -24,6 +24,7 @@ public class PostEntity extends BaseEntity {
 
     public static PostEntity from(Post post) {
         return PostEntity.builder()
+                .id(post.getId())
                 .userId(post.getUserId())
                 .content(post.getContent())
                 .isDeleted(post.isDeleted())

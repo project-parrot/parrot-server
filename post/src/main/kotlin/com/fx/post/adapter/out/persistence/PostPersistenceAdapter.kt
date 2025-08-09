@@ -20,4 +20,7 @@ class PostPersistenceAdapter(
 
     override fun existsById(postId: Long): Boolean =
         postRepository.existsById(postId)
+
+    override fun findByIdAndIsDeletedNot(postId: Long): Post? =
+        postRepository.findByIdAndIsDeletedNot(postId, true).orElse(null)?.toDomain()
 }

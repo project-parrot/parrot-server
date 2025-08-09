@@ -1,6 +1,7 @@
 package com.fx.post.domain
 
 import com.fx.post.application.`in`.dto.PostCreateCommand
+import com.fx.post.application.`in`.dto.PostUpdateCommand
 import java.time.LocalDateTime
 
 data class Post(
@@ -18,6 +19,16 @@ data class Post(
             return Post(
                 userId = postCreateCommand.userId,
                 content = postCreateCommand.content
+            )
+        }
+
+        @JvmStatic
+        fun updatePost(postId:Long, userId: Long, today: LocalDateTime, postUpdateCommand: PostUpdateCommand): Post {
+            return Post(
+                id = postId,
+                userId = userId,
+                content = postUpdateCommand.content,
+                updatedAt = today
             )
         }
 
