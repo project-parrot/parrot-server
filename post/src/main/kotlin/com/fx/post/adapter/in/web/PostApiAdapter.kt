@@ -30,8 +30,11 @@ class PostApiAdapter(
     }
 
     @PostMapping("/posts/{postId}/comments")
-    fun createComment(@PathVariable postId: Long, @RequestBody @Valid commentCreateRequest: CommentCreateRequest): ResponseEntity<Api<CommentCreateResponse>> {
-        val comment = postCommandUseCase.createComment(postId,commentCreateRequest.toCommand())
+    fun createComment(
+        @PathVariable postId: Long,
+        @RequestBody @Valid commentCreateRequest: CommentCreateRequest,
+        @AuthenticatedUser authUser: AuthUser): ResponseEntity<Api<CommentCreateResponse>> {
+        val comment = postCommandUseCase.createComment(postId,commentCreateRequest.toCommand(authUser))
         return Api.OK(CommentCreateResponse(comment.id))
     }
 
