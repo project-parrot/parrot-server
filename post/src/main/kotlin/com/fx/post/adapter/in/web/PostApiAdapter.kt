@@ -1,7 +1,9 @@
 package com.fx.post.adapter.`in`.web
 
+import com.fx.global.annotation.AuthenticatedUser
 import com.fx.global.annotation.hexagonal.WebAdapter
 import com.fx.global.api.Api
+import com.fx.global.resolver.AuthUser
 import com.fx.post.adapter.`in`.web.dto.*
 import com.fx.post.application.`in`.PostCommandUseCase
 import jakarta.validation.Valid
@@ -19,8 +21,11 @@ class PostApiAdapter(
     private val postCommandUseCase: PostCommandUseCase
 ) {
     @PostMapping("/posts")
-    fun createPost(@RequestBody @Valid postCreateRequest: PostCreateRequest): ResponseEntity<Api<PostCreateResponse>> {
-        val post = postCommandUseCase.createPost(postCreateRequest.toCommand())
+    fun createPost(
+        @RequestBody @Valid postCreateRequest: PostCreateRequest,
+        @AuthenticatedUser authUser: AuthUser
+    ): ResponseEntity<Api<PostCreateResponse>> {
+        val post = postCommandUseCase.createPost(postCreateRequest.toCommand(authUser))
         return Api.OK(PostCreateResponse(post.id))
     }
 
