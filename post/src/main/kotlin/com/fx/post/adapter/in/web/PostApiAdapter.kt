@@ -8,11 +8,7 @@ import com.fx.post.adapter.`in`.web.dto.*
 import com.fx.post.application.`in`.PostCommandUseCase
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 import java.util.Objects
 import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
@@ -56,6 +52,15 @@ class PostApiAdapter(
         @AuthenticatedUser authUser: AuthUser
         ): ResponseEntity<Api<Unit?>> {
         postCommandUseCase.addLike(postId, authUser.userId)
+        return Api.OK(null)
+    }
+
+    @DeleteMapping("/posts/{postId}/likes")
+    fun cancelLike(
+        @PathVariable postId: Long,
+        @AuthenticatedUser authUser: AuthUser
+    ): ResponseEntity<Api<Unit?>> {
+        postCommandUseCase.cancelLike(postId, authUser.userId)
         return Api.OK(null)
     }
 }

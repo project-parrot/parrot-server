@@ -20,7 +20,6 @@ import com.fx.post.exception.errorcode.LikeErrorCode
 import com.fx.post.exception.errorcode.PostErrorCode
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -92,5 +91,17 @@ class PostCommandService(
         }
 
         likePersistencePort.save(Like.createLike(postId, userId))
+    }
+
+    @Transactional
+    override fun cancelLike(postId: Long, userId: Long) {
+        if (!postPersistencePort.existsById(postId))
+            throw PostException(PostErrorCode.POST_NOT_EXIST)
+
+        if (!likePersistencePort.existsByPostIdAndUserId(postId, userId)) {
+            throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
+        }
+
+        likePersistencePort.deleteByPostIdAndUserId(postId, userId)
     }
 }

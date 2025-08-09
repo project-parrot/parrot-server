@@ -17,4 +17,8 @@ class LikePersistenceAdapter(
 
     override fun existsByPostIdAndUserId(postId: Long, userId: Long): Boolean =
         likeRepository.existsByPostIdAndUserId(postId, userId)
+
+    override fun deleteByPostIdAndUserId(postId: Long, userId: Long) {
+        likeRepository.deleteByPostIdAndUserId(postId, userId)
+    }
 }
