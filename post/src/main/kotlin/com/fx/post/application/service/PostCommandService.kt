@@ -90,7 +90,7 @@ class PostCommandService(
             throw LikeException(LikeErrorCode.LIKE_EXIST)
         }
 
-        likePersistencePort.save(Like.createLike(postId, userId))
+        likePersistencePort.save(Like.addLike(postId, userId))
     }
 
     @Transactional
