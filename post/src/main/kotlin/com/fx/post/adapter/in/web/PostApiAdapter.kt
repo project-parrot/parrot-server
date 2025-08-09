@@ -39,9 +39,12 @@ class PostApiAdapter(
     }
 
     @PostMapping("/posts/{postId}/likes")
-    fun addLike(@PathVariable postId: Long, @RequestBody likeDto: LikeDto): ResponseEntity<Api<Unit?>> {
+    fun addLike(
+        @PathVariable postId: Long,
+        @AuthenticatedUser authUser: AuthUser
+        ): ResponseEntity<Api<Unit?>> {
         // 인가 처리 완료 시 likeDto 대신 인가 객체로 변경 예정
-        postCommandUseCase.addLike(postId, likeDto)
+        postCommandUseCase.addLike(postId, authUser.userId)
         return Api.OK(null)
     }
 }

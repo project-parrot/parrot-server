@@ -1,6 +1,5 @@
 package com.fx.post.application.service
 
-import com.fx.post.adapter.`in`.web.dto.LikeDto
 import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.dto.CommentCreateCommand
 import com.fx.post.application.`in`.dto.PostCreateCommand
@@ -64,11 +63,9 @@ class PostCommandService(
     }
 
     @Transactional
-    override fun addLike(postId: Long, likeDto: LikeDto) {
+    override fun addLike(postId: Long, userId: Long) {
         if (!postPersistencePort.existsById(postId))
             throw PostException(PostErrorCode.POST_NOT_EXIST)
-
-        val userId = likeDto.userId
 
         if (likePersistencePort.existsByPostIdAndUserId(postId, userId)) {
             throw LikeException(LikeErrorCode.LIKE_EXIST)
