@@ -98,8 +98,7 @@ class PostCommandService(
         if (!postPersistencePort.existsById(postId))
             throw PostException(PostErrorCode.POST_NOT_EXIST)
 
-        val like = likePersistencePort.findByPostIdAndUserId(postId, userId) ?: throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
-
-        like.id?.let { likePersistencePort.deleteById(it) }
+        val likeCount = likePersistencePort.deleteByPostIdAndUserId(postId, userId)
+        if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
     }
 }
