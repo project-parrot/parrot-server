@@ -90,7 +90,7 @@ class PostCommandService(
             throw LikeException(LikeErrorCode.LIKE_EXIST)
         }
 
-        likePersistencePort.save(Like.createLike(postId, userId))
+        likePersistencePort.save(Like.addLike(postId, userId))
     }
 
     @Transactional
@@ -98,10 +98,7 @@ class PostCommandService(
         if (!postPersistencePort.existsById(postId))
             throw PostException(PostErrorCode.POST_NOT_EXIST)
 
-        if (!likePersistencePort.existsByPostIdAndUserId(postId, userId)) {
-            throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
-        }
-
-        likePersistencePort.deleteByPostIdAndUserId(postId, userId)
+        val likeCount = likePersistencePort.deleteByPostIdAndUserId(postId, userId)
+        if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
     }
 }

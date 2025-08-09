@@ -6,7 +6,7 @@ interface LikePersistencePort {
 
     fun save(like: Like): Like
 
-    fun existsByPostIdAndUserId(postId:Long, userId:Long): Boolean
+    fun existsByPostIdAndUserId(postId: Long, userId: Long): Boolean
 
-    fun deleteByPostIdAndUserId(postId: Long, userId: Long)
+    fun deleteByPostIdAndUserId(postId: Long, userId: Long): Int
 }

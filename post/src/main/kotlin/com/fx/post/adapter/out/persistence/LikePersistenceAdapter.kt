@@ -14,11 +14,9 @@ class LikePersistenceAdapter(
     override fun save(like: Like): Like =
         likeRepository.save(LikeEntity.from(like)).toDomain()
 
-
     override fun existsByPostIdAndUserId(postId: Long, userId: Long): Boolean =
         likeRepository.existsByPostIdAndUserId(postId, userId)
 
-    override fun deleteByPostIdAndUserId(postId: Long, userId: Long) {
+    override fun deleteByPostIdAndUserId(postId: Long, userId: Long): Int =
         likeRepository.deleteByPostIdAndUserId(postId, userId)
-    }
 }

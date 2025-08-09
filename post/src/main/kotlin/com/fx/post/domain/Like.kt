@@ -12,7 +12,7 @@ data class Like(
 
     companion object {
         @JvmStatic
-        fun createLike(postId: Long, userId: Long): Like {
+        fun addLike(postId: Long, userId: Long): Like {
             return Like(
                 postId = postId,
                 userId = userId
