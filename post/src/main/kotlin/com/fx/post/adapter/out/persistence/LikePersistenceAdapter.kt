@@ -19,4 +19,7 @@ class LikePersistenceAdapter(
 
     override fun deleteByPostIdAndUserId(postId: Long, userId: Long): Int =
         likeRepository.deleteByPostIdAndUserId(postId, userId)
+
+    override fun findByPostId(postId: Long): List<Long> =
+        likeRepository.findByPostId(postId).map{ it.toDomain().userId }
 }

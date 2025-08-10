@@ -88,6 +88,14 @@ class PostApiAdapter(
         return Api.OK(null)
     }
 
+    @GetMapping("/posts/{postId}/likes")
+    fun getLikeUsers(
+        @PathVariable postId: Long
+    ): ResponseEntity<Api<List<LikeUsersResponse>>> {
+        val likeUsers = postCommandUseCase.getLikeUsers(postId)
+        return Api.OK(likeUsers.map { LikeUsersResponse(userId = it) })
+    }
+
     @GetMapping("/posts/me/likes")
     fun getMyLikedPosts(
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
