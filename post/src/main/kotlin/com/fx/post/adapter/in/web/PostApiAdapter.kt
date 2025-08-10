@@ -87,4 +87,14 @@ class PostApiAdapter(
         postCommandUseCase.cancelLike(postId, authUser.userId)
         return Api.OK(null)
     }
+
+    @GetMapping("/posts/me/likes")
+    fun getMyLikedPosts(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
+        @AuthenticatedUser authUser: AuthUser
+    ): ResponseEntity<Api<List<PostResponse>>> {
+        val posts = postCommandUseCase.getMyLikedPosts(authUser.userId, before)
+        return Api.OK(posts.map { PostResponse.from(it) })
+    }
+
 }
