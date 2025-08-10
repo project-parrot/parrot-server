@@ -52,19 +52,19 @@ class PostCommandService(
     override fun getFollowersPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
         // 유저 모듈에서 FeignClient로 팔로우 리스트 가져오기(미구현)
         val followers = listOf(1L, 2L) // 임시 구현
-        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeletedNot(followers, before)
+        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeleted(followers, before)
         // 유저 모듈에서 FeignClient로 follower들의 닉네임을 가져온 뒤 매핑하기(미구현)
         return posts
     }
 
     override fun getMyPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
-        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeletedNot(listOf(userId), before)
+        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeleted(listOf(userId), before)
         // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
         return posts
     }
 
     override fun getUserPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
-        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeletedNot(listOf(userId), before)
+        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeleted(listOf(userId), before)
         // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
         return posts
     }
@@ -101,7 +101,6 @@ class PostCommandService(
         } else {
             commentPersistencePort.save(Comment.createComment(postId, commentCreateCommand))
         }
-
     }
 
     @Transactional
@@ -123,5 +122,12 @@ class PostCommandService(
 
         val likeCount = likePersistencePort.deleteByPostIdAndUserId(postId, userId)
         if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
+    }
+
+    override fun getMyLikedPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
+        val posts = postPersistencePort.findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(userId, before)
+        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
+
+        return posts
     }
 }

@@ -25,4 +25,6 @@ interface PostCommandUseCase {
     fun addLike(postId:Long, userId: Long)
 
     fun cancelLike(postId:Long, userId:Long)
+
+    fun getMyLikedPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto>
 }

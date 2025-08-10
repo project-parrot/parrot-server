@@ -16,8 +16,8 @@ class PostPersistenceAdapter(
     override fun save(post: Post): Post =
         postRepository.save(PostEntity.from(post)).toDomain()
 
-    override fun findByUserIdInAndCreatedAtBeforeAndIsDeletedNot(userIds: List<Long>, createdAt: LocalDateTime): List<PostSummaryDto> =
-        postRepository.findByUserIdInAndCreatedAtBeforeAndIsDeletedNot(userIds, createdAt, true)
+    override fun findByUserIdInAndCreatedAtBeforeAndIsDeleted(userIds: List<Long>, before: LocalDateTime): List<PostSummaryDto> =
+        postRepository.findByUserIdInAndCreatedAtBeforeAndIsDeleted(userIds, before, false)
 
     override fun existsByUserIdAndCreatedAtBetween(userId:Long, start: LocalDateTime, end: LocalDateTime): Boolean =
         postRepository.existsByUserIdAndCreatedAtBetween(userId, start, end)
@@ -27,4 +27,7 @@ class PostPersistenceAdapter(
 
     override fun findByIdAndIsDeletedNot(postId: Long): Post? =
         postRepository.findByIdAndIsDeletedNot(postId, true).orElse(null)?.toDomain()
+
+    override fun findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(userId: Long, before: LocalDateTime): List<PostSummaryDto> =
+        postRepository.findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(userId, before, false)
 }

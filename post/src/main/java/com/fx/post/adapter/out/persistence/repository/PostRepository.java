@@ -24,10 +24,25 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
         from PostEntity p
         left join LikeEntity l on l.postId = p.id
         left join CommentEntity c on c.postId = p.id
-        where p.userId in :userIds and p.createdAt < :before and p.isDeleted != :isDeleted
+        where p.userId in :userIds and p.createdAt < :before and p.isDeleted = :isDeleted
         group by p.id, p.userId, p.content, p.createdAt
         order by p.createdAt desc
         limit 10
     """)
-    List<PostSummaryDto> findByUserIdInAndCreatedAtBeforeAndIsDeletedNot(@Param("userIds") List<Long> userIds, @Param("before") LocalDateTime before, @Param("isDeleted") Boolean isDeleted);
+    List<PostSummaryDto> findByUserIdInAndCreatedAtBeforeAndIsDeleted(@Param("userIds") List<Long> userIds, @Param("before") LocalDateTime before, @Param("isDeleted") Boolean isDeleted);
+
+    @Query("""
+    SELECT new com.fx.post.adapter.out.persistence.dto.PostSummaryDto(
+            p.id, p.userId, p.content, p.createdAt,
+            count(distinct l.id), count(distinct c.id)
+        )
+        from PostEntity p
+        left join LikeEntity l on l.postId = p.id
+        left join CommentEntity c on c.postId = p.id
+        where l.userId = :userId and p.createdAt < :before and p.isDeleted = :isDeleted
+        group by p.id, p.userId, p.content, p.createdAt
+        order by p.createdAt desc
+        limit 10
+    """)
+    List<PostSummaryDto> findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(@Param("userId") Long userId, @Param("before") LocalDateTime before, @Param("isDeleted") Boolean isDeleted);
 }
