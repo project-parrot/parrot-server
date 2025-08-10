@@ -124,6 +124,14 @@ class PostCommandService(
         if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
     }
 
+    override fun getLikeUsers(postId: Long): List<Long> {
+        val users = likePersistencePort.findByPostId(postId)
+        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
+        // 이후 userId나 닉네임 순으로 정렬(미구현)
+
+        return users
+    }
+
     override fun getMyLikedPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
         val posts = postPersistencePort.findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(userId, before)
         // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)

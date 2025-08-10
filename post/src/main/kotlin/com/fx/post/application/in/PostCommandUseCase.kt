@@ -26,5 +26,7 @@ interface PostCommandUseCase {
 
     fun cancelLike(postId:Long, userId:Long)
 
+    fun getLikeUsers(postId: Long): List<Long>
+
     fun getMyLikedPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto>
 }
