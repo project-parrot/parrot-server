@@ -7,10 +7,10 @@ import com.fx.global.resolver.AuthUser
 import com.fx.post.adapter.`in`.web.dto.*
 import com.fx.post.application.`in`.PostCommandUseCase
 import jakarta.validation.Valid
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.Objects
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
+import java.time.LocalDateTime
 
 @WebAdapter
 @RequestMapping("/api/v1/post")
@@ -24,6 +24,30 @@ class PostApiAdapter(
     ): ResponseEntity<Api<PostCreateResponse>> {
         val post = postCommandUseCase.createPost(postCreateRequest.toCommand(authUser))
         return Api.OK(PostCreateResponse(post.id))
+    }
+
+    @GetMapping("/posts")
+    fun getFollowersPosts(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
+                          @AuthenticatedUser authUser: AuthUser
+    ): ResponseEntity<Api<List<PostResponse>>> {
+        val posts = postCommandUseCase.getFollowersPosts(authUser.userId, before)
+        return Api.OK(posts.map { PostResponse.from(it) })
+    }
+
+    @GetMapping("/posts/me")
+    fun getMyPosts(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
+                 @AuthenticatedUser authUser: AuthUser
+    ): ResponseEntity<Api<List<PostResponse>>> {
+        val posts = postCommandUseCase.getMyPosts(authUser.userId, before)
+        return Api.OK(posts.map { PostResponse.from(it) })
+    }
+
+    @GetMapping("/posts/{userId}")
+    fun getUserPosts(@PathVariable userId: Long,
+                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime
+    ): ResponseEntity<Api<List<PostResponse>>> {
+        val posts = postCommandUseCase.getUserPosts(userId, before)
+        return Api.OK(posts.map { PostResponse.from(it) })
     }
 
     @PutMapping("/posts/{postId}")
