@@ -4,7 +4,7 @@ import com.fx.post.domain.Comment
 import java.time.LocalDateTime
 
 data class CommentResponse(
-    val commentId: Long,
+    val commentId: Long?= null,
     val userId: Long,
     //val nickname: String,
     //val profileImageUrl: String?= null,
@@ -15,7 +15,7 @@ data class CommentResponse(
     companion object {
         fun from(comment: Comment): CommentResponse {
             return CommentResponse(
-                commentId = comment.postId,
+                commentId = comment.id,
                 userId = comment.userId,
                 content = comment.content,
                 createdAt = comment.createdAt,

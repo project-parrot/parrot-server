@@ -110,6 +110,12 @@ class PostCommandService(
         return comments
     }
 
+    override fun getMyComments(userId: Long): List<Comment> {
+        val comments = commentPersistencePort.findByUserIdOrderByCreatedAtDesc(userId)
+
+        return comments
+    }
+
     @Transactional
     override fun addLike(postId: Long, userId: Long) {
         if (!postPersistencePort.existsById(postId))
@@ -128,6 +134,7 @@ class PostCommandService(
             throw PostException(PostErrorCode.POST_NOT_EXIST)
 
         val likeCount = likePersistencePort.deleteByPostIdAndUserId(postId, userId)
+
         if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
     }
 
