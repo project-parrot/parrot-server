@@ -4,7 +4,7 @@ import com.fx.global.annotation.hexagonal.PersistenceAdapter
 import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
 import com.fx.post.adapter.out.persistence.entity.PostEntity
 import com.fx.post.adapter.out.persistence.repository.PostRepository
-import com.fx.post.application.out.PostPersistencePort
+import com.fx.post.application.out.persistence.PostPersistencePort
 import com.fx.post.domain.Post
 import java.time.LocalDateTime
 
