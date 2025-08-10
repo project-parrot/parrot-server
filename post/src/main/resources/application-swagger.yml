@@ -1,0 +1,9 @@
+springdoc:
+  api-docs:
+    path: /open-api/v3/api/docs
+  swagger-ui:
+    path: /open-api/swagger-ui.html
+
+openapi:
+  service:
+    url: http://localhost:80/post-service

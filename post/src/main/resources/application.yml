@@ -5,6 +5,10 @@ spring:
   application:
     name: post-service
 
+  profiles:
+    include:
+      swagger
+
   datasource:
     url: ${MYSQL_URL}
     username: ${MYSQL_USERNAME}

@@ -1,4 +1,4 @@
-package com.fx.post.config
+package com.fx.post.config.web
 
 import com.fx.global.interceptor.AuthorizationInterceptor
 import com.fx.global.resolver.AuthenticatedUserResolver
