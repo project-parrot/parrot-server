@@ -17,4 +17,6 @@ class CommentPersistenceAdapter(
     override fun existsById(parentId: Long): Boolean =
         commentRepository.existsById(parentId)
 
+    override fun findByPostIdOrderByCreatedAtAsc(postId: Long): List<Comment> =
+        commentRepository.findByPostIdOrderByCreatedAtAsc(postId).map { it.toDomain() }
 }

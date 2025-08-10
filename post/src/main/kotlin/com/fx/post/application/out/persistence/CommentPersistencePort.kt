@@ -8,4 +8,5 @@ interface CommentPersistencePort {
 
     fun existsById(parentId: Long): Boolean
 
+    fun findByPostIdOrderByCreatedAtAsc(postId: Long): List<Comment>
 }
