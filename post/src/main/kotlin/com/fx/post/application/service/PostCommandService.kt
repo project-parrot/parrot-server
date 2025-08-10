@@ -1,6 +1,7 @@
 package com.fx.post.application.service
 
 import com.fx.global.dto.UserRole
+import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
 import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.dto.CommentCreateCommand
 import com.fx.post.application.`in`.dto.PostCreateCommand
@@ -44,6 +45,26 @@ class PostCommandService(
 
         val savedPost = postPersistencePort.save(Post.createPost(postCreateCommand))
         return savedPost
+    }
+
+    override fun getFollowersPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
+        // 유저 모듈에서 FeignClient로 팔로우 리스트 가져오기(미구현)
+        val followers = listOf(1L, 2L) // 임시 구현
+        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeletedNot(followers, before)
+        // 유저 모듈에서 FeignClient로 follower들의 닉네임을 가져온 뒤 매핑하기(미구현)
+        return posts
+    }
+
+    override fun getMyPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
+        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeletedNot(listOf(userId), before)
+        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
+        return posts
+    }
+
+    override fun getUserPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
+        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeletedNot(listOf(userId), before)
+        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
+        return posts
     }
 
     @Transactional
