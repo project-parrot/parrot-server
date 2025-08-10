@@ -16,6 +16,10 @@ spring:
   application:
     name: gateway-service
 
+  profiles:
+    include:
+      swagger
+
   cloud:
     gateway:
       server:
@@ -49,6 +53,7 @@ spring:
                 allow-credentials: true
                 allowed-origins:
                   - http://localhost:3000
+                  - http://localhost:80
                 allowed-methods:
                   - POST
                   - GET
