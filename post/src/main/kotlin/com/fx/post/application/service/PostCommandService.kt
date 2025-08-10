@@ -103,6 +103,19 @@ class PostCommandService(
         }
     }
 
+    override fun getComments(postId: Long): List<Comment> {
+        val comments = commentPersistencePort.findByPostIdOrderByCreatedAtAsc(postId)
+        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
+
+        return comments
+    }
+
+    override fun getMyComments(userId: Long): List<Comment> {
+        val comments = commentPersistencePort.findByUserIdOrderByCreatedAtDesc(userId)
+
+        return comments
+    }
+
     @Transactional
     override fun addLike(postId: Long, userId: Long) {
         if (!postPersistencePort.existsById(postId))
@@ -121,6 +134,7 @@ class PostCommandService(
             throw PostException(PostErrorCode.POST_NOT_EXIST)
 
         val likeCount = likePersistencePort.deleteByPostIdAndUserId(postId, userId)
+
         if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
     }
 
