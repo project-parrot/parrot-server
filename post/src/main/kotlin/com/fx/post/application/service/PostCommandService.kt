@@ -6,10 +6,11 @@ import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.dto.CommentCreateCommand
 import com.fx.post.application.`in`.dto.PostCreateCommand
 import com.fx.post.application.`in`.dto.PostUpdateCommand
-import com.fx.post.application.out.CommentPersistencePort
-import com.fx.post.application.out.LikePersistencePort
-import com.fx.post.application.out.PostMediaPersistencePort
-import com.fx.post.application.out.PostPersistencePort
+import com.fx.post.application.out.persistence.CommentPersistencePort
+import com.fx.post.application.out.persistence.LikePersistencePort
+import com.fx.post.application.out.persistence.PostMediaPersistencePort
+import com.fx.post.application.out.persistence.PostPersistencePort
+import com.fx.post.application.out.web.UserWebPort
 import com.fx.post.domain.Comment
 import com.fx.post.domain.Like
 import com.fx.post.domain.Post
@@ -29,7 +30,8 @@ class PostCommandService(
     private val postPersistencePort: PostPersistencePort,
     private val postMediaPersistencePort: PostMediaPersistencePort,
     private val commentPersistencePort: CommentPersistencePort,
-    private val likePersistencePort: LikePersistencePort
+    private val likePersistencePort: LikePersistencePort,
+    private val userWebPort: UserWebPort
 ) : PostCommandUseCase {
 
     @Transactional

@@ -1,4 +1,4 @@
-package com.fx.post.application.out
+package com.fx.post.application.out.persistence
 
 import com.fx.post.domain.Comment
 
