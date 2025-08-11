@@ -20,15 +20,21 @@ class UserOpenApiAdapter(
 ) {
 
     @PostMapping("/signup")
-    fun signUp(@RequestBody @Valid signUpRequest: UserSignUpRequest): ResponseEntity<Api<UserIdResponse>> {
-        val user = userCommandUseCase.signUp(signUpRequest.toCommand())
-        return Api.OK(UserIdResponse(user.id))
-    }
+    fun signUp(
+        @RequestBody @Valid signUpRequest: UserSignUpRequest
+    ): ResponseEntity<Api<UserIdResponse>> =
+        Api.OK(UserIdResponse(
+            userCommandUseCase.signUp(signUpRequest.toCommand()).id)
+        )
 
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: UserLoginRequest): ResponseEntity<Api<TokenResponse>> {
-        val tokenInfo = userCommandUseCase.login(loginRequest.toCommand())
-        return Api.OK(TokenResponse.of(tokenInfo))
-    }
+    fun login(
+        @RequestBody loginRequest: UserLoginRequest
+    ): ResponseEntity<Api<TokenResponse>> =
+        Api.OK(
+            TokenResponse.from(
+                userCommandUseCase.login(loginRequest.toCommand())
+            )
+        )
 
 }

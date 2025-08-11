@@ -9,7 +9,7 @@ data class TokenResponse(
 
     companion object {
         @JvmStatic
-        fun of(tokenInfo: TokenInfo): TokenResponse =
+        fun from(tokenInfo: TokenInfo): TokenResponse =
             TokenResponse(
                 accessToken = tokenInfo.accessToken,
                 refreshToken = tokenInfo.refreshToken,

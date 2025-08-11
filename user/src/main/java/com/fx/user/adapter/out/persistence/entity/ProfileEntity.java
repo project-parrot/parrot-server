@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "profile")
 @SuperBuilder
 @NoArgsConstructor
-public class ProfileEntity  extends BaseEntity {
+public class ProfileEntity extends BaseEntity {
 
     private Long userId;
 
