@@ -1,5 +1,7 @@
 package com.fx.global.interceptor
 
+import com.fx.global.exception.UnauthorizedException
+import com.fx.global.exception.errorcode.UnauthorizedErrorCode
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpMethod
@@ -29,14 +31,15 @@ class AuthorizationInterceptor(
             return true;
         }
 
+
         val userId = request.getHeader(X_USER_ID)
-            ?: throw RuntimeException("Missing header: $X_USER_ID")
+            ?: throw UnauthorizedException(UnauthorizedErrorCode.MISSING_USER_ID_HEADER)
 
         val userRole = request.getHeader(X_USER_ROLE)
-            ?: throw RuntimeException("Missing header: $X_USER_ROLE")
+            ?: throw UnauthorizedException(UnauthorizedErrorCode.MISSING_USER_ROLE_HEADER)
 
         val requestContext = RequestContextHolder.getRequestAttributes()
-            ?: throw IllegalStateException("RequestAttributes is null")
+            ?: throw UnauthorizedException(UnauthorizedErrorCode.NO_REQUEST_CONTEXT)
 
         requestContext.setAttribute(X_USER_ID, userId, RequestAttributes.SCOPE_REQUEST)
         requestContext.setAttribute(X_USER_ROLE, userRole, RequestAttributes.SCOPE_REQUEST)
