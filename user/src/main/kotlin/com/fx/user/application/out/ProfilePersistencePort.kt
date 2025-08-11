@@ -8,4 +8,6 @@ interface ProfilePersistencePort {
 
     fun existsByNickname(nickname: String): Boolean
 
+    fun findByProfile(userId: Long): Profile?
+
 }

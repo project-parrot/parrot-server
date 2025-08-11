@@ -28,7 +28,7 @@ class UserOpenApiAdapter(
     @PostMapping("/login")
     fun login(@RequestBody loginRequest: UserLoginRequest): ResponseEntity<Api<TokenResponse>> {
         val tokenInfo = userCommandUseCase.login(loginRequest.toCommand())
-        return Api.OK(TokenResponse.of(tokenInfo))
+        return Api.OK(TokenResponse.from(tokenInfo))
     }
 
 }

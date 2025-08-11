@@ -1,7 +1,7 @@
 package com.fx.global.dto
 
 enum class UserRole(
-    private val key: String,
+    private val description: String,
 ) {
 
     ADMIN("ROLE_ADMIN"),

@@ -7,15 +7,17 @@ import com.fx.user.application.out.ProfilePersistencePort
 import com.fx.user.domain.Profile
 
 @PersistenceAdapter
-class ProfilePersistenceAdapterKotlin(
+class ProfilePersistenceAdapter(
     private val profileRepository: ProfileRepository
 ) : ProfilePersistencePort {
 
-    override fun save(profile: Profile): Profile {
-        return profileRepository.save(ProfileEntity.from(profile)).toDomain()
-    }
+    override fun save(profile: Profile): Profile =
+        profileRepository.save(ProfileEntity.from(profile)).toDomain()
 
-    override fun existsByNickname(nickname: String): Boolean {
-        return profileRepository.existsByNickname(nickname);
-    }
+    override fun existsByNickname(nickname: String): Boolean =
+        profileRepository.existsByNickname(nickname)
+
+    override fun findByProfile(userId: Long): Profile? =
+        profileRepository.findByUserId(userId).orElse(null)?.toDomain()
+
 }
