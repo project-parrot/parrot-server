@@ -8,13 +8,10 @@ import com.fx.user.application.out.ProfilePersistencePort
 import com.fx.user.application.out.UserPersistencePort
 import com.fx.user.application.out.JwtProviderPort
 import com.fx.user.application.out.PasswordEncoderPort
-import com.fx.user.domain.AuthenticatedUserInfo
 import com.fx.user.domain.Profile
 import com.fx.user.domain.TokenInfo
 import com.fx.user.domain.User
-import com.fx.user.exception.JwtException
 import com.fx.user.exception.UserException
-import com.fx.user.exception.errorcode.JwtErrorCode
 import com.fx.user.exception.errorcode.UserErrorCode
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -75,14 +72,6 @@ class UserCommandService(
             }
             return savedUser
         }
-    }
-
-    override fun getAuthenticatedUserInfo(bearerToken: String): AuthenticatedUserInfo {
-        if (!bearerToken.startsWith("Bearer ")) {
-            throw JwtException(JwtErrorCode.INVALID_TOKEN)
-        }
-        val token = bearerToken.removePrefix("Bearer ").trim()
-        return jwtProviderPort.getAuthenticatedUserInfo(token)
     }
 
 }

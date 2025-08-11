@@ -13,11 +13,4 @@ class UserInternalApiAdapter(
     private val userCommandUseCase: UserCommandUseCase
 ) {
 
-    @PostMapping("/token/validate")
-    fun validateToken(@RequestHeader("Authorization") authorizationHeaderToken: String): TokenValidationResponse {
-        val authenticatedUserInfo =
-            userCommandUseCase.getAuthenticatedUserInfo(authorizationHeaderToken)
-        return TokenValidationResponse.of(authenticatedUserInfo)
-    }
-
 }
