@@ -1,4 +1,4 @@
-package com.fx.post.config.swagger
+package com.fx.user.config.swagger
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.models.Components

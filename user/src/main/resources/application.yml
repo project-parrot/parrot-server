@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    include: auth
+    include: auth, swagger
 
   application:
     name: user-service
