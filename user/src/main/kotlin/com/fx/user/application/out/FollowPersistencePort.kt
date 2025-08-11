@@ -2,8 +2,10 @@ package com.fx.user.application.out
 
 interface FollowPersistencePort {
 
-    fun countFollowers(userId: Long): Int
+    fun getFollowerCount(userId: Long): Int
 
-    fun countFollowing(userId: Long): Int
+    fun getFollowingCount(userId: Long): Int
+
+    fun isFollowing(viewerId: Long, targetUserId: Long): Boolean
 
 }

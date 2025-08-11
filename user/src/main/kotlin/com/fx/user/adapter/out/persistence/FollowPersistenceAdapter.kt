@@ -10,10 +10,13 @@ class FollowPersistenceAdapter(
     private val followRepository: FollowRepository
 ) : FollowPersistencePort {
 
-    override fun countFollowers(userId: Long): Int =
+    override fun getFollowerCount(userId: Long): Int =
         followRepository.countByFollowingIdAndStatus(userId, FollowStatus.APPROVED)
 
-    override fun countFollowing(userId: Long): Int =
+    override fun getFollowingCount(userId: Long): Int =
         followRepository.countByFollowerIdAndStatus(userId, FollowStatus.APPROVED)
+
+    override fun isFollowing(viewerId: Long, targetUserId: Long): Boolean =
+        followRepository.existsByFollowerIdAndFollowingIdAndStatus(viewerId, targetUserId, FollowStatus.APPROVED)
 
 }

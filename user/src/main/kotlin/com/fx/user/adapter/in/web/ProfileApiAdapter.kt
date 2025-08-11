@@ -8,6 +8,7 @@ import com.fx.user.application.`in`.ProfileQueryUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 
 @WebAdapter
@@ -17,7 +18,19 @@ class ProfileApiAdapter(
 ) {
 
     @GetMapping("/me")
-    fun myProfile(@AuthenticationPrincipal authenticatedUser: AuthenticatedUser): ResponseEntity<Api<ProfileInfoResponse>> =
+    fun myProfile(
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser
+    ): ResponseEntity<Api<ProfileInfoResponse>> =
         Api.OK(ProfileInfoResponse.from(profileQueryAdapter.getMyProfile(authenticatedUser.userId)))
-    
+
+    @GetMapping("{userId}")
+    fun otherProfile(
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+        @PathVariable userId: Long
+    ): ResponseEntity<Api<ProfileInfoResponse>> =
+        Api.OK(ProfileInfoResponse.from(profileQueryAdapter.getOtherProfile(
+            viewerId = authenticatedUser.userId,
+            targetUserId = userId))
+        )
+
 }

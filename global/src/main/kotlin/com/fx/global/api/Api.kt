@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
 class Api<T>(
-    private val success: Boolean,
-    private val code: Int,
+    val success: Boolean,
+    val code: Int,
     val message: String?,
     val data: T?
 ) {

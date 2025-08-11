@@ -6,4 +6,6 @@ interface ProfileQueryUseCase {
 
     fun getMyProfile(userId: Long): ProfileInfo
 
+    fun getOtherProfile(viewerId: Long, targetUserId: Long): ProfileInfo
+
 }

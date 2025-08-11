@@ -13,11 +13,12 @@ data class ProfileInfo(
 ) {
     companion object {
         @JvmStatic
-        fun createMyProfileInfo(
+        fun createProfileInfo(
             profile: Profile,
             profileImageUrl: String?,
             followerCount: Int,
-            followingCount: Int
+            followingCount: Int,
+            isFollowing: Boolean
         ) = ProfileInfo(
             id = profile.id!!,
             userId = profile.userId,
@@ -27,7 +28,7 @@ data class ProfileInfo(
             isPrivate = profile.isPrivate,
             followerCount = followerCount,
             followingCount = followingCount,
-            isFollowing = false
+            isFollowing = isFollowing
         )
     }
 }
