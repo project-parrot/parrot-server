@@ -3,6 +3,7 @@ package com.fx.post.adapter.out.persistence.entity;
 import com.fx.post.domain.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,10 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@Table(name = "post")
+@Table(name = "post",
+        indexes = {
+            @Index(name = "idx_post_userid_isdeleted_createdat", columnList = "user_id, is_deleted, created_at")
+        })
 @SuperBuilder
 @NoArgsConstructor
 public class PostEntity extends BaseEntity {
