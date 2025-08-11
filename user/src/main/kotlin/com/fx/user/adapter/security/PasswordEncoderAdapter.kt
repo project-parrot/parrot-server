@@ -1,10 +1,10 @@
 package com.fx.user.adapter.security
 
+import com.fx.global.annotation.hexagonal.SecurityAdapter
 import com.fx.user.application.out.PasswordEncoderPort
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.stereotype.Component
 
-@Component
+@SecurityAdapter
 class PasswordEncoderAdapter(
     private val passwordEncoder: PasswordEncoder
 ) : PasswordEncoderPort {

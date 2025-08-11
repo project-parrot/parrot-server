@@ -1,5 +1,6 @@
 package com.fx.user.adapter.security
 
+import com.fx.global.annotation.hexagonal.SecurityAdapter
 import com.fx.global.dto.UserRole
 import com.fx.user.adapter.security.dto.AuthenticatedUser
 import com.fx.user.application.out.JwtProviderPort
@@ -11,9 +12,8 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
-import org.springframework.stereotype.Component
 
-@Component
+@SecurityAdapter
 class CustomSuccessHandler(
     private val jwtProviderPort: JwtProviderPort,
     @Value("\${jwt.access-token.plus-hour}") private val accessTokenPlusHour: Int,

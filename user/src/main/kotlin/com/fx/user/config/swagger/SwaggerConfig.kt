@@ -31,7 +31,7 @@ class SwaggerConfig {
             .components(Components().addSecuritySchemes("Bearer", securityScheme))
             .info(
                 Info()
-                    .title("POST SERVICE API")
+                    .title("USER SERVICE API")
                     .version("v1")
             )
     }

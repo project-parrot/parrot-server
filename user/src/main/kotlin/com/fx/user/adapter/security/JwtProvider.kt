@@ -1,5 +1,6 @@
 package com.fx.user.adapter.security
 
+import com.fx.global.annotation.hexagonal.SecurityAdapter
 import com.fx.global.dto.UserRole
 import com.fx.user.application.out.JwtProviderPort
 import com.fx.user.domain.AuthenticatedUserInfo
@@ -12,12 +13,11 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SignatureException
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
-@Component
+@SecurityAdapter
 class JwtProvider(
     @Value("\${jwt.secret.key}") private val secretKey: String,
     @Value("\${jwt.access-token.plus-hour}") private val accessTokenPlusHour: Long,

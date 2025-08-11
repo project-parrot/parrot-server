@@ -1,5 +1,6 @@
 package com.fx.user.adapter.security
 
+import com.fx.global.annotation.hexagonal.SecurityAdapter
 import com.fx.user.adapter.security.dto.AuthenticatedUser
 import com.fx.user.application.out.JwtProviderPort
 import jakarta.servlet.FilterChain
@@ -7,10 +8,9 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
-@Component
+@SecurityAdapter
 class JwtAuthenticationFilter(
     private val jwtProviderPort: JwtProviderPort
 ) : OncePerRequestFilter() {

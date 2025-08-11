@@ -1,5 +1,6 @@
 package com.fx.user.adapter.security
 
+import com.fx.global.annotation.hexagonal.SecurityAdapter
 import com.fx.user.adapter.security.dto.AuthenticatedUser
 import com.fx.user.adapter.security.dto.GoogleOAuthDto
 import com.fx.user.adapter.security.dto.NaverOAuthDto
@@ -11,9 +12,8 @@ import com.fx.user.exception.errorcode.UserErrorCode
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
-import org.springframework.stereotype.Service
 
-@Service
+@SecurityAdapter
 class CustomOAuth2UserService(
     private val userCommandUseCase: UserCommandUseCase
 ) : DefaultOAuth2UserService() {
