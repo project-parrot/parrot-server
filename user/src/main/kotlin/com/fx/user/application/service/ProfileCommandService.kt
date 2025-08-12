@@ -18,7 +18,7 @@ class ProfileCommandService(
         userId: Long,
         updateCommand: ProfileUpdateCommand
     ): Boolean {
-        val profile = profilePersistencePort.findByProfile(userId)?: throw ProfileException(
+        val profile = profilePersistencePort.findByUserId(userId)?: throw ProfileException(
             ProfileErrorCode.PROFILE_NOT_FOUND)
 
         if (profile.nickname != updateCommand.nickname) {

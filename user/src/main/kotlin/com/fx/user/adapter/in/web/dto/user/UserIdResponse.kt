@@ -1,4 +1,4 @@
-package com.fx.user.adapter.`in`.web.dto
+package com.fx.user.adapter.`in`.web.dto.user
 
 data class UserIdResponse(
     val userId: Long?

@@ -17,7 +17,7 @@ class ProfilePersistenceAdapter(
     override fun existsByNickname(nickname: String): Boolean =
         profileRepository.existsByNickname(nickname)
 
-    override fun findByProfile(userId: Long): Profile? =
+    override fun findByUserId(userId: Long): Profile? =
         profileRepository.findByUserId(userId).orElse(null)?.toDomain()
 
     override fun updateProfile(profile: Profile): Profile =

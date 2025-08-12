@@ -2,8 +2,8 @@ package com.fx.user.adapter.`in`.web
 
 import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
-import com.fx.user.adapter.`in`.web.dto.ProfileInfoResponse
-import com.fx.user.adapter.`in`.web.dto.ProfileUpdateRequest
+import com.fx.user.adapter.`in`.web.dto.profile.ProfileInfoResponse
+import com.fx.user.adapter.`in`.web.dto.profile.ProfileUpdateRequest
 import com.fx.user.adapter.security.dto.AuthenticatedUser
 import com.fx.user.application.`in`.ProfileCommandUseCase
 import com.fx.user.application.`in`.ProfileQueryUseCase

@@ -3,6 +3,7 @@ package com.fx.user.application.service
 import com.fx.user.application.`in`.ProfileQueryUseCase
 import com.fx.user.application.out.FollowPersistencePort
 import com.fx.user.application.out.ProfilePersistencePort
+import com.fx.user.domain.FollowStatus
 import com.fx.user.domain.Profile
 import com.fx.user.domain.ProfileInfo
 import com.fx.user.exception.ProfileException
@@ -16,7 +17,7 @@ class ProfileQueryService(
 ): ProfileQueryUseCase {
 
     override fun getMyProfile(userId: Long): ProfileInfo {
-        val profile = profilePersistencePort.findByProfile(userId)?: throw ProfileException(
+        val profile = profilePersistencePort.findByUserId(userId)?: throw ProfileException(
             ProfileErrorCode.PROFILE_NOT_FOUND)
         val followerCount = followPersistencePort.getFollowerCount(userId)
         val followingCount = followPersistencePort.getFollowingCount(userId)
@@ -34,10 +35,10 @@ class ProfileQueryService(
     }
 
     override fun getOtherProfile(viewerId: Long, targetUserId: Long): ProfileInfo {
-        val targetUserProfile = profilePersistencePort.findByProfile(targetUserId)
+        val targetUserProfile = profilePersistencePort.findByUserId(targetUserId)
             ?: throw ProfileException(ProfileErrorCode.PROFILE_NOT_FOUND)
 
-        val isFollowing = followPersistencePort.isFollowing(viewerId, targetUserId)
+        val isFollowing = followPersistencePort.isFollowing(viewerId, targetUserId, FollowStatus.APPROVED)
 
         // 상대 프로필이 Private 이고 팔로우 상태가 아닌 경우
         if (targetUserProfile.isPrivate && !isFollowing) {
