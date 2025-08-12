@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
 @WebInputAdapter
-@RequestMapping("/api/v1/post")
+@RequestMapping("/api/v1/posts")
 class PostApiAdapter(
     private val postCommandUseCase: PostCommandUseCase
 ) {
-    @PostMapping("/posts")
+    @PostMapping("/")
     fun createPost(
         @RequestBody @Valid postCreateRequest: PostCreateRequest,
         @AuthenticatedUser authUser: AuthUser
@@ -26,7 +26,7 @@ class PostApiAdapter(
         return Api.OK(PostCreateResponse(post.id))
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/")
     fun getFollowersPosts(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
                           @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> {
@@ -34,7 +34,7 @@ class PostApiAdapter(
         return Api.OK(posts.map { PostResponse.from(it) })
     }
 
-    @GetMapping("/posts/me")
+    @GetMapping("/me")
     fun getMyPosts(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
                  @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> {
@@ -42,7 +42,7 @@ class PostApiAdapter(
         return Api.OK(posts.map { PostResponse.from(it) })
     }
 
-    @GetMapping("/posts/{userId}")
+    @GetMapping("/{userId}")
     fun getUserPosts(@PathVariable userId: Long,
                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime
     ): ResponseEntity<Api<List<PostResponse>>> {
@@ -50,7 +50,7 @@ class PostApiAdapter(
         return Api.OK(posts.map { PostResponse.from(it) })
     }
 
-    @PutMapping("/posts/{postId}")
+    @PutMapping("/{postId}")
     fun updatePost(
         @PathVariable postId: Long,
         @RequestBody @Valid postUpdateRequest: PostUpdateRequest,
@@ -61,7 +61,7 @@ class PostApiAdapter(
     }
 
 
-    @PostMapping("/posts/{postId}/comments")
+    @PostMapping("/{postId}/comments")
     fun createComment(
         @PathVariable postId: Long,
         @RequestBody @Valid commentCreateRequest: CommentCreateRequest,
@@ -70,19 +70,19 @@ class PostApiAdapter(
         return Api.OK(CommentCreateResponse(comment.id))
     }
 
-    @GetMapping("/posts/{postId}/comments")
+    @GetMapping("/{postId}/comments")
     fun getComments(@PathVariable postId: Long): ResponseEntity<Api<List<CommentResponse>>> {
         val comments = postCommandUseCase.getComments(postId)
         return Api.OK(comments.map { CommentResponse.from(it) })
     }
 
-    @GetMapping("/posts/me/comments")
+    @GetMapping("/me/comments")
     fun getMyComments(@AuthenticatedUser authUser: AuthUser): ResponseEntity<Api<List<MyCommentResponse>>> {
         val comments = postCommandUseCase.getMyComments(authUser.userId)
         return Api.OK(comments.map { MyCommentResponse.from(it) })
     }
 
-    @PostMapping("/posts/{postId}/likes")
+    @PostMapping("/{postId}/likes")
     fun addLike(
         @PathVariable postId: Long,
         @AuthenticatedUser authUser: AuthUser
@@ -91,7 +91,7 @@ class PostApiAdapter(
         return Api.OK(null)
     }
 
-    @DeleteMapping("/posts/{postId}/likes")
+    @DeleteMapping("/{postId}/likes")
     fun cancelLike(
         @PathVariable postId: Long,
         @AuthenticatedUser authUser: AuthUser
@@ -100,7 +100,7 @@ class PostApiAdapter(
         return Api.OK(null)
     }
 
-    @GetMapping("/posts/{postId}/likes")
+    @GetMapping("/{postId}/likes")
     fun getLikeUsers(
         @PathVariable postId: Long
     ): ResponseEntity<Api<List<LikeUsersResponse>>> {
@@ -108,7 +108,7 @@ class PostApiAdapter(
         return Api.OK(likeUsers.map { LikeUsersResponse(userId = it) })
     }
 
-    @GetMapping("/posts/me/likes")
+    @GetMapping("/me/likes")
     fun getMyLikedPosts(
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
         @AuthenticatedUser authUser: AuthUser
