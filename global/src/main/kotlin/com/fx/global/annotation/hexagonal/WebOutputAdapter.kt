@@ -1,8 +1,8 @@
 package com.fx.global.annotation.hexagonal
 
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.stereotype.Component
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-@RestController
-annotation class WebAdapter()
+@Component
+annotation class WebOutputAdapter()

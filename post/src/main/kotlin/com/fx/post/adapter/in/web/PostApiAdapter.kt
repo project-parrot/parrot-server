@@ -1,7 +1,7 @@
 package com.fx.post.adapter.`in`.web
 
 import com.fx.global.annotation.AuthenticatedUser
-import com.fx.global.annotation.hexagonal.WebAdapter
+import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
 import com.fx.global.resolver.AuthUser
 import com.fx.post.adapter.`in`.web.dto.*
@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
-@WebAdapter
+@WebInputAdapter
 @RequestMapping("/api/v1/post")
 class PostApiAdapter(
     private val postCommandUseCase: PostCommandUseCase
