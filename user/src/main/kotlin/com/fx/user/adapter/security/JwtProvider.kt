@@ -2,6 +2,7 @@ package com.fx.user.adapter.security
 
 import com.fx.global.annotation.hexagonal.SecurityAdapter
 import com.fx.global.dto.UserRole
+import com.fx.user.application.out.JwtCachePort
 import com.fx.user.application.out.JwtProviderPort
 import com.fx.user.domain.AuthenticatedUserInfo
 import com.fx.user.domain.TokenInfo
@@ -23,18 +24,19 @@ class JwtProvider(
     @Value("\${jwt.secret.key}") private val secretKey: String,
     @Value("\${jwt.access-token.plus-hour}") private val accessTokenPlusHour: Long,
     @Value("\${jwt.refresh-token.plus-hour}") private val refreshTokenPlusHour: Long,
-    private val httpSession: HttpSession
+    private val jwtCachePort: JwtCachePort
 ) : JwtProviderPort {
 
     private val key = Keys.hmacShaKeyFor(secretKey.toByteArray())
     private val PREFIX: String = "Bearer "
-    private val REFRESHTOKEN: String = "refreshToken"
 
     override fun generateTokens(userId: Long, role: UserRole): TokenInfo {
         val accessToken = createToken(userId, role, accessTokenPlusHour)
         val refreshToken = createToken(userId, role, refreshTokenPlusHour)
 
-        saveRefreshToken(refreshToken)
+        val expiration = parseTokenSafely(refreshToken).expiration
+
+        jwtCachePort.saveToken(refreshToken, expiration)
 
         return TokenInfo(
             accessToken = accessToken,
@@ -66,7 +68,7 @@ class JwtProvider(
 
         val claims = parseTokenSafely(refreshToken)
 
-        val storedToken = httpSession.getAttribute(REFRESHTOKEN)?.toString() ?: throw JwtException(JwtErrorCode.INVALID_TOKEN)
+        val storedToken = jwtCachePort.getToken() ?: throw JwtException(JwtErrorCode.INVALID_TOKEN)
 
         if (storedToken != refreshToken) throw JwtException(JwtErrorCode.INVALID_TOKEN)
 
@@ -113,13 +115,6 @@ class JwtProvider(
             .claims(claims)
             .expiration(expiredAt)
             .compact()
-    }
-
-    private fun saveRefreshToken(refreshToken: String) {
-        val expiration = parseTokenSafely(refreshToken).expiration
-
-        httpSession.setAttribute(REFRESHTOKEN, refreshToken)
-        httpSession.maxInactiveInterval = ((expiration.time - Date().time) / 1000).toInt()
     }
 
 }
