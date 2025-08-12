@@ -30,9 +30,7 @@ class FollowApiAdapter(
     fun unfollowUser(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
         @PathVariable followId: Long,
-    ): ResponseEntity<Api<Boolean>> {
-        followCommandUseCase.unfollowUser(authenticatedUser.userId, followId)
-        return Api.OK(true)
-    }
+    ): ResponseEntity<Api<Boolean>> =
+        Api.OK(followCommandUseCase.unfollowUser(authenticatedUser.userId, followId))
 
 }
