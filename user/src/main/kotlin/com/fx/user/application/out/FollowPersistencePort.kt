@@ -15,6 +15,8 @@ interface FollowPersistencePort {
 
     fun getFollow(followerId: Long, followingId: Long): Follow?
 
+    fun getFollow(followId: Long): Follow?
+
     fun deleteFollow(followId: Long)
 
 }

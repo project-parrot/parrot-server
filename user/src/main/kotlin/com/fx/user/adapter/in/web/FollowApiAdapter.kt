@@ -26,17 +26,12 @@ class FollowApiAdapter(
     ): ResponseEntity<Api<FollowResponse>> =
         Api.OK(FollowResponse.from(followCommandUseCase.followUser(authenticatedUser.userId, userId)))
 
-    /**
-     * mode = following 내가 팔로잉하고 있는 사용자 제거
-     * mode = follower 나를 팔로우하는 사용자 제거
-     */
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/{followId}")
     fun unfollowUser(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-        @PathVariable userId: Long,
-        @RequestParam mode: String
+        @PathVariable followId: Long,
     ): ResponseEntity<Api<Boolean>> {
-        followCommandUseCase.unfollowUser(authenticatedUser.userId, userId, mode)
+        followCommandUseCase.unfollowUser(authenticatedUser.userId, followId)
         return Api.OK(true)
     }
 
