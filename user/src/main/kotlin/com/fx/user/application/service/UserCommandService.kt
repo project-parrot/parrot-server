@@ -11,7 +11,9 @@ import com.fx.user.application.out.PasswordEncoderPort
 import com.fx.user.domain.Profile
 import com.fx.user.domain.TokenInfo
 import com.fx.user.domain.User
+import com.fx.user.exception.ProfileException
 import com.fx.user.exception.UserException
+import com.fx.user.exception.errorcode.ProfileErrorCode
 import com.fx.user.exception.errorcode.UserErrorCode
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -33,7 +35,7 @@ class UserCommandService(
         }
 
         if (profilePersistencePort.existsByNickname(signUpCommand.nickname)) {
-            throw UserException(UserErrorCode.NICKNAME_EXISTS)
+            throw ProfileException(ProfileErrorCode.NICKNAME_EXISTS)
         }
 
         // 암호화

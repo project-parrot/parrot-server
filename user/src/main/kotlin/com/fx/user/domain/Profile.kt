@@ -1,5 +1,6 @@
 package com.fx.user.domain
 
+import com.fx.user.application.`in`.dto.ProfileUpdateCommand
 import java.time.LocalDateTime
 
 data class Profile(
@@ -12,6 +13,14 @@ data class Profile(
     val createdAt: LocalDateTime? = null,
     val updatedAt: LocalDateTime? = null
 ) {
+
+    fun updateProfile(updateCommand: ProfileUpdateCommand): Profile {
+        return this.copy(
+            nickname = updateCommand.nickname,
+            statusMessage = updateCommand.statusMessage,
+            isPrivate = updateCommand.isPrivate
+        )
+    }
 
     companion object {
 

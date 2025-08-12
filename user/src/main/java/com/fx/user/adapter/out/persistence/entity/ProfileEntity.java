@@ -28,6 +28,7 @@ public class ProfileEntity extends BaseEntity {
 
     public static ProfileEntity from(Profile profile) {
         return ProfileEntity.builder()
+            .id(profile.getId()) // nullable -> save / not null -> update
             .userId(profile.getUserId())
             .mediaId(profile.getMediaId())
             .nickname(profile.getNickname())

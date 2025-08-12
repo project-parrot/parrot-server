@@ -10,6 +10,7 @@ enum class ProfileErrorCode(
 {
 
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "프로필 정보를 찾을 수 없습니다."),
-    PROFILE_PRIVATE(HttpStatus.FORBIDDEN, "비공개 프로필입니다.")
+    PROFILE_PRIVATE(HttpStatus.FORBIDDEN, "비공개 프로필입니다."),
+    NICKNAME_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
 
 }
