@@ -12,6 +12,7 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SignatureException
+import jakarta.servlet.http.HttpSession
 import org.springframework.beans.factory.annotation.Value
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -21,14 +22,19 @@ import java.util.*
 class JwtProvider(
     @Value("\${jwt.secret.key}") private val secretKey: String,
     @Value("\${jwt.access-token.plus-hour}") private val accessTokenPlusHour: Long,
-    @Value("\${jwt.refresh-token.plus-hour}") private val refreshTokenPlusHour: Long
+    @Value("\${jwt.refresh-token.plus-hour}") private val refreshTokenPlusHour: Long,
+    private val httpSession: HttpSession
 ) : JwtProviderPort {
 
     private val key = Keys.hmacShaKeyFor(secretKey.toByteArray())
+    private val PREFIX: String = "Bearer "
+    private val REFRESHTOKEN: String = "refreshToken"
 
     override fun generateTokens(userId: Long, role: UserRole): TokenInfo {
         val accessToken = createToken(userId, role, accessTokenPlusHour)
         val refreshToken = createToken(userId, role, refreshTokenPlusHour)
+
+        saveRefreshToken(refreshToken)
 
         return TokenInfo(
             accessToken = accessToken,
@@ -51,6 +57,28 @@ class JwtProvider(
     override fun validateToken(token: String): Boolean {
         parseTokenSafely(token) // 예외 없으면 유효한 토큰
         return true
+    }
+
+    override fun reIssueToken(header: String): TokenInfo {
+        if (header.isEmpty() || !header.startsWith(PREFIX))
+            throw JwtException(JwtErrorCode.INVALID_TOKEN)
+        val refreshToken = header.removePrefix(PREFIX).trim()
+
+        val claims = parseTokenSafely(refreshToken)
+
+        val storedToken = httpSession.getAttribute(REFRESHTOKEN)?.toString() ?: throw JwtException(JwtErrorCode.INVALID_TOKEN)
+
+        if (storedToken != refreshToken) throw JwtException(JwtErrorCode.INVALID_TOKEN)
+
+        val userId = claims["userId"].toString().toLong()
+        val role = UserRole.valueOf(claims["role"].toString())
+
+        val newAccessToken = createToken(userId, role, accessTokenPlusHour)
+
+        return TokenInfo(
+            accessToken = newAccessToken,
+            refreshToken = refreshToken
+        )
     }
 
     private fun parseTokenSafely(token: String): Claims {
@@ -85,6 +113,13 @@ class JwtProvider(
             .claims(claims)
             .expiration(expiredAt)
             .compact()
+    }
+
+    private fun saveRefreshToken(refreshToken: String) {
+        val expiration = parseTokenSafely(refreshToken).expiration
+
+        httpSession.setAttribute(REFRESHTOKEN, refreshToken)
+        httpSession.maxInactiveInterval = ((expiration.time - Date().time) / 1000).toInt()
     }
 
 }

@@ -76,4 +76,8 @@ class UserCommandService(
         }
     }
 
+    override fun reIssue(header: String): TokenInfo {
+        return jwtProviderPort.reIssueToken(header)
+    }
+
 }

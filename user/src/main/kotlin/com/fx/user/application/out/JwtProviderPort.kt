@@ -13,4 +13,6 @@ interface JwtProviderPort {
 
     fun getAuthenticatedUserInfo(accessToken: String): AuthenticatedUserInfo
 
+    fun reIssueToken(header: String) : TokenInfo
+
 }
