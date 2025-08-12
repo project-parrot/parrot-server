@@ -14,12 +14,6 @@ interface PostCommandUseCase {
 
     fun updatePost(postId:Long, postUpdateCommand: PostUpdateCommand): Post
 
-    fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment
-
-    fun getComments(postId: Long): List<Comment>
-
-    fun getMyComments(userId: Long): List<Comment>
-
     fun addLike(postId:Long, userId: Long)
 
     fun cancelLike(postId:Long, userId:Long)

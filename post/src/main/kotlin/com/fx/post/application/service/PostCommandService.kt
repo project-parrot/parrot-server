@@ -29,7 +29,6 @@ import java.time.LocalTime
 class PostCommandService(
     private val postPersistencePort: PostPersistencePort,
     private val postMediaPersistencePort: PostMediaPersistencePort,
-    private val commentPersistencePort: CommentPersistencePort,
     private val likePersistencePort: LikePersistencePort,
     private val userWebPort: UserWebPort
 ) : PostCommandUseCase {
@@ -64,36 +63,6 @@ class PostCommandService(
 
         val savedPost = postPersistencePort.save(Post.updatePost(postId, post.userId, today, postUpdateCommand))
         return savedPost
-    }
-
-    @Transactional
-    override fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment {
-        if (!postPersistencePort.existsById(postId))
-            throw PostException(PostErrorCode.POST_NOT_EXIST)
-
-        val parentId = commentCreateCommand.parentId
-
-        return if (parentId != null) {
-            if (!commentPersistencePort.existsById(parentId)) {
-                throw CommentException(CommentErrorCode.PARENT_NOT_EXIST)
-            }
-            commentPersistencePort.save(Comment.createComment(postId, commentCreateCommand))
-        } else {
-            commentPersistencePort.save(Comment.createComment(postId, commentCreateCommand))
-        }
-    }
-
-    override fun getComments(postId: Long): List<Comment> {
-        val comments = commentPersistencePort.findByPostIdOrderByCreatedAtAsc(postId)
-        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
-
-        return comments
-    }
-
-    override fun getMyComments(userId: Long): List<Comment> {
-        val comments = commentPersistencePort.findByUserIdOrderByCreatedAtDesc(userId)
-
-        return comments
     }
 
     @Transactional

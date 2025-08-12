@@ -62,28 +62,6 @@ class PostApiAdapter(
         return Api.OK(PostUpdateResponse(post.id))
     }
 
-
-    @PostMapping("/{postId}/comments")
-    fun createComment(
-        @PathVariable postId: Long,
-        @RequestBody @Valid commentCreateRequest: CommentCreateRequest,
-        @AuthenticatedUser authUser: AuthUser): ResponseEntity<Api<CommentCreateResponse>> {
-        val comment = postCommandUseCase.createComment(postId,commentCreateRequest.toCommand(authUser))
-        return Api.OK(CommentCreateResponse(comment.id))
-    }
-
-    @GetMapping("/{postId}/comments")
-    fun getComments(@PathVariable postId: Long): ResponseEntity<Api<List<CommentResponse>>> {
-        val comments = postCommandUseCase.getComments(postId)
-        return Api.OK(comments.map { CommentResponse.from(it) })
-    }
-
-    @GetMapping("/me/comments")
-    fun getMyComments(@AuthenticatedUser authUser: AuthUser): ResponseEntity<Api<List<MyCommentResponse>>> {
-        val comments = postCommandUseCase.getMyComments(authUser.userId)
-        return Api.OK(comments.map { MyCommentResponse.from(it) })
-    }
-
     @PostMapping("/{postId}/likes")
     fun addLike(
         @PathVariable postId: Long,
