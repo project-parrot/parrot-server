@@ -17,8 +17,7 @@ spring:
     name: gateway-service
 
   profiles:
-    include:
-      swagger
+    include: auth, swagger
 
   cloud:
     gateway:
