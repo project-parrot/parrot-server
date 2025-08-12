@@ -6,6 +6,6 @@ interface FollowCommandUseCase {
 
     fun followUser(followerId:Long, followingId: Long): Follow
 
-    fun unfollowUser(requestUserId: Long, targetUserId: Long, mode: String): Boolean
+    fun unfollowUser(requestUserId: Long, followId: Long): Boolean
 
 }

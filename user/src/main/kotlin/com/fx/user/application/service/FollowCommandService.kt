@@ -48,26 +48,18 @@ class FollowCommandService(
     }
 
     @Transactional
-    override fun unfollowUser(requestUserId: Long, targetUserId: Long, mode: String): Boolean =
-        when (mode.lowercase()) {
-            "following" -> unfollowByFollowing(requestUserId, targetUserId)
-            "follower" -> unfollowByFollower(requestUserId, targetUserId)
-            else -> throw FollowException(FollowErrorCode.INVALID_MODE)
+    override fun unfollowUser(requestUserId: Long, followId: Long): Boolean {
+
+        val follow = followPersistencePort.getFollow(followId)?: throw FollowException(FollowErrorCode.FOLLOW_NOT_FOUND)
+
+        if (follow.followerId != requestUserId && follow.followingId != requestUserId) {
+            throw FollowException(FollowErrorCode.UNAUTHORIZED_UNFOLLOW)
         }
 
-    private fun unfollowByFollowing(requestUserId: Long, targetUserId: Long): Boolean {
-        val follow = followPersistencePort.getFollow(requestUserId, targetUserId)
-            ?: throw FollowException(FollowErrorCode.NOT_FOLLOWING)
-        followPersistencePort.deleteFollow(follow.id!!)
+        followPersistencePort.deleteFollow(followId)
         return true
     }
 
-    private fun unfollowByFollower(requestUserId: Long, targetUserId: Long): Boolean {
-        val follow = followPersistencePort.getFollow(targetUserId, requestUserId)
-            ?: throw FollowException(FollowErrorCode.NOT_FOLLOWER)
-        followPersistencePort.deleteFollow(follow.id!!)
-        return true
-    }
 
     private fun saveFollow(followerId: Long, followingId: Long, status: FollowStatus): Follow =
         followPersistencePort.saveFollow(
