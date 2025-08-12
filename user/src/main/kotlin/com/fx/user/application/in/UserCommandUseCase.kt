@@ -14,4 +14,6 @@ interface UserCommandUseCase{
 
     fun findOrCreateOAuthUser(oauthCommand: UserOAuthCommand): User
 
+    fun reIssue(header: String): TokenInfo
+
 }

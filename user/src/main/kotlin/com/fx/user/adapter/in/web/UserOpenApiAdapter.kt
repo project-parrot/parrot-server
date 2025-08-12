@@ -11,6 +11,7 @@ import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 
 @WebInputAdapter
@@ -34,6 +35,14 @@ class UserOpenApiAdapter(
         Api.OK(
             TokenResponse.from(
                 userCommandUseCase.login(loginRequest.toCommand())
+            )
+        )
+
+    @PostMapping("/reissue")
+    fun reIssue(@RequestHeader("Authorization") header: String): ResponseEntity<Api<TokenResponse>> =
+        Api.OK(
+            TokenResponse.from(
+                userCommandUseCase.reIssue(header)
             )
         )
 
