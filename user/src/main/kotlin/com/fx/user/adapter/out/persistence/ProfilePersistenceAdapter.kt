@@ -20,4 +20,7 @@ class ProfilePersistenceAdapter(
     override fun findByProfile(userId: Long): Profile? =
         profileRepository.findByUserId(userId).orElse(null)?.toDomain()
 
+    override fun updateProfile(profile: Profile): Profile =
+        profileRepository.save(ProfileEntity.from(profile)).toDomain()
+
 }
