@@ -61,40 +61,4 @@ class PostApiAdapter(
         val post = postCommandUseCase.updatePost(postId, postUpdateRequest.toCommand(authUser))
         return Api.OK(PostUpdateResponse(post.id))
     }
-
-    @PostMapping("/{postId}/likes")
-    fun addLike(
-        @PathVariable postId: Long,
-        @AuthenticatedUser authUser: AuthUser
-        ): ResponseEntity<Api<Unit?>> {
-        postCommandUseCase.addLike(postId, authUser.userId)
-        return Api.OK(null)
-    }
-
-    @DeleteMapping("/{postId}/likes")
-    fun cancelLike(
-        @PathVariable postId: Long,
-        @AuthenticatedUser authUser: AuthUser
-    ): ResponseEntity<Api<Unit?>> {
-        postCommandUseCase.cancelLike(postId, authUser.userId)
-        return Api.OK(null)
-    }
-
-    @GetMapping("/{postId}/likes")
-    fun getLikeUsers(
-        @PathVariable postId: Long
-    ): ResponseEntity<Api<List<LikeUsersResponse>>> {
-        val likeUsers = postCommandUseCase.getLikeUsers(postId)
-        return Api.OK(likeUsers.map { LikeUsersResponse(userId = it) })
-    }
-
-    @GetMapping("/me/likes")
-    fun getMyLikedPosts(
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
-        @AuthenticatedUser authUser: AuthUser
-    ): ResponseEntity<Api<List<PostResponse>>> {
-        val posts = postCommandUseCase.getMyLikedPosts(authUser.userId, before)
-        return Api.OK(posts.map { PostResponse.from(it) })
-    }
-
 }

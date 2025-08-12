@@ -39,7 +39,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
         from PostEntity p
         left join LikeEntity l on l.postId = p.id
         left join CommentEntity c on c.postId = p.id
-        where p.userId = :userId and p.createdAt < :before and p.isDeleted = :isDeleted
+        where l.userId = :userId and p.createdAt < :before and p.isDeleted = :isDeleted
         group by p.id, p.userId, p.content, p.createdAt
         order by p.createdAt desc
         limit 10
