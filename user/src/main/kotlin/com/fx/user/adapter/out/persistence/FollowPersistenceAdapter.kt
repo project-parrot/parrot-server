@@ -27,4 +27,7 @@ class FollowPersistenceAdapter(
     override fun getFollow(followerId: Long, followingId: Long): Follow? =
         followRepository.findByFollowerIdAndFollowingId(followerId, followingId).orElse(null)?.toDomain()
 
+    override fun deleteFollow(followId: Long) =
+        followRepository.deleteById(followId)
+
 }
