@@ -1,6 +1,6 @@
 package com.fx.user.adapter.`in`.web
 
-import com.fx.global.annotation.hexagonal.WebAdapter
+import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
 import com.fx.user.adapter.`in`.web.dto.TokenResponse
 import com.fx.user.adapter.`in`.web.dto.UserIdResponse
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 
-@WebAdapter
+@WebInputAdapter
 @RequestMapping("/open-api/v1/user")
 class UserOpenApiAdapter(
     private val userCommandUseCase: UserCommandUseCase
