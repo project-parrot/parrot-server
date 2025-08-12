@@ -29,7 +29,6 @@ import java.time.LocalTime
 class PostCommandService(
     private val postPersistencePort: PostPersistencePort,
     private val postMediaPersistencePort: PostMediaPersistencePort,
-    private val commentPersistencePort: CommentPersistencePort,
     private val likePersistencePort: LikePersistencePort,
     private val userWebPort: UserWebPort
 ) : PostCommandUseCase {
@@ -49,26 +48,6 @@ class PostCommandService(
         return savedPost
     }
 
-    override fun getFollowersPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
-        // 유저 모듈에서 FeignClient로 팔로우 리스트 가져오기(미구현)
-        val followers = listOf(1L, 2L) // 임시 구현
-        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeleted(followers, before)
-        // 유저 모듈에서 FeignClient로 follower들의 닉네임을 가져온 뒤 매핑하기(미구현)
-        return posts
-    }
-
-    override fun getMyPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
-        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeleted(listOf(userId), before)
-        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
-        return posts
-    }
-
-    override fun getUserPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
-        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeleted(listOf(userId), before)
-        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
-        return posts
-    }
-
     @Transactional
     override fun updatePost(postId:Long, postUpdateCommand: PostUpdateCommand): Post {
         val post = postPersistencePort.findByIdAndIsDeletedNot(postId)?: throw PostException(PostErrorCode.POST_NOT_EXIST)
@@ -84,36 +63,6 @@ class PostCommandService(
 
         val savedPost = postPersistencePort.save(Post.updatePost(postId, post.userId, today, postUpdateCommand))
         return savedPost
-    }
-
-    @Transactional
-    override fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment {
-        if (!postPersistencePort.existsById(postId))
-            throw PostException(PostErrorCode.POST_NOT_EXIST)
-
-        val parentId = commentCreateCommand.parentId
-
-        return if (parentId != null) {
-            if (!commentPersistencePort.existsById(parentId)) {
-                throw CommentException(CommentErrorCode.PARENT_NOT_EXIST)
-            }
-            commentPersistencePort.save(Comment.createComment(postId, commentCreateCommand))
-        } else {
-            commentPersistencePort.save(Comment.createComment(postId, commentCreateCommand))
-        }
-    }
-
-    override fun getComments(postId: Long): List<Comment> {
-        val comments = commentPersistencePort.findByPostIdOrderByCreatedAtAsc(postId)
-        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
-
-        return comments
-    }
-
-    override fun getMyComments(userId: Long): List<Comment> {
-        val comments = commentPersistencePort.findByUserIdOrderByCreatedAtDesc(userId)
-
-        return comments
     }
 
     @Transactional

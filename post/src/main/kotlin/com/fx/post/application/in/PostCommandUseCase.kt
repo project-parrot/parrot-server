@@ -12,19 +12,7 @@ interface PostCommandUseCase {
 
     fun createPost(postCreateCommand: PostCreateCommand): Post
 
-    fun getFollowersPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto>
-
-    fun getMyPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto>
-
-    fun getUserPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto>
-
     fun updatePost(postId:Long, postUpdateCommand: PostUpdateCommand): Post
-
-    fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment
-
-    fun getComments(postId: Long): List<Comment>
-
-    fun getMyComments(userId: Long): List<Comment>
 
     fun addLike(postId:Long, userId: Long)
 
