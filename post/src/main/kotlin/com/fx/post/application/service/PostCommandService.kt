@@ -49,26 +49,6 @@ class PostCommandService(
         return savedPost
     }
 
-    override fun getFollowersPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
-        // 유저 모듈에서 FeignClient로 팔로우 리스트 가져오기(미구현)
-        val followers = listOf(1L, 2L) // 임시 구현
-        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeleted(followers, before)
-        // 유저 모듈에서 FeignClient로 follower들의 닉네임을 가져온 뒤 매핑하기(미구현)
-        return posts
-    }
-
-    override fun getMyPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
-        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeleted(listOf(userId), before)
-        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
-        return posts
-    }
-
-    override fun getUserPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
-        val posts = postPersistencePort.findByUserIdInAndCreatedAtBeforeAndIsDeleted(listOf(userId), before)
-        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
-        return posts
-    }
-
     @Transactional
     override fun updatePost(postId:Long, postUpdateCommand: PostUpdateCommand): Post {
         val post = postPersistencePort.findByIdAndIsDeletedNot(postId)?: throw PostException(PostErrorCode.POST_NOT_EXIST)

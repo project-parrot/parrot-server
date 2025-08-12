@@ -6,6 +6,7 @@ import com.fx.global.api.Api
 import com.fx.global.resolver.AuthUser
 import com.fx.post.adapter.`in`.web.dto.*
 import com.fx.post.application.`in`.PostCommandUseCase
+import com.fx.post.application.`in`.PostQueryUseCase
 import jakarta.validation.Valid
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
@@ -15,7 +16,8 @@ import java.time.LocalDateTime
 @WebInputAdapter
 @RequestMapping("/api/v1/posts")
 class PostApiAdapter(
-    private val postCommandUseCase: PostCommandUseCase
+    private val postCommandUseCase: PostCommandUseCase,
+    private val postQueryUseCase: PostQueryUseCase
 ) {
     @PostMapping("/")
     fun createPost(
@@ -30,7 +32,7 @@ class PostApiAdapter(
     fun getFollowersPosts(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
                           @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> {
-        val posts = postCommandUseCase.getFollowersPosts(authUser.userId, before)
+        val posts = postQueryUseCase.getFollowersPosts(authUser.userId, before)
         return Api.OK(posts.map { PostResponse.from(it) })
     }
 
@@ -38,7 +40,7 @@ class PostApiAdapter(
     fun getMyPosts(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
                  @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> {
-        val posts = postCommandUseCase.getMyPosts(authUser.userId, before)
+        val posts = postQueryUseCase.getMyPosts(authUser.userId, before)
         return Api.OK(posts.map { PostResponse.from(it) })
     }
 
@@ -46,7 +48,7 @@ class PostApiAdapter(
     fun getUserPosts(@PathVariable userId: Long,
                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime
     ): ResponseEntity<Api<List<PostResponse>>> {
-        val posts = postCommandUseCase.getUserPosts(userId, before)
+        val posts = postQueryUseCase.getUserPosts(userId, before)
         return Api.OK(posts.map { PostResponse.from(it) })
     }
 
