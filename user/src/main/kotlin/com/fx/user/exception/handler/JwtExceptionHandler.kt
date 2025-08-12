@@ -3,7 +3,6 @@ package com.fx.user.exception.handler
 import com.fx.global.api.Api
 import com.fx.global.api.ErrorCodeIfs
 import com.fx.user.exception.JwtException
-import com.fx.user.exception.UserException
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler

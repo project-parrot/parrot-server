@@ -2,10 +2,10 @@ package com.fx.user.adapter.`in`.web
 
 import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
-import com.fx.user.adapter.`in`.web.dto.TokenResponse
-import com.fx.user.adapter.`in`.web.dto.UserIdResponse
-import com.fx.user.adapter.`in`.web.dto.UserLoginRequest
-import com.fx.user.adapter.`in`.web.dto.UserSignUpRequest
+import com.fx.user.adapter.`in`.web.dto.user.TokenResponse
+import com.fx.user.adapter.`in`.web.dto.user.UserIdResponse
+import com.fx.user.adapter.`in`.web.dto.user.UserLoginRequest
+import com.fx.user.adapter.`in`.web.dto.user.UserSignUpRequest
 import com.fx.user.application.`in`.UserCommandUseCase
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
