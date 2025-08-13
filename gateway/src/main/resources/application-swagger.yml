@@ -10,3 +10,5 @@ springdoc:
         url: /post-service/open-api/v3/api/docs
       - name: user-service
         url: /user-service/open-api/v3/api/docs
+      - name: media-service
+        url: /media-service/open-api/v3/api/docs
