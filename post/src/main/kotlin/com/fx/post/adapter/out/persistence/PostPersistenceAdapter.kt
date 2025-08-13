@@ -28,6 +28,7 @@ class PostPersistenceAdapter(
     override fun findByIdAndIsDeletedNot(postId: Long): Post? =
         postRepository.findByIdAndIsDeletedNot(postId, true).orElse(null)?.toDomain()
 
-    override fun findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(userId: Long, before: LocalDateTime): List<PostSummaryDto> =
-        postRepository.findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(userId, before, false)
+    override fun findLikedPostsByUserIdAndPostIdBeforeAndIsDeleted(userId: Long, postId: Long): List<PostSummaryDto> =
+        postRepository.findLikedPostsByUserIdAndPostIdBeforeAndIsDeleted(userId, postId, false)
+
 }

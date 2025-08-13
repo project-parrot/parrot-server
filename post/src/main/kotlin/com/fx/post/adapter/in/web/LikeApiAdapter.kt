@@ -8,10 +8,8 @@ import com.fx.post.adapter.`in`.web.dto.LikeUsersResponse
 import com.fx.post.adapter.`in`.web.dto.PostResponse
 import com.fx.post.application.`in`.LikeCommandUseCase
 import com.fx.post.application.`in`.LikeQueryUseCase
-import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
 
 @WebInputAdapter
 @RequestMapping("/api/v1/posts")
@@ -47,10 +45,10 @@ class LikeApiAdapter(
 
     @GetMapping("/me/likes")
     fun getMyLikedPosts(
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
+        @RequestParam postId: Long = Long.MAX_VALUE,
         @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> {
-        val posts = likeQueryUseCase.getMyLikedPosts(authUser.userId, before)
+        val posts = likeQueryUseCase.getMyLikedPosts(authUser.userId, postId)
         return Api.OK(posts.map { PostResponse.from(it) })
     }
 }

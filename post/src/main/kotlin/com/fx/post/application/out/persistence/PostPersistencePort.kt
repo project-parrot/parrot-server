@@ -16,5 +16,5 @@ interface PostPersistencePort {
 
     fun findByUserIdAndPostIdBeforeAndIsDeleted(userIds: List<Long>, postId: Long): List<PostSummaryDto>
 
-    fun findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(userId: Long, before: LocalDateTime): List<PostSummaryDto>
+    fun findLikedPostsByUserIdAndPostIdBeforeAndIsDeleted(userId: Long, postId: Long): List<PostSummaryDto>
 }

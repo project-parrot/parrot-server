@@ -21,8 +21,8 @@ class LikeQueryService(
         return users
     }
 
-    override fun getMyLikedPosts(userId: Long, before: LocalDateTime): List<PostSummaryDto> {
-        val posts = postPersistencePort.findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(userId, before)
+    override fun getMyLikedPosts(userId: Long, postId: Long): List<PostSummaryDto> {
+        val posts = postPersistencePort.findLikedPostsByUserIdAndPostIdBeforeAndIsDeleted(userId, postId)
         // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
 
         return posts
