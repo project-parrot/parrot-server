@@ -5,7 +5,6 @@ import com.fx.post.application.`in`.LikeQueryUseCase
 import com.fx.post.application.out.persistence.LikePersistencePort
 import com.fx.post.application.out.persistence.PostPersistencePort
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class LikeQueryService(
