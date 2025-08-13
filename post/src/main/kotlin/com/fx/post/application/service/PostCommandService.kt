@@ -17,7 +17,6 @@ import com.fx.post.domain.Post
 import com.fx.post.exception.CommentException
 import com.fx.post.exception.LikeException
 import com.fx.post.exception.PostException
-import com.fx.post.exception.errorcode.CommentErrorCode
 import com.fx.post.exception.errorcode.LikeErrorCode
 import com.fx.post.exception.errorcode.PostErrorCode
 import jakarta.transaction.Transactional

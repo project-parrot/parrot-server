@@ -4,7 +4,6 @@ import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
 import com.fx.post.application.`in`.PostQueryUseCase
 import com.fx.post.application.out.persistence.PostPersistencePort
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class PostQueryService(

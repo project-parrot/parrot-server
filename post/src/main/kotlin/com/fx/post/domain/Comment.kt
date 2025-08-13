@@ -1,6 +1,5 @@
 package com.fx.post.domain
 
-import com.fx.post.adapter.`in`.web.dto.CommentCreateRequest
 import com.fx.post.application.`in`.dto.CommentCreateCommand
 import java.time.LocalDateTime
 
