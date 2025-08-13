@@ -1,14 +1,14 @@
-package com.fx.user.adapter.out.cache
+package com.fx.user.adapter.out.token
 
-import com.fx.global.annotation.hexagonal.CacheAdapter
-import com.fx.user.application.out.JwtCachePort
+import com.fx.global.annotation.hexagonal.TokenStorageAdapter
+import com.fx.user.application.out.TokenStoragePort
 import jakarta.servlet.http.HttpSession
 import java.util.*
 
-@CacheAdapter
-class RedisJwtCacheAdapter(
+@TokenStorageAdapter
+class SessionTokenStorageAdapter(
     private val httpSession: HttpSession
-): JwtCachePort {
+): TokenStoragePort {
     private val REFRESHTOKEN: String = "refreshToken"
 
     override fun saveToken(refreshToken: String, expiration: Date) {
