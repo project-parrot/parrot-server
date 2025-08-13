@@ -19,7 +19,7 @@ class PostApiAdapter(
     private val postCommandUseCase: PostCommandUseCase,
     private val postQueryUseCase: PostQueryUseCase
 ) {
-    @PostMapping("/")
+    @PostMapping
     fun createPost(
         @RequestBody @Valid postCreateRequest: PostCreateRequest,
         @AuthenticatedUser authUser: AuthUser
@@ -28,29 +28,30 @@ class PostApiAdapter(
         return Api.OK(PostCreateResponse(post.id))
     }
 
-    @GetMapping("/")
-    fun getFollowersPosts(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
+    @GetMapping
+    fun getFollowersPosts(@RequestParam postId: Long = Long.MAX_VALUE,
                           @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> {
-        val posts = postQueryUseCase.getFollowersPosts(authUser.userId, before)
+        val posts = postQueryUseCase.getFollowersPosts(authUser.userId, postId)
         return Api.OK(posts.map { PostResponse.from(it) })
     }
 
     @GetMapping("/me")
-    fun getMyPosts(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime,
+    fun getMyPosts(@RequestParam postId: Long = Long.MAX_VALUE,
                  @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> {
-        val posts = postQueryUseCase.getMyPosts(authUser.userId, before)
+        val posts = postQueryUseCase.getMyPosts(authUser.userId, postId)
         return Api.OK(posts.map { PostResponse.from(it) })
     }
 
     @GetMapping("/{userId}")
     fun getUserPosts(@PathVariable userId: Long,
-                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) before: LocalDateTime
+                     @RequestParam postId: Long = Long.MAX_VALUE
     ): ResponseEntity<Api<List<PostResponse>>> {
-        val posts = postQueryUseCase.getUserPosts(userId, before)
+        val posts = postQueryUseCase.getUserPosts(userId, postId)
         return Api.OK(posts.map { PostResponse.from(it) })
     }
+
 
     @PutMapping("/{postId}")
     fun updatePost(
