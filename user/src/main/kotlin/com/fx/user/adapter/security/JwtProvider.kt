@@ -2,7 +2,7 @@ package com.fx.user.adapter.security
 
 import com.fx.global.annotation.hexagonal.SecurityAdapter
 import com.fx.global.dto.UserRole
-import com.fx.user.application.out.JwtCachePort
+import com.fx.user.application.out.TokenStoragePort
 import com.fx.user.application.out.JwtProviderPort
 import com.fx.user.domain.AuthenticatedUserInfo
 import com.fx.user.domain.TokenInfo
@@ -13,7 +13,6 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SignatureException
-import jakarta.servlet.http.HttpSession
 import org.springframework.beans.factory.annotation.Value
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -24,7 +23,7 @@ class JwtProvider(
     @Value("\${jwt.secret.key}") private val secretKey: String,
     @Value("\${jwt.access-token.plus-hour}") private val accessTokenPlusHour: Long,
     @Value("\${jwt.refresh-token.plus-hour}") private val refreshTokenPlusHour: Long,
-    private val jwtCachePort: JwtCachePort
+    private val tokenStoragePort: TokenStoragePort
 ) : JwtProviderPort {
 
     private val key = Keys.hmacShaKeyFor(secretKey.toByteArray())
@@ -36,7 +35,7 @@ class JwtProvider(
 
         val expiration = parseTokenSafely(refreshToken).expiration
 
-        jwtCachePort.saveToken(refreshToken, expiration)
+        tokenStoragePort.saveToken(refreshToken, expiration)
 
         return TokenInfo(
             accessToken = accessToken,
@@ -68,7 +67,7 @@ class JwtProvider(
 
         val claims = parseTokenSafely(refreshToken)
 
-        val storedToken = jwtCachePort.getToken() ?: throw JwtException(JwtErrorCode.INVALID_TOKEN)
+        val storedToken = tokenStoragePort.getToken() ?: throw JwtException(JwtErrorCode.INVALID_TOKEN)
 
         if (storedToken != refreshToken) throw JwtException(JwtErrorCode.INVALID_TOKEN)
 

@@ -2,7 +2,7 @@ package com.fx.user.application.out
 
 import java.util.*
 
-interface JwtCachePort {
+interface TokenStoragePort {
     fun saveToken(refreshToken: String, expiration: Date)
 
     fun getToken(): String?
