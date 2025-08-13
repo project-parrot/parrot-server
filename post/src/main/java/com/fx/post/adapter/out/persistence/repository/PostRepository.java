@@ -17,32 +17,35 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
     Optional<PostEntity> findByIdAndIsDeletedNot(Long id, Boolean isDeleted);
 
     @Query("""
-    SELECT new com.fx.post.adapter.out.persistence.dto.PostSummaryDto(
-            p.id, p.userId, p.content, p.createdAt,
-            count(distinct l.id), count(distinct c.id)
-        )
-        from PostEntity p
-        left join LikeEntity l on l.postId = p.id
-        left join CommentEntity c on c.postId = p.id
-        where p.userId in :userIds and p.createdAt < :before and p.isDeleted = :isDeleted
-        group by p.id, p.userId, p.content, p.createdAt
-        order by p.createdAt desc
-        limit 10
-    """)
-    List<PostSummaryDto> findByUserIdInAndCreatedAtBeforeAndIsDeleted(@Param("userIds") List<Long> userIds, @Param("before") LocalDateTime before, @Param("isDeleted") Boolean isDeleted);
+    SELECT new com.fx.post.adapter.out.persistence.dto.PostSummaryDto(p.id, p.userId, p.content, p.createdAt, 
+        COUNT(DISTINCT l.id), COUNT(DISTINCT c.id))
+    FROM PostEntity p
+    LEFT JOIN LikeEntity l ON p.id = l.postId
+    LEFT JOIN CommentEntity c ON p.id = c.postId
+    WHERE p.userId IN :userIds
+        AND p.id < :postId
+        AND p.isDeleted = :isDeleted
+    GROUP BY p.id, p.userId, p.content, p.createdAt
+    ORDER BY p.id DESC
+    LIMIT 10
+    """
+    )
+    List<PostSummaryDto> findByUserIdAndPostIdBeforeAndIsDeleted(@Param("userIds") List<Long> userIds, @Param("postId") Long postId, @Param("isDeleted") Boolean isDeleted);
 
     @Query("""
     SELECT new com.fx.post.adapter.out.persistence.dto.PostSummaryDto(
             p.id, p.userId, p.content, p.createdAt,
             count(distinct l.id), count(distinct c.id)
         )
-        from PostEntity p
-        left join LikeEntity l on l.postId = p.id
-        left join CommentEntity c on c.postId = p.id
-        where l.userId = :userId and p.createdAt < :before and p.isDeleted = :isDeleted
-        group by p.id, p.userId, p.content, p.createdAt
-        order by p.createdAt desc
-        limit 10
+    FROM PostEntity p
+    LEFT JOIN LikeEntity l ON l.postId = p.id
+    LEFT JOIN CommentEntity c ON c.postId = p.id
+    WHERE l.userId = :userId
+        AND p.id < :postId
+        AND p.isDeleted = :isDeleted
+    GROUP BY p.id, p.userId, p.content, p.createdAt
+    ORDER BY p.id DESC
+    LIMIT 10
     """)
-    List<PostSummaryDto> findLikedPostsByUserIdAndCreatedAtBeforeAndIsDeleted(@Param("userId") Long userId, @Param("before") LocalDateTime before, @Param("isDeleted") Boolean isDeleted);
+    List<PostSummaryDto> findLikedPostsByUserIdAndPostIdBeforeAndIsDeleted(@Param("userId") Long userId, @Param("postId") Long postId, @Param("isDeleted") Boolean isDeleted);
 }

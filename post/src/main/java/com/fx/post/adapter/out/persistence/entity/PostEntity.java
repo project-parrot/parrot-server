@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "post",
         indexes = {
-            @Index(name = "idx_post_userid_isdeleted_createdat", columnList = "user_id, is_deleted, created_at")
+            @Index(name = "idx_post_userid_isdeleted", columnList = "user_id, is_deleted")
         })
 @SuperBuilder
 @NoArgsConstructor
