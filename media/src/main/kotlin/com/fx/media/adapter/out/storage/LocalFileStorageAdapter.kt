@@ -4,9 +4,12 @@ import com.fx.global.annotation.hexagonal.FileStorageAdapter
 import com.fx.global.dto.FileType
 import com.fx.media.adapter.`in`.web.dto.Context
 import com.fx.media.adapter.out.storage.dto.FileInfo
+import com.fx.media.adapter.out.storage.dto.FileStoreCommand
 import com.fx.media.application.`in`.dto.MediaUploadCommand
 import com.fx.media.application.out.storage.FileStoragePort
 import com.fx.media.domain.Media
+import com.fx.media.exception.MediaException
+import com.fx.media.exception.errorcode.MediaErrorCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import lombok.extern.slf4j.Slf4j
@@ -35,28 +38,16 @@ class LocalFileStorageAdapter (
 
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    override suspend fun store(mediaUploadCommand: MediaUploadCommand): Media = withContext(Dispatchers.IO) {
+    override suspend fun store(fileStoreCommand: FileStoreCommand): Media = withContext(Dispatchers.IO) {
         createDirectory(uploadDir)
 
-        val fileInfo = createFileInfo(mediaUploadCommand.file)
-        copyFileToStorage(mediaUploadCommand.file, fileInfo.path)
+        val fileInfo = createFileInfo(fileStoreCommand.file)
+        copyFileToStorage(fileStoreCommand.file, fileInfo.path)
         logUploadStatus(fileInfo.path)
 
-        val fileUrl = createUrl(fileInfo, mediaUploadCommand.context)
+        val fileUrl = createUrl(fileInfo, fileStoreCommand.context)
 
-        createMedia(mediaUploadCommand, fileInfo, fileUrl)
-    }
-
-    override fun storeWithoutCoroutine(mediaUploadCommand: MediaUploadCommand): Media {
-        createDirectory(uploadDir)
-
-        val fileInfo = createFileInfo(mediaUploadCommand.file)
-        copyFileToStorage(mediaUploadCommand.file, fileInfo.path)
-        logUploadStatus(fileInfo.path)
-
-        val fileUrl = createUrl(fileInfo, mediaUploadCommand.context)
-
-        return createMedia(mediaUploadCommand, fileInfo, fileUrl)
+        createMedia(fileStoreCommand, fileInfo, fileUrl)
     }
 
     private fun createFileInfo(file: MultipartFile): FileInfo {
@@ -76,18 +67,18 @@ class LocalFileStorageAdapter (
         try {
             Files.copy(file.inputStream, path, StandardCopyOption.REPLACE_EXISTING)
         } catch (_: Exception) {
-            throw IllegalStateException("파일 저장 오류")
+            throw MediaException(MediaErrorCode.FILE_UPLOAD_FAILED)
         }
     }
 
     private fun createDirectory(dirPath: String) {
         val directory = File(dirPath)
         if (!directory.exists() && !directory.mkdirs()) {
-            throw IOException("Could not create directory $dirPath")
+            throw MediaException(MediaErrorCode.DIRECTORY_CREATION_FAILED)
         }
     }
 
-    private fun createMedia(mediaUploadCommand: MediaUploadCommand, fileInfo: FileInfo, fileUrl: String): Media {
+    private fun createMedia(fileStoreCommand: FileStoreCommand, fileInfo: FileInfo, fileUrl: String): Media {
         val fileType = when (fileInfo.extension.lowercase()) {
             "png", "jpg", "jpeg", "gif" -> FileType.IMAGE
             "mp4", "mov", "avi" -> FileType.VIDEO
@@ -95,10 +86,10 @@ class LocalFileStorageAdapter (
         }
 
         return Media(
-            userId = mediaUploadCommand.userId,
+            userId = fileStoreCommand.userId,
             fileUrl = fileUrl,
             fileType = fileType,
-            fileSize = mediaUploadCommand.file.size,
+            fileSize = fileStoreCommand.file.size,
             serverName = fileInfo.serverName,
             originalName = fileInfo.originalName,
             extension = fileInfo.extension

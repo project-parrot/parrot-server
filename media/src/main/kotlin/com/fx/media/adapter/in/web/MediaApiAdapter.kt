@@ -6,6 +6,7 @@ import com.fx.global.api.Api
 import com.fx.global.resolver.AuthUser
 import com.fx.media.adapter.`in`.web.dto.Context
 import com.fx.media.adapter.`in`.web.dto.MediaUploadResponse
+import com.fx.media.adapter.out.storage.dto.FileStoreCommand
 import com.fx.media.application.`in`.MediaCommandUseCase
 import com.fx.media.application.`in`.MediaQueryUseCase
 import com.fx.media.application.`in`.dto.MediaUploadCommand
@@ -28,21 +29,9 @@ class MediaApiAdapter (
         @AuthenticatedUser authUser: AuthUser
     ) : ResponseEntity<Api<List<MediaUploadResponse>>> {
 
-        val mediaResponses = files.map { mediaCommandUseCase.uploadFile(MediaUploadCommand(it, context, authUser.userId)) }
-
+        val mediaResponses = mediaCommandUseCase.uploadFile(MediaUploadCommand(files, context, authUser.userId))
         return Api.OK(mediaResponses.map { MediaUploadResponse.from(it) })
     }
 
-    @PostMapping("/without")
-    fun uploadFileWithoutCoroutine(
-        @RequestParam("files") files: List<MultipartFile>,
-        @RequestParam context: Context,
-        @AuthenticatedUser authUser: AuthUser
-    ) : ResponseEntity<Api<List<MediaUploadResponse>>> {
-
-        val mediaResponses = files.map { mediaCommandUseCase.uploadFileWithoutCoroutine(MediaUploadCommand(it, context, authUser.userId)) }
-
-        return Api.OK(mediaResponses.map { MediaUploadResponse.from(it) })
-    }
 
 }
