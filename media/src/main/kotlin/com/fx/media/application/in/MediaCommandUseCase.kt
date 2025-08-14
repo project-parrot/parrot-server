@@ -5,7 +5,6 @@ import com.fx.media.domain.Media
 
 interface MediaCommandUseCase {
 
-    suspend fun uploadFile(mediaUploadCommand: MediaUploadCommand): Media
+    suspend fun uploadFile(mediaUploadCommand: MediaUploadCommand): List<Media>
 
-    fun uploadFileWithoutCoroutine(mediaUploadCommand: MediaUploadCommand): Media
 }
