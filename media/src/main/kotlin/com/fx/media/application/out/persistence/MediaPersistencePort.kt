@@ -5,4 +5,7 @@ import com.fx.media.domain.Media
 interface MediaPersistencePort {
 
     fun save(media: Media) : Media
+
+    fun findByIdAndIsDeleted(mediaId: Long) : Media?
+
 }
