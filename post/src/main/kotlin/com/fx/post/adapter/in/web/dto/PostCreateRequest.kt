@@ -7,13 +7,13 @@ import jakarta.validation.constraints.Size
 data class PostCreateRequest(
     @field:Size(max = 2000, message = "게시글은 2000자 이내여야 합니다.")
     val content: String,
-    //val mediaIds: List<Long>
+    val mediaIds: List<Long>?
 ) {
     fun toCommand(authUser: AuthUser): PostCreateCommand {
         return PostCreateCommand(
             userId = authUser.userId,
             content = this.content,
-            //mediaIds = this.mediaIds
+            mediaIds = this.mediaIds
         )
     }
 

@@ -17,9 +17,9 @@ import org.springframework.web.multipart.MultipartFile
 
 @WebInputAdapter
 @RequestMapping("/api/v1/media")
-class MediaApiAdapter (
+class MediaApiAdapter(
     private val mediaCommandUseCase: MediaCommandUseCase,
-    private val mediaQueryUseCase: MediaQueryUseCase
+    private val mediaQueryUseCase: MediaQueryUseCase,
 ) {
     @PostMapping
     suspend fun uploadFile(
@@ -27,7 +27,6 @@ class MediaApiAdapter (
         @RequestParam context: Context,
         @AuthenticatedUser authUser: AuthUser
     ) : ResponseEntity<Api<List<MediaUploadResponse>>> {
-
         val medias = mediaCommandUseCase.uploadFile(MediaUploadCommand(files, context, authUser.userId))
         return Api.OK(medias.map { MediaUploadResponse.from(it) })
     }
@@ -36,7 +35,6 @@ class MediaApiAdapter (
     fun getFile(
         @PathVariable mediaId: Long
     ) : ResponseEntity<Api<MediaGetResponse>> {
-
         val media = mediaQueryUseCase.getFile(mediaId)
         return Api.OK(MediaGetResponse.from(media))
     }
@@ -46,11 +44,8 @@ class MediaApiAdapter (
         @PathVariable mediaId: Long,
         @AuthenticatedUser authUser: AuthUser
     ) : ResponseEntity<Api<Unit>> {
-
         mediaCommandUseCase.deleteFile(mediaId, authUser.userId, authUser.role)
         return Api.OK(Unit)
-
     }
-
 
 }

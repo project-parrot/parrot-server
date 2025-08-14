@@ -14,11 +14,14 @@ import com.fx.post.application.out.web.UserWebPort
 import com.fx.post.domain.Comment
 import com.fx.post.domain.Like
 import com.fx.post.domain.Post
+import com.fx.post.domain.PostMedia
 import com.fx.post.exception.CommentException
 import com.fx.post.exception.LikeException
 import com.fx.post.exception.PostException
+import com.fx.post.exception.PostMediaException
 import com.fx.post.exception.errorcode.LikeErrorCode
 import com.fx.post.exception.errorcode.PostErrorCode
+import com.fx.post.exception.errorcode.PostMediaErrorCode
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -43,7 +46,20 @@ class PostCommandService(
             throw PostException(PostErrorCode.DUPLICATE_DAILY_POST)
         }
 
+        val mediaIds = postCreateCommand.mediaIds.orEmpty()
+
+        if (mediaIds.size > 5) throw PostMediaException(PostMediaErrorCode.TOO_MANY_FILE)
+
         val savedPost = postPersistencePort.save(Post.createPost(postCreateCommand))
+
+        mediaIds.forEach { mediaId ->
+            val postMedia = PostMedia(
+                postId = savedPost.id,
+                mediaId = mediaId
+            )
+            postMediaPersistencePort.save(postMedia)
+        }
+
         return savedPost
     }
 
@@ -85,5 +101,6 @@ class PostCommandService(
 
         if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
     }
+
 
 }
