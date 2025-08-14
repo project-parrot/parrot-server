@@ -41,5 +41,16 @@ class MediaApiAdapter (
         return Api.OK(MediaGetResponse.from(media))
     }
 
+    @DeleteMapping("/{mediaId}")
+    fun deleteFile(
+        @PathVariable mediaId: Long,
+        @AuthenticatedUser authUser: AuthUser
+    ) : ResponseEntity<Api<Unit>> {
+
+        mediaCommandUseCase.deleteFile(mediaId, authUser.userId, authUser.role)
+        return Api.OK(Unit)
+
+    }
+
 
 }
