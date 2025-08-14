@@ -5,6 +5,11 @@ spring:
   application:
     name: media-service
 
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
+
   profiles:
     include:
       swagger
@@ -36,3 +41,12 @@ eureka:
     fetch-registry: true
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+file:
+  upload-dir: ${FILE_UPLOAD_DIR}
+  context-path: ${FILE_CONTEXT_PATH}
+
+url:
+  scheme: ${FILE_URL_SCHEME}
+  host: ${FILE_URL_HOST}
+  prefix: ${FILE_URL_PREFIX}
