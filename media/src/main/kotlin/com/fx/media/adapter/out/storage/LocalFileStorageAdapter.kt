@@ -7,6 +7,8 @@ import com.fx.media.adapter.out.storage.dto.FileInfo
 import com.fx.media.application.`in`.dto.MediaUploadCommand
 import com.fx.media.application.out.storage.FileStoragePort
 import com.fx.media.domain.Media
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -33,7 +35,19 @@ class LocalFileStorageAdapter (
 
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    override fun store(mediaUploadCommand: MediaUploadCommand): Media {
+    override suspend fun store(mediaUploadCommand: MediaUploadCommand): Media = withContext(Dispatchers.IO) {
+        createDirectory(uploadDir)
+
+        val fileInfo = createFileInfo(mediaUploadCommand.file)
+        copyFileToStorage(mediaUploadCommand.file, fileInfo.path)
+        logUploadStatus(fileInfo.path)
+
+        val fileUrl = createUrl(fileInfo, mediaUploadCommand.context)
+
+        createMedia(mediaUploadCommand, fileInfo, fileUrl)
+    }
+
+    override fun storeWithoutCoroutine(mediaUploadCommand: MediaUploadCommand): Media {
         createDirectory(uploadDir)
 
         val fileInfo = createFileInfo(mediaUploadCommand.file)

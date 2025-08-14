@@ -13,9 +13,16 @@ class MediaCommandService(
     private val fileStoragePort: FileStoragePort
 ) : MediaCommandUseCase {
 
-    override fun uploadFile(mediaUploadCommand: MediaUploadCommand): Media {
+    override suspend fun uploadFile(mediaUploadCommand: MediaUploadCommand): Media {
 
         val media = fileStoragePort.store(mediaUploadCommand)
+        val savedMedia = mediaPersistencePort.save(media)
+
+        return savedMedia
+    }
+
+    override fun uploadFileWithoutCoroutine(mediaUploadCommand: MediaUploadCommand): Media {
+        val media = fileStoragePort.storeWithoutCoroutine(mediaUploadCommand)
         val savedMedia = mediaPersistencePort.save(media)
 
         return savedMedia

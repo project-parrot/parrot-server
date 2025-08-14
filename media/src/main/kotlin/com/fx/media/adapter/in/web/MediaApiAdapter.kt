@@ -22,13 +22,25 @@ class MediaApiAdapter (
     private val mediaQueryUseCase: MediaQueryUseCase
 ) {
     @PostMapping
-    fun uploadFile(
+    suspend fun uploadFile(
         @RequestParam("files") files: List<MultipartFile>,
         @RequestParam context: Context,
         @AuthenticatedUser authUser: AuthUser
     ) : ResponseEntity<Api<List<MediaUploadResponse>>> {
 
         val mediaResponses = files.map { mediaCommandUseCase.uploadFile(MediaUploadCommand(it, context, authUser.userId)) }
+
+        return Api.OK(mediaResponses.map { MediaUploadResponse.from(it) })
+    }
+
+    @PostMapping("/without")
+    fun uploadFileWithoutCoroutine(
+        @RequestParam("files") files: List<MultipartFile>,
+        @RequestParam context: Context,
+        @AuthenticatedUser authUser: AuthUser
+    ) : ResponseEntity<Api<List<MediaUploadResponse>>> {
+
+        val mediaResponses = files.map { mediaCommandUseCase.uploadFileWithoutCoroutine(MediaUploadCommand(it, context, authUser.userId)) }
 
         return Api.OK(mediaResponses.map { MediaUploadResponse.from(it) })
     }
