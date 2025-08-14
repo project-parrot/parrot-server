@@ -17,4 +17,7 @@ class MediaPersistenceAdapter(
     override fun findByIdAndIsDeleted(mediaId: Long): Media? =
         mediaRepository.findByIdAndIsDeleted(mediaId, false).orElse(null)?.toDomain()
 
+    override fun delete(media: Media) {
+        mediaRepository.save(MediaEntity.from(media)).toDomain()
+    }
 }

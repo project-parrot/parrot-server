@@ -16,4 +16,23 @@ data class Media (
     val createdAt: LocalDateTime?= null,
     val updatedAt: LocalDateTime?= null,
 ) {
+
+    companion object {
+        @JvmStatic
+        fun deleteMedia(media: Media) : Media {
+            return Media(
+                id = media.id,
+                fileUrl = media.fileUrl,
+                fileType = media.fileType,
+                fileSize = media.fileSize,
+                userId = media.userId,
+                serverName = media.serverName,
+                originalName = media.originalName,
+                extension = media.extension,
+                isDeleted = true,
+                createdAt = media.createdAt,
+                updatedAt = media.updatedAt,
+            )
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.fx.media.application.service
 
+import com.fx.global.dto.UserRole
 import com.fx.media.adapter.out.storage.dto.FileStoreCommand
 import com.fx.media.application.`in`.MediaCommandUseCase
 import com.fx.media.application.`in`.dto.MediaUploadCommand
@@ -23,6 +24,14 @@ class MediaCommandService(
         val savedMedia = medias.map { mediaPersistencePort.save(it) }
 
         return savedMedia
+    }
+
+    override fun deleteFile(mediaId: Long, userId: Long, role: UserRole) {
+        val media = mediaPersistencePort.findByIdAndIsDeleted(mediaId) ?: throw MediaException(MediaErrorCode.MEDIA_NOT_FOUND)
+        if (userId != media.userId && role != UserRole.ADMIN) {
+            throw MediaException(MediaErrorCode.MEDIA_FORBIDDEN)
+        }
+        mediaPersistencePort.delete(Media.deleteMedia(media))
     }
 
     private fun validateFileCount(count: Int) {

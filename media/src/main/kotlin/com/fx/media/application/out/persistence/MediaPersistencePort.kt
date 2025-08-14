@@ -8,4 +8,6 @@ interface MediaPersistencePort {
 
     fun findByIdAndIsDeleted(mediaId: Long) : Media?
 
+    fun delete(media: Media)
+
 }
