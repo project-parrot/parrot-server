@@ -27,6 +27,7 @@ public class FollowEntity extends BaseEntity {
 
     public static FollowEntity fromDomain(Follow follow) {
         return FollowEntity.builder()
+            .id(follow.getId())
             .followerId(follow.getFollowerId())
             .followingId(follow.getFollowingId())
             .status(follow.getStatus())
