@@ -14,4 +14,10 @@ class PostMediaPersistenceAdapter(
     override fun save(postMedia: PostMedia): PostMedia =
         postMediaRepository.save(PostMediaEntity.from(postMedia)).toDomain()
 
+    override fun findByPostId(postId: Long): List<Long> =
+        postMediaRepository.findByPostId(postId).map { it.toDomain().mediaId }
+
+    override fun delete(postId: Long, mediaId: Long) =
+        postMediaRepository.deleteByPostIdAndMediaId(postId, mediaId)
+
 }

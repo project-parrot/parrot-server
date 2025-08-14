@@ -6,5 +6,5 @@ class PostUpdateCommand(
     val userId: Long,
     val role: UserRole,
     val content: String,
-    //val mediaIds: List<Long>
+    val mediaIds: List<Long>?
 )
