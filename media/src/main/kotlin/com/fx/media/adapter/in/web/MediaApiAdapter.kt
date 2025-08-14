@@ -5,15 +5,14 @@ import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
 import com.fx.global.resolver.AuthUser
 import com.fx.media.adapter.`in`.web.dto.Context
+import com.fx.media.adapter.`in`.web.dto.MediaGetResponse
 import com.fx.media.adapter.`in`.web.dto.MediaUploadResponse
 import com.fx.media.adapter.out.storage.dto.FileStoreCommand
 import com.fx.media.application.`in`.MediaCommandUseCase
 import com.fx.media.application.`in`.MediaQueryUseCase
 import com.fx.media.application.`in`.dto.MediaUploadCommand
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
 @WebInputAdapter
@@ -29,8 +28,17 @@ class MediaApiAdapter (
         @AuthenticatedUser authUser: AuthUser
     ) : ResponseEntity<Api<List<MediaUploadResponse>>> {
 
-        val mediaResponses = mediaCommandUseCase.uploadFile(MediaUploadCommand(files, context, authUser.userId))
-        return Api.OK(mediaResponses.map { MediaUploadResponse.from(it) })
+        val medias = mediaCommandUseCase.uploadFile(MediaUploadCommand(files, context, authUser.userId))
+        return Api.OK(medias.map { MediaUploadResponse.from(it) })
+    }
+
+    @GetMapping("/{mediaId}")
+    fun getFile(
+        @PathVariable mediaId: Long
+    ) : ResponseEntity<Api<MediaGetResponse>> {
+
+        val media = mediaQueryUseCase.getFile(mediaId)
+        return Api.OK(MediaGetResponse.from(media))
     }
 
 
