@@ -19,7 +19,7 @@ public class MediaEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private FileType fileType;
 
-    private Double fileSize;
+    private Long fileSize;
 
     private Long userId;
 

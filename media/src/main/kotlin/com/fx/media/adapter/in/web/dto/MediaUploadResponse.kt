@@ -7,7 +7,7 @@ data class MediaUploadResponse(
     val mediaId: Long?= null,
     val url: String,
     val mediaType: FileType,
-    val size: Double
+    val size: Long
 ) {
     companion object {
         @JvmStatic
