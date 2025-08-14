@@ -60,6 +60,14 @@ class FollowCommandService(
         return true
     }
 
+    @Transactional
+    override fun approveFollowUser(userId: Long, followId: Long): Follow {
+        val follow = followPersistencePort.getFollow(followId)?: throw FollowException(FollowErrorCode.FOLLOW_NOT_FOUND)
+
+        // 이미 Approved 상태인 경우 예외
+        if (follow.status == FollowStatus.APPROVED) {
+            throw FollowException(FollowErrorCode.ALREADY_FOLLOWING)
+        }
 
         // 자신에게 온 following 인지 확인
         if (follow.followingId != userId) {
