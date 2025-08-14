@@ -84,7 +84,7 @@ class LocalFileStorageAdapter (
             userId = mediaUploadCommand.userId,
             fileUrl = fileUrl,
             fileType = fileType,
-            fileSize = mediaUploadCommand.file.size.toDouble(),
+            fileSize = mediaUploadCommand.file.size,
             serverName = fileInfo.serverName,
             originalName = fileInfo.originalName,
             extension = fileInfo.extension

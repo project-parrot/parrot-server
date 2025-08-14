@@ -7,7 +7,7 @@ data class Media (
     val id: Long?= null,
     val fileUrl: String,
     val fileType: FileType,
-    val fileSize: Double,
+    val fileSize: Long,
     val userId: Long?= null,
     val serverName: String,
     val originalName: String,
