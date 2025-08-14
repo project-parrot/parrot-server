@@ -9,6 +9,7 @@ import com.fx.media.application.out.storage.FileStoragePort
 import com.fx.media.domain.Media
 import com.fx.media.exception.MediaException
 import com.fx.media.exception.errorcode.MediaErrorCode
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,6 +18,7 @@ class MediaCommandService(
     private val fileStoragePort: FileStoragePort
 ) : MediaCommandUseCase {
 
+    @Transactional
     override suspend fun uploadFile(mediaUploadCommand: MediaUploadCommand): List<Media> {
         validateFileCount(mediaUploadCommand.files.size)
 
@@ -26,6 +28,7 @@ class MediaCommandService(
         return savedMedia
     }
 
+    @Transactional
     override fun deleteFile(mediaId: Long, userId: Long, role: UserRole) {
         val media = mediaPersistencePort.findByIdAndIsDeleted(mediaId) ?: throw MediaException(MediaErrorCode.MEDIA_NOT_FOUND)
         if (userId != media.userId && role != UserRole.ADMIN) {
