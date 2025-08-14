@@ -6,10 +6,15 @@ data class Follow(
     val id: Long? = null,
     val followerId: Long,
     val followingId: Long,
-    val status: FollowStatus,
+    var status: FollowStatus,
     val createdAt: LocalDateTime? = null,
     val updatedAt: LocalDateTime? = null
 ) {
+
+    fun approveFollow() {
+        this.status = FollowStatus.APPROVED
+    }
+
     companion object {
         @JvmStatic
         fun followUser(

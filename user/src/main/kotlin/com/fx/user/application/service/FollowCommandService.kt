@@ -61,6 +61,15 @@ class FollowCommandService(
     }
 
 
+        // 자신에게 온 following 인지 확인
+        if (follow.followingId != userId) {
+            throw FollowException(FollowErrorCode.UNAUTHORIZED_UNFOLLOW)
+        }
+
+        follow.approveFollow()
+        return followPersistencePort.saveFollow(follow)
+    }
+
     private fun saveFollow(followerId: Long, followingId: Long, status: FollowStatus): Follow =
         followPersistencePort.saveFollow(
             Follow.followUser(

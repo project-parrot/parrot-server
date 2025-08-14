@@ -8,4 +8,6 @@ interface FollowCommandUseCase {
 
     fun unfollowUser(requestUserId: Long, followId: Long): Boolean
 
+    fun approveFollowUser(userId: Long, followId: Long): Follow
+
 }
