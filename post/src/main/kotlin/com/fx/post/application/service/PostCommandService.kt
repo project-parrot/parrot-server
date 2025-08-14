@@ -1,24 +1,22 @@
 package com.fx.post.application.service
 
 import com.fx.global.dto.UserRole
-import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
 import com.fx.post.application.`in`.PostCommandUseCase
-import com.fx.post.application.`in`.dto.CommentCreateCommand
 import com.fx.post.application.`in`.dto.PostCreateCommand
 import com.fx.post.application.`in`.dto.PostUpdateCommand
-import com.fx.post.application.out.persistence.CommentPersistencePort
 import com.fx.post.application.out.persistence.LikePersistencePort
 import com.fx.post.application.out.persistence.PostMediaPersistencePort
 import com.fx.post.application.out.persistence.PostPersistencePort
 import com.fx.post.application.out.web.UserWebPort
-import com.fx.post.domain.Comment
 import com.fx.post.domain.Like
 import com.fx.post.domain.Post
-import com.fx.post.exception.CommentException
+import com.fx.post.domain.PostMedia
 import com.fx.post.exception.LikeException
 import com.fx.post.exception.PostException
+import com.fx.post.exception.PostMediaException
 import com.fx.post.exception.errorcode.LikeErrorCode
 import com.fx.post.exception.errorcode.PostErrorCode
+import com.fx.post.exception.errorcode.PostMediaErrorCode
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -43,7 +41,14 @@ class PostCommandService(
             throw PostException(PostErrorCode.DUPLICATE_DAILY_POST)
         }
 
+        val mediaIds = postCreateCommand.mediaIds.orEmpty()
+
+        if (mediaIds.size > 5) throw PostMediaException(PostMediaErrorCode.TOO_MANY_FILE)
+
         val savedPost = postPersistencePort.save(Post.createPost(postCreateCommand))
+
+        savePostMedia(savedPost.id!!, mediaIds)
+
         return savedPost
     }
 
@@ -51,17 +56,18 @@ class PostCommandService(
     override fun updatePost(postId:Long, postUpdateCommand: PostUpdateCommand): Post {
         val post = postPersistencePort.findByIdAndIsDeletedNot(postId)?: throw PostException(PostErrorCode.POST_NOT_EXIST)
 
-        if (postUpdateCommand.userId != post.userId && postUpdateCommand.role != UserRole.ADMIN) {
-            throw PostException(PostErrorCode.POST_FORBIDDEN)
-        }
+        val now = LocalDateTime.now()
 
-        val today: LocalDateTime = LocalDateTime.now()
-        val createdAt: LocalDateTime? = post.createdAt
+        validateUserPermission(post.userId, postUpdateCommand.userId, postUpdateCommand.role)
+        validateEditDate(now, post.createdAt)
 
-        if (today.toLocalDate() != createdAt?.toLocalDate()) throw PostException(PostErrorCode.POST_EDIT_DATE_MISMATCH)
+        val mediaIds = postUpdateCommand.mediaIds.orEmpty().toSet()
 
-        val savedPost = postPersistencePort.save(Post.updatePost(postId, post.userId, today, postUpdateCommand))
-        return savedPost
+        if (mediaIds.size > 5) throw PostMediaException(PostMediaErrorCode.TOO_MANY_FILE)
+
+        updatePostMedia(postId, mediaIds)
+
+        return postPersistencePort.save(Post.updatePost(postId, post.userId, now, postUpdateCommand))
     }
 
     @Transactional
@@ -84,6 +90,34 @@ class PostCommandService(
         val likeCount = likePersistencePort.deleteByPostIdAndUserId(postId, userId)
 
         if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
+    }
+
+
+    private fun validateUserPermission(postUserId: Long, userId: Long, role: UserRole) {
+        if (postUserId != userId && role != UserRole.ADMIN)
+            throw PostException(PostErrorCode.POST_FORBIDDEN)
+    }
+
+    private fun validateEditDate(now: LocalDateTime, createdAt: LocalDateTime?) {
+        if (now.toLocalDate() != createdAt?.toLocalDate()) {
+            throw PostException(PostErrorCode.POST_EDIT_DATE_MISMATCH)
+        }
+    }
+
+    private fun savePostMedia(postId: Long, mediaIds: List<Long>) {
+        mediaIds.forEach { mediaId ->
+            postMediaPersistencePort.save(PostMedia(postId = postId, mediaId = mediaId))
+        }
+    }
+
+    private fun updatePostMedia(postId: Long, newMediaIds: Set<Long>) {
+        val existingMediaIds = postMediaPersistencePort.findByPostId(postId).map {it}.toSet()
+
+        val toAdd = newMediaIds - existingMediaIds
+        val toRemove = existingMediaIds - newMediaIds
+
+        toAdd.forEach { mediaId -> postMediaPersistencePort.save(PostMedia(postId = postId, mediaId = mediaId)) }
+        toRemove.forEach { mediaId -> postMediaPersistencePort.delete(postId, mediaId) }
     }
 
 }
