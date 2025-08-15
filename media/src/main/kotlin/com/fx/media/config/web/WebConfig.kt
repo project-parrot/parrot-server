@@ -24,7 +24,7 @@ class WebConfig(
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(authorizationInterceptor)
             .addPathPatterns("/**")
-            .excludePathPatterns("/open-api/**")
+            .excludePathPatterns("/open-api/**", "/internal/**")
     }
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {

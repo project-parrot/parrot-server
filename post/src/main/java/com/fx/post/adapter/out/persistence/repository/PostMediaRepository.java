@@ -11,4 +11,6 @@ public interface PostMediaRepository extends JpaRepository<PostMediaEntity, Long
 
     void deleteByPostIdAndMediaId(Long postId, Long mediaId);
 
+    List<PostMediaEntity> findByPostIdIn(List<Long> postIds);
+
 }

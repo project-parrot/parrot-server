@@ -9,7 +9,7 @@ data class PostResponse(
     //val nickname: String,
     //val profileImageUrl: String? = null,
     val content: String?,
-    //val mediaUrls: List<String>,
+    val mediaUrls: List<String>?= null,
     val createdAt: LocalDateTime,
     val likeCount: Long,
     val commentCount: Long
@@ -20,6 +20,7 @@ data class PostResponse(
                 postId = postSummaryDto.id,
                 userId = postSummaryDto.userId,
                 content = postSummaryDto.content,
+                mediaUrls = postSummaryDto.mediaUrls,
                 createdAt = postSummaryDto.createdAt,
                 likeCount = postSummaryDto.likeCount,
                 commentCount = postSummaryDto.commentCount

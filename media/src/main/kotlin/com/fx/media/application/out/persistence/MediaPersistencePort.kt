@@ -10,4 +10,6 @@ interface MediaPersistencePort {
 
     fun delete(media: Media)
 
+    fun findByIdInAndIsDeleted(mediaIds: List<Long>) : List<Media>
+
 }

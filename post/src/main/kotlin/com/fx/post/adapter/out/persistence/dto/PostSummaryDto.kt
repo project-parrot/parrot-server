@@ -6,7 +6,11 @@ data class PostSummaryDto(
     var id: Long,
     val userId: Long,
     val content: String,
+    var mediaUrls: List<String>?= null,
     val createdAt: LocalDateTime,
     val likeCount: Long,
     val commentCount: Long,
-)
+) {
+    constructor(id: Long, userId: Long, content: String, createdAt: LocalDateTime, likeCount: Long, commentCount: Long)
+            : this(id, userId, content, null, createdAt, likeCount, commentCount)
+}
