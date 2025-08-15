@@ -7,6 +7,7 @@ import com.fx.global.resolver.AuthUser
 import com.fx.post.adapter.`in`.web.dto.*
 import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.PostQueryUseCase
+import com.fx.post.application.out.web.MediaWebPort
 import jakarta.validation.Valid
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
@@ -17,7 +18,8 @@ import java.time.LocalDateTime
 @RequestMapping("/api/v1/posts")
 class PostApiAdapter(
     private val postCommandUseCase: PostCommandUseCase,
-    private val postQueryUseCase: PostQueryUseCase
+    private val postQueryUseCase: PostQueryUseCase,
+    private val mediaWebPort: MediaWebPort
 ) {
     @PostMapping
     fun createPost(
@@ -62,4 +64,5 @@ class PostApiAdapter(
         val post = postCommandUseCase.updatePost(postId, postUpdateRequest.toCommand(authUser))
         return Api.OK(PostUpdateResponse(post.id))
     }
+
 }

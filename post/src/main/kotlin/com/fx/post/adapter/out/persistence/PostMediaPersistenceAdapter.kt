@@ -20,4 +20,7 @@ class PostMediaPersistenceAdapter(
     override fun delete(postId: Long, mediaId: Long) =
         postMediaRepository.deleteByPostIdAndMediaId(postId, mediaId)
 
+    override fun findByPostIdIn(postIds: List<Long>): List<PostMedia> =
+        postMediaRepository.findByPostIdIn(postIds).map { it.toDomain() }
+
 }

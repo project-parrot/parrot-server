@@ -10,4 +10,5 @@ interface PostMediaPersistencePort {
 
     fun delete(postId:Long, mediaId:Long)
 
+    fun findByPostIdIn(postIds: List<Long>): List<PostMedia>
 }

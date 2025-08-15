@@ -20,4 +20,8 @@ class MediaPersistenceAdapter(
     override fun delete(media: Media) {
         mediaRepository.save(MediaEntity.from(media)).toDomain()
     }
+
+    override fun findByIdInAndIsDeleted(mediaIds: List<Long>): List<Media> =
+        mediaRepository.findByIdInAndIsDeleted(mediaIds, false).map { it.toDomain() }
+
 }
