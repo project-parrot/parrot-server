@@ -1,4 +1,4 @@
-package com.fx.post.adapter.`in`.web.dto
+package com.fx.post.adapter.`in`.web.dto.post
 
 import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
 import java.time.LocalDateTime
@@ -15,7 +15,7 @@ data class PostResponse(
     val commentCount: Long
 ) {
     companion object {
-        fun from(postSummaryDto: PostSummaryDto): PostResponse{
+        fun from(postSummaryDto: PostSummaryDto): PostResponse {
             return PostResponse(
                 postId = postSummaryDto.id,
                 userId = postSummaryDto.userId,

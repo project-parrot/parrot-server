@@ -1,4 +1,4 @@
-package com.fx.post.adapter.`in`.web.dto
+package com.fx.post.adapter.`in`.web.dto.comment
 
 import com.fx.global.resolver.AuthUser
 import com.fx.post.application.`in`.dto.CommentCreateCommand
