@@ -20,25 +20,32 @@ class CommentApiAdapter(
     private val commentCommandUseCase: CommentCommandUseCase,
     private val commentQueryUseCase: CommentQueryUseCase
 ) {
+
     @PostMapping("/{postId}/comments")
     fun createComment(
         @PathVariable postId: Long,
         @RequestBody @Valid commentCreateRequest: CommentCreateRequest,
         @AuthenticatedUser authUser: AuthUser
-    ): ResponseEntity<Api<CommentCreateResponse>> {
-        val comment = commentCommandUseCase.createComment(postId,commentCreateRequest.toCommand(authUser))
-        return Api.OK(CommentCreateResponse(comment.id))
-    }
+    ): ResponseEntity<Api<CommentCreateResponse>> =
+        Api.OK(
+            CommentCreateResponse(
+                commentCommandUseCase.createComment(postId,commentCreateRequest.toCommand(authUser))
+                    .id
+            )
+        )
 
     @GetMapping("/{postId}/comments")
-    fun getComments(@PathVariable postId: Long): ResponseEntity<Api<List<CommentResponse>>> {
-        val comments = commentQueryUseCase.getComments(postId)
-        return Api.OK(comments.map { CommentResponse.from(it) })
-    }
+    fun getComments(@PathVariable postId: Long): ResponseEntity<Api<List<CommentResponse>>> =
+        Api.OK(
+            commentQueryUseCase.getComments(postId)
+                .map { CommentResponse.from(it) }
+        )
 
     @GetMapping("/me/comments")
-    fun getMyComments(@AuthenticatedUser authUser: AuthUser): ResponseEntity<Api<List<MyCommentResponse>>> {
-        val comments = commentQueryUseCase.getMyComments(authUser.userId)
-        return Api.OK(comments.map { MyCommentResponse.from(it) })
-    }
+    fun getMyComments(@AuthenticatedUser authUser: AuthUser): ResponseEntity<Api<List<MyCommentResponse>>> =
+        Api.OK(
+            commentQueryUseCase.getMyComments(authUser.userId)
+                .map { MyCommentResponse.from(it) }
+        )
+
 }
