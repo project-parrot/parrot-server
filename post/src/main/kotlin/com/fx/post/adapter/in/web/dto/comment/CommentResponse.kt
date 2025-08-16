@@ -1,4 +1,4 @@
-package com.fx.post.adapter.`in`.web.dto
+package com.fx.post.adapter.`in`.web.dto.comment
 
 import com.fx.post.domain.Comment
 import java.time.LocalDateTime

@@ -4,10 +4,10 @@ import com.fx.global.annotation.AuthenticatedUser
 import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
 import com.fx.global.resolver.AuthUser
-import com.fx.post.adapter.`in`.web.dto.CommentCreateRequest
-import com.fx.post.adapter.`in`.web.dto.CommentCreateResponse
-import com.fx.post.adapter.`in`.web.dto.CommentResponse
-import com.fx.post.adapter.`in`.web.dto.MyCommentResponse
+import com.fx.post.adapter.`in`.web.dto.comment.CommentCreateRequest
+import com.fx.post.adapter.`in`.web.dto.comment.CommentCreateResponse
+import com.fx.post.adapter.`in`.web.dto.comment.CommentResponse
+import com.fx.post.adapter.`in`.web.dto.comment.MyCommentResponse
 import com.fx.post.application.`in`.CommentCommandUseCase
 import com.fx.post.application.`in`.CommentQueryUseCase
 import jakarta.validation.Valid

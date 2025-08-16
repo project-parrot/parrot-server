@@ -4,8 +4,8 @@ import com.fx.global.annotation.AuthenticatedUser
 import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
 import com.fx.global.resolver.AuthUser
-import com.fx.post.adapter.`in`.web.dto.LikeUsersResponse
-import com.fx.post.adapter.`in`.web.dto.PostResponse
+import com.fx.post.adapter.`in`.web.dto.like.LikeUsersResponse
+import com.fx.post.adapter.`in`.web.dto.post.PostResponse
 import com.fx.post.application.`in`.LikeCommandUseCase
 import com.fx.post.application.`in`.LikeQueryUseCase
 import org.springframework.http.ResponseEntity

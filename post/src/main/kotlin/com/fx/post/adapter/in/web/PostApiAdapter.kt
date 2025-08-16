@@ -4,15 +4,13 @@ import com.fx.global.annotation.AuthenticatedUser
 import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
 import com.fx.global.resolver.AuthUser
-import com.fx.post.adapter.`in`.web.dto.*
+import com.fx.post.adapter.`in`.web.dto.post.*
 import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.PostQueryUseCase
 import com.fx.post.application.out.web.MediaWebPort
 import jakarta.validation.Valid
-import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
 
 @WebInputAdapter
 @RequestMapping("/api/v1/posts")
