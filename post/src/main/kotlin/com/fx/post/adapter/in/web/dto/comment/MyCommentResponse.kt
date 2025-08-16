@@ -18,5 +18,9 @@ data class MyCommentResponse(
                 createdAt = comment.createdAt
             )
         }
+
+        fun from(commentList: List<Comment>): List<MyCommentResponse> {
+            return commentList.map { from(it) }
+        }
     }
 }

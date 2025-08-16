@@ -22,5 +22,9 @@ data class CommentResponse(
                 parentId = comment.parentId
             )
         }
+
+        fun from(commentList: List<Comment>): List<CommentResponse> {
+            return commentList.map { from(it) }
+        }
     }
 }
