@@ -37,15 +37,17 @@ class CommentApiAdapter(
     @GetMapping("/{postId}/comments")
     fun getComments(@PathVariable postId: Long): ResponseEntity<Api<List<CommentResponse>>> =
         Api.OK(
-            commentQueryUseCase.getComments(postId)
-                .map { CommentResponse.from(it) }
+            CommentResponse.from(
+                commentQueryUseCase.getComments(postId)
+            )
         )
 
     @GetMapping("/me/comments")
     fun getMyComments(@AuthenticatedUser authUser: AuthUser): ResponseEntity<Api<List<MyCommentResponse>>> =
         Api.OK(
-            commentQueryUseCase.getMyComments(authUser.userId)
-                .map { MyCommentResponse.from(it) }
+            MyCommentResponse.from(
+                commentQueryUseCase.getMyComments(authUser.userId)
+            )
         )
 
 }
