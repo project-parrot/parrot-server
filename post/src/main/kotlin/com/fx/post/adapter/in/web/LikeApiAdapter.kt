@@ -41,10 +41,8 @@ class LikeApiAdapter(
         @PathVariable postId: Long
     ): ResponseEntity<Api<List<LikeUsersResponse>>> =
         Api.OK(
-            likeQueryUseCase.getLikeUsers(postId)
-                .map { LikeUsersResponse(userId = it) }
+            LikeUsersResponse.from(likeQueryUseCase.getLikeUsers(postId))
         )
-
 
     @GetMapping("/me/likes")
     fun getMyLikedPosts(
@@ -52,8 +50,9 @@ class LikeApiAdapter(
         @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> =
         Api.OK(
-            likeQueryUseCase.getMyLikedPosts(authUser.userId, postId)
-                .map { PostResponse.from(it) }
+            PostResponse.from(
+                likeQueryUseCase.getMyLikedPosts(authUser.userId, postId)
+            )
         )
 
 }
