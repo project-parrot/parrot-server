@@ -26,6 +26,10 @@ data class PostResponse(
                 commentCount = postSummaryDto.commentCount
             )
         }
+
+        fun from(postSummaryDtoList: List<PostSummaryDto>): List<PostResponse> {
+            return postSummaryDtoList.map { from(it) }
+        }
     }
 
 }

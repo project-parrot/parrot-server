@@ -21,18 +21,24 @@ class PostApiAdapter(
     fun createPost(
         @RequestBody @Valid postCreateRequest: PostCreateRequest,
         @AuthenticatedUser authUser: AuthUser
-    ): ResponseEntity<Api<PostCreateResponse>> {
-        val post = postCommandUseCase.createPost(postCreateRequest.toCommand(authUser))
-        return Api.OK(PostCreateResponse(post.id))
-    }
+    ): ResponseEntity<Api<PostCreateResponse>> =
+        Api.OK(
+            PostCreateResponse(
+                postCommandUseCase.createPost(
+                    postCreateRequest.toCommand(authUser)
+                ).id
+            )
+        )
+
 
     @GetMapping
     fun getFollowersPosts(@RequestParam postId: Long = Long.MAX_VALUE,
                           @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> =
         Api.OK(
-            postQueryUseCase.getFollowersPosts(authUser.userId, postId)
-                .map { PostResponse.from(it) }
+            PostResponse.from(
+                postQueryUseCase.getFollowersPosts(authUser.userId, postId)
+            )
         )
 
     @GetMapping("/me")
@@ -40,8 +46,9 @@ class PostApiAdapter(
                  @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<List<PostResponse>>> =
         Api.OK(
-            postQueryUseCase.getMyPosts(authUser.userId, postId)
-                .map { PostResponse.from(it) }
+            PostResponse.from(
+                postQueryUseCase.getMyPosts(authUser.userId, postId)
+            )
         )
 
     @GetMapping("/{userId}")
@@ -49,8 +56,9 @@ class PostApiAdapter(
                      @RequestParam postId: Long = Long.MAX_VALUE
     ): ResponseEntity<Api<List<PostResponse>>> =
         Api.OK(
-            postQueryUseCase.getUserPosts(userId, postId)
-                .map { PostResponse.from(it) }
+            PostResponse.from(
+                postQueryUseCase.getUserPosts(userId, postId)
+            )
         )
 
     @PutMapping("/{postId}")
@@ -59,8 +67,12 @@ class PostApiAdapter(
         @RequestBody @Valid postUpdateRequest: PostUpdateRequest,
         @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<PostUpdateResponse>> =
-        Api.OK(PostUpdateResponse(
-            postCommandUseCase.updatePost(postId, postUpdateRequest.toCommand(authUser)).id)
+        Api.OK(
+            PostUpdateResponse(
+                postCommandUseCase.updatePost(
+                    postId, postUpdateRequest.toCommand(authUser)
+                ).id
+            )
         )
 
 }
