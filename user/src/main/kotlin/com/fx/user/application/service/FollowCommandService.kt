@@ -1,10 +1,13 @@
 package com.fx.user.application.service
 
 import com.fx.user.application.`in`.FollowCommandUseCase
+import com.fx.user.application.`in`.dto.FollowQueryCommand
 import com.fx.user.application.out.FollowPersistencePort
 import com.fx.user.application.out.ProfilePersistencePort
 import com.fx.user.domain.Follow
+import com.fx.user.domain.FollowQuery
 import com.fx.user.domain.FollowStatus
+import com.fx.user.domain.FollowUserInfo
 import com.fx.user.exception.FollowException
 import com.fx.user.exception.ProfileException
 import com.fx.user.exception.errorcode.FollowErrorCode
@@ -76,6 +79,30 @@ class FollowCommandService(
 
         follow.approveFollow()
         return followPersistencePort.saveFollow(follow)
+    }
+
+    override fun getUserFollowings(followQueryCommand: FollowQueryCommand): List<FollowUserInfo> {
+        val targetUserId = followQueryCommand.targetUserId
+
+        // 자기 자신을 조회하는 경우
+        if (targetUserId == followQueryCommand.requestUserId) {
+            return followPersistencePort.getUserFollowings(FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED))
+        }
+
+        val targetUser = profilePersistencePort.findByUserId(targetUserId)?: throw ProfileException(
+            ProfileErrorCode.PROFILE_NOT_FOUND)
+
+        val isFollowing = followPersistencePort.isFollowing(
+            followQueryCommand.requestUserId, targetUserId,
+            FollowStatus.APPROVED
+        )
+
+        // 비공개 유저인데 팔로우하지 않은 경우 조회 차단
+        if(targetUser.isPrivate && !isFollowing) {
+            throw FollowException(FollowErrorCode.UNAUTHORIZED_FOLLOW_LIST_ACCESS)
+        }
+
+        return followPersistencePort.getUserFollowings(FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED))
     }
 
     private fun saveFollow(followerId: Long, followingId: Long, status: FollowStatus): Follow =
