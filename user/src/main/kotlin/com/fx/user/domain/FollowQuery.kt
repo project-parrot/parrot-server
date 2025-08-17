@@ -16,8 +16,8 @@ data class FollowQuery(
 ) {
     companion object {
         @JvmStatic
-        fun searchCondition(followQueryCommand: FollowQueryCommand, status: FollowStatus): FollowQuery {
-            return FollowQuery(
+        fun searchCondition(followQueryCommand: FollowQueryCommand, status: FollowStatus): FollowQuery =
+            FollowQuery(
                 targetUserId = followQueryCommand.targetUserId,
                 followId = followQueryCommand.followId,
                 createdAt = followQueryCommand.createdAt,
@@ -25,6 +25,6 @@ data class FollowQuery(
                 pageable = followQueryCommand.pageable,
                 status = status
             )
-        }
+
     }
 }
