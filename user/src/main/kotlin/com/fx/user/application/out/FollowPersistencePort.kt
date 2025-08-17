@@ -23,4 +23,6 @@ interface FollowPersistencePort {
 
     fun getUserFollowings(followQuery: FollowQuery): List<FollowUserInfo>
 
+    fun getUserFollowers(followQuery: FollowQuery): List<FollowUserInfo>
+
 }

@@ -86,15 +86,16 @@ class FollowCommandService(
 
         // 자기 자신을 조회하는 경우
         if (targetUserId == followQueryCommand.requestUserId) {
-            return followPersistencePort.getUserFollowings(FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED))
+            return followPersistencePort.getUserFollowings(
+                FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
+            )
         }
 
         val targetUser = profilePersistencePort.findByUserId(targetUserId)?: throw ProfileException(
             ProfileErrorCode.PROFILE_NOT_FOUND)
 
         val isFollowing = followPersistencePort.isFollowing(
-            followQueryCommand.requestUserId, targetUserId,
-            FollowStatus.APPROVED
+            followQueryCommand.requestUserId, targetUserId, FollowStatus.APPROVED
         )
 
         // 비공개 유저인데 팔로우하지 않은 경우 조회 차단
@@ -102,7 +103,36 @@ class FollowCommandService(
             throw FollowException(FollowErrorCode.UNAUTHORIZED_FOLLOW_LIST_ACCESS)
         }
 
-        return followPersistencePort.getUserFollowings(FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED))
+        return followPersistencePort.getUserFollowings(
+            FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
+        )
+    }
+
+    override fun getUserFollowers(followQueryCommand: FollowQueryCommand): List<FollowUserInfo> {
+        val targetUserId = followQueryCommand.targetUserId
+
+        // 자기 자신 조회
+        if (targetUserId == followQueryCommand.requestUserId) {
+            return followPersistencePort.getUserFollowers(
+                FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
+            )
+        }
+
+        val targetUser = profilePersistencePort.findByUserId(targetUserId)
+            ?: throw ProfileException(ProfileErrorCode.PROFILE_NOT_FOUND)
+
+        val isFollowing = followPersistencePort.isFollowing(
+            followQueryCommand.requestUserId, targetUserId, FollowStatus.APPROVED
+        )
+
+        // 비공개 유저인데 팔로우하지 않은 경우 조회 차단
+        if (targetUser.isPrivate && !isFollowing) {
+            throw FollowException(FollowErrorCode.UNAUTHORIZED_FOLLOW_LIST_ACCESS)
+        }
+
+        return followPersistencePort.getUserFollowers(
+            FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
+        )
     }
 
     private fun saveFollow(followerId: Long, followingId: Long, status: FollowStatus): Follow =

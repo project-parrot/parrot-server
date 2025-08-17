@@ -50,6 +50,7 @@ class FollowApiAdapter(
             "팔로우 요청을 수락했습니다."
         )
 
+    // 예시 : /api/v1/follows/{targetUserId}/followings?sort=createdAt,DESC&size=20
     @GetMapping("/{userId}/followings")
     fun getUserFollowings(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
@@ -57,7 +58,6 @@ class FollowApiAdapter(
         @ModelAttribute followSearchParam: FollowSearchParam,
         @PageableDefault(sort = ["createdAt"] , direction = Sort.Direction.DESC, size = 20) pageable: Pageable // DEFAULT : 최신순 조회
     ): ResponseEntity<Api<List<FollowUserResponse>>> {
-
         val followUserInfoList = followCommandUseCase.getUserFollowings(
             followSearchParam.toCommand(
                 authenticatedUser.userId,
@@ -65,9 +65,25 @@ class FollowApiAdapter(
                 pageable
             )
         )
-
         return Api.OK(FollowUserResponse.from(followUserInfoList))
-
     }
+
+    @GetMapping("/{userId}/followers")
+    fun getUserFollowers(
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+        @PathVariable userId: Long,
+        @ModelAttribute followSearchParam: FollowSearchParam,
+        @PageableDefault(sort = ["createdAt"] , direction = Sort.Direction.DESC, size = 20) pageable: Pageable // DEFAULT : 최신순 조회
+    ): ResponseEntity<Api<List<FollowUserResponse>>> {
+        val followUserInfoList = followCommandUseCase.getUserFollowers(
+            followSearchParam.toCommand(
+                authenticatedUser.userId,
+                userId,
+                pageable
+            )
+        )
+        return Api.OK(FollowUserResponse.from(followUserInfoList))
+    }
+
 
 }

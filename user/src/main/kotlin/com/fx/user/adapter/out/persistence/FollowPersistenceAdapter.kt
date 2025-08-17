@@ -40,4 +40,7 @@ class FollowPersistenceAdapter(
     override fun getUserFollowings(followQuery: FollowQuery): List<FollowUserInfo> =
         followQueryRepository.findByFollowings(followQuery)
 
+    override fun getUserFollowers(followQuery: FollowQuery): List<FollowUserInfo> =
+        followQueryRepository.findByFollowers(followQuery)
+
 }

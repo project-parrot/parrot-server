@@ -74,7 +74,8 @@ public class FollowQueryRepository {
             .where(
                 followEntity.followingId.eq(followQuery.getTargetUserId()),
                 ltCreatedAt(followQuery.getCreatedAt()),
-                likeNickname(followQuery.getNickname())
+                likeNickname(followQuery.getNickname()),
+                followEntity.status.eq(followQuery.getStatus())
             )
             .orderBy(getOrderSpecifier(followQuery.getPageable().getSort()).toArray(new OrderSpecifier[0]))
             .limit(followQuery.getPageable().getPageSize())
