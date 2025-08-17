@@ -8,6 +8,9 @@ build/
 ### Ignore .env ###
 *.env
 
+## QueryDSL ###
+**/src/main/generated
+
 ### STS ###
 .apt_generated
 .classpath
