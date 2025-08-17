@@ -82,57 +82,44 @@ class FollowCommandService(
     }
 
     override fun getUserFollowings(followQueryCommand: FollowQueryCommand): List<FollowUserInfo> {
-        val targetUserId = followQueryCommand.targetUserId
-
-        // 자기 자신을 조회하는 경우
-        if (targetUserId == followQueryCommand.requestUserId) {
-            return followPersistencePort.getUserFollowings(
-                FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
-            )
-        }
-
-        val targetUser = profilePersistencePort.findByUserId(targetUserId)?: throw ProfileException(
-            ProfileErrorCode.PROFILE_NOT_FOUND)
-
-        val isFollowing = followPersistencePort.isFollowing(
-            followQueryCommand.requestUserId, targetUserId, FollowStatus.APPROVED
-        )
-
-        // 비공개 유저인데 팔로우하지 않은 경우 조회 차단
-        if(targetUser.isPrivate && !isFollowing) {
-            throw FollowException(FollowErrorCode.UNAUTHORIZED_FOLLOW_LIST_ACCESS)
-        }
-
+        checkFollowListAccess(followQueryCommand)
+        // TODO IMAGE 조회
         return followPersistencePort.getUserFollowings(
             FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
         )
     }
 
     override fun getUserFollowers(followQueryCommand: FollowQueryCommand): List<FollowUserInfo> {
-        val targetUserId = followQueryCommand.targetUserId
+        checkFollowListAccess(followQueryCommand)
 
-        // 자기 자신 조회
-        if (targetUserId == followQueryCommand.requestUserId) {
-            return followPersistencePort.getUserFollowers(
-                FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
-            )
-        }
-
-        val targetUser = profilePersistencePort.findByUserId(targetUserId)
-            ?: throw ProfileException(ProfileErrorCode.PROFILE_NOT_FOUND)
-
-        val isFollowing = followPersistencePort.isFollowing(
-            followQueryCommand.requestUserId, targetUserId, FollowStatus.APPROVED
-        )
-
-        // 비공개 유저인데 팔로우하지 않은 경우 조회 차단
-        if (targetUser.isPrivate && !isFollowing) {
-            throw FollowException(FollowErrorCode.UNAUTHORIZED_FOLLOW_LIST_ACCESS)
-        }
-
+        // TODO IMAGE 조회
         return followPersistencePort.getUserFollowers(
             FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
         )
+    }
+
+    private fun checkFollowListAccess(followQueryCommand: FollowQueryCommand) {
+        val targetUserId = followQueryCommand.targetUserId
+        val requestUserId = followQueryCommand.requestUserId
+
+        // 자기 자신을 조회하는 경우 항상 허용
+        if (targetUserId == requestUserId) {
+            return
+        }
+
+        // 다른 사용자의 목록을 조회하는 경우
+        val targetUser = profilePersistencePort.findByUserId(targetUserId)
+            ?: throw ProfileException(ProfileErrorCode.PROFILE_NOT_FOUND)
+
+        // 대상 유저가 비공개 계정인 경우, 요청한 유저가 팔로우하고 있는지 확인
+        if (targetUser.isPrivate) {
+            val isFollowing = followPersistencePort.isFollowing(
+                requestUserId, targetUserId, FollowStatus.APPROVED
+            )
+            if (!isFollowing) {
+                throw FollowException(FollowErrorCode.UNAUTHORIZED_FOLLOW_LIST_ACCESS)
+            }
+        }
     }
 
     private fun saveFollow(followerId: Long, followingId: Long, status: FollowStatus): Follow =
