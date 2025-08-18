@@ -117,7 +117,7 @@ services:
       - GATEWAY_PORT
       - SWAGGER_HOST
     volumes:
-      - /home/ubuntu/parrot/images:parrot/images
+      - /home/ubuntu/parrot/images:/parrot/images
     #  - /home/ubuntu/parrot/logs/post-service:/logs
 
 networks:
