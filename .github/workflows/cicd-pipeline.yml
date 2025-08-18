@@ -54,9 +54,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build JARs
-        run: doppler run -- ./gradlew build
-
       - name: Build & Push Docker Images
         run: |
           doppler run -- docker compose build
