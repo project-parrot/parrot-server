@@ -1,0 +1,105 @@
+services:
+  eureka:
+    build:
+      context: .
+      dockerfile: ./eureka/Dockerfile
+    image: ${DOCKER_EUREKA_IMAGE_NAME}
+    container_name: eureka
+    ports:
+      - 8761:8761
+    networks:
+      - parrot-network
+    #volumes:
+    #  - /home/ubuntu/parrot/logs/eureka:/logs
+
+  gateway:
+    build:
+      context: .
+      dockerfile: ./gateway/Dockerfile
+    image: ${DOCKER_GATEWAY_IMAGE_NAME}
+    container_name: gateway
+    ports:
+      - 80:80
+    networks:
+      - parrot-network
+    environment:
+      - EUREKA_DEFAULT_ZONE
+      - JWT_ACCESS_PLUS_HOUR
+      - JWT_REFRESH_PLUS_HOUR
+      - JWT_SECRET_KEY
+    #volumes:
+    #  - /home/ubuntu/parrot/logs/gateway:/logs
+
+  user-service:
+    build:
+      context: .
+      dockerfile: ./user/Dockerfile
+    image: ${DOCKER_USER_IMAGE_NAME}
+    container_name: user-service
+    networks:
+      - parrot-network
+    environment:
+      - USER_PORT
+      - EUREKA_DEFAULT_ZONE
+      - MYSQL_URL
+      - MYSQL_USERNAME
+      - MYSQL_PASSWORD
+      - REDIS_HOST
+      - REDIS_PASSWORD
+      - REDIS_PORT
+      - JWT_ACCESS_PLUS_HOUR
+      - JWT_REFRESH_PLUS_HOUR
+      - JWT_SECRET_KEY
+      - OAUTH_GOOGLE_CLIENT_ID
+      - OAUTH_GOOGLE_CLIENT_SECRET
+      - OAUTH_GOOGLE_REDIRECT_URL
+      - OAUTH_NAVER_CLIENT_ID
+      - OAUTH_NAVER_CLIENT_SECRET
+      - OAUTH_NAVER_REDIRECT_URL
+    #volumes:
+    #  - /home/ubuntu/parrot/logs/user-service:/logs
+  
+  post-service:
+    build:
+      context: .
+      dockerfile: ./post/Dockerfile
+    image: ${DOCKER_POST_IMAGE_NAME}
+    container_name: post-service
+    networks:
+      - parrot-network
+    environment:
+      - POST_PORT
+      - EUREKA_DEFAULT_ZONE
+      - MYSQL_URL
+      - MYSQL_USERNAME
+      - MYSQL_PASSWORD
+    #volumes:
+    #  - /home/ubuntu/parrot/logs/post-service:/logs
+
+  media-service:
+    build:
+      context: .
+      dockerfile: ./media/Dockerfile
+    image: ${DOCKER_MEDIA_IMAGE_NAME}
+    container_name: media-service
+    networks:
+      - parrot-network
+    environment:
+      - MEDIA_PORT
+      - EUREKA_DEFAULT_ZONE
+      - MYSQL_URL
+      - MYSQL_USERNAME
+      - MYSQL_PASSWORD
+      - FILE_CONTEXT_PATH
+      - FILE_UPLOAD_DIR
+      - FILE_URL_HOST
+      - FILE_URL_PREFIX
+      - FILE_URL_SCHEME
+      - MAX_FILE_SIZE
+      - MAX_REQUEST_SIZE
+    #volumes:
+    #  - /home/ubuntu/parrot/logs/post-service:/logs
+
+networks:
+  parrot-network:
+    external: true
