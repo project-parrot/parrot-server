@@ -7,6 +7,7 @@ import com.fx.user.adapter.`in`.web.dto.follow.FollowSearchParam
 import com.fx.user.adapter.`in`.web.dto.follow.FollowUserResponse
 import com.fx.user.adapter.security.dto.AuthenticatedUser
 import com.fx.user.application.`in`.FollowCommandUseCase
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -26,6 +27,7 @@ class FollowApiAdapter(
     private val followCommandUseCase: FollowCommandUseCase
 ) {
 
+    @Operation(summary = "상대 팔로우하기", description = "{userId} 는 팔로우 대상 userId 입니다.")
     @PostMapping("/{userId}")
     fun followUser(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
@@ -33,6 +35,7 @@ class FollowApiAdapter(
     ): ResponseEntity<Api<FollowResponse>> =
         Api.OK(FollowResponse.from(followCommandUseCase.followUser(authenticatedUser.userId, userId)))
 
+    @Operation(summary = "팔로우/팔로워/팔로잉요청 삭제")
     @DeleteMapping("/{followId}")
     fun unfollowUser(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
@@ -40,6 +43,7 @@ class FollowApiAdapter(
     ): ResponseEntity<Api<Boolean>> =
         Api.OK(followCommandUseCase.unfollowUser(authenticatedUser.userId, followId))
 
+    @Operation(summary = "팔로우 요청 승인")
     @PatchMapping("/{followId}/approve")
     fun approveFollowUser(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
@@ -50,7 +54,12 @@ class FollowApiAdapter(
             "팔로우 요청을 수락했습니다."
         )
 
+
+    // TODO createdAt -> ID 기반으로 수정
     // 예시 : /api/v1/follows/{targetUserId}/followings?sort=createdAt,DESC&size=20
+    @Operation(summary = "팔로잉 목록 조회",
+        description = "default : [sort=createdAt,DESC], [size:20] <br>" +
+            " 요청 예시 : /api/v1/follows/{targetUserId}/followings?sort=createdAt,DESC&size=20")
     @GetMapping("/{userId}/followings")
     fun getUserFollowings(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
@@ -68,6 +77,7 @@ class FollowApiAdapter(
         return Api.OK(FollowUserResponse.from(followUserInfoList))
     }
 
+    @Operation(summary = "팔로워 목록 조회")
     @GetMapping("/{userId}/followers")
     fun getUserFollowers(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
