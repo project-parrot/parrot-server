@@ -1,10 +1,7 @@
 springdoc:
-  api-docs:
-    enabled: true
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
-    config-url: /v3/swagger-ui.html/swagger-config
     urls:
       - name: post-service
         url: /post-service/open-api/v3/api/docs
