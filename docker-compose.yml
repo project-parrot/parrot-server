@@ -63,6 +63,7 @@ services:
       - OAUTH_NAVER_CLIENT_SECRET
       - OAUTH_NAVER_REDIRECT_URL
       - SERVER_ADDRESS
+      - GATEWAY_PORT
     #volumes:
     #  - /home/ubuntu/parrot/logs/user-service:/logs
   
@@ -83,6 +84,7 @@ services:
       - MYSQL_USERNAME
       - MYSQL_PASSWORD
       - SERVER_ADDRESS
+      - GATEWAY_PORT
     #volumes:
     #  - /home/ubuntu/parrot/logs/post-service:/logs
 
@@ -110,6 +112,7 @@ services:
       - MAX_FILE_SIZE
       - MAX_REQUEST_SIZE
       - SERVER_ADDRESS
+      - GATEWAY_PORT
     #volumes:
     #  - /home/ubuntu/parrot/logs/post-service:/logs
 

@@ -6,4 +6,4 @@ springdoc:
 
 openapi:
   service:
-    url: http://${SERVER_ADDRESS}/user-service
+    url: http://${SERVER_ADDRESS}:${GATEWAY_PORT}/user-service
