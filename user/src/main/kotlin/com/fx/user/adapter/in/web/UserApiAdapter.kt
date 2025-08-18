@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @WebInputAdapter
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 class UserApiAdapter {
 
     @GetMapping("/test")
