@@ -22,12 +22,14 @@ services:
       - ${GATEWAY_PORT}:${GATEWAY_PORT}
     networks:
       - parrot-network
-    environment:
-      - GATEWAY_PORT
-      - EUREKA_DEFAULT_ZONE
-      - JWT_ACCESS_PLUS_HOUR
-      - JWT_REFRESH_PLUS_HOUR
-      - JWT_SECRET_KEY
+    env_file:
+      - .env
+#    environment:
+#      - GATEWAY_PORT
+#      - EUREKA_DEFAULT_ZONE
+#      - JWT_ACCESS_PLUS_HOUR
+#      - JWT_REFRESH_PLUS_HOUR
+#      - JWT_SECRET_KEY
     #volumes:
     #  - /home/ubuntu/parrot/logs/gateway:/logs
 
@@ -39,24 +41,26 @@ services:
     container_name: user-service
     networks:
       - parrot-network
-    environment:
-      - USER_PORT
-      - EUREKA_DEFAULT_ZONE
-      - MYSQL_URL
-      - MYSQL_USERNAME
-      - MYSQL_PASSWORD
-      - REDIS_HOST
-      - REDIS_PASSWORD
-      - REDIS_PORT
-      - JWT_ACCESS_PLUS_HOUR
-      - JWT_REFRESH_PLUS_HOUR
-      - JWT_SECRET_KEY
-      - OAUTH_GOOGLE_CLIENT_ID
-      - OAUTH_GOOGLE_CLIENT_SECRET
-      - OAUTH_GOOGLE_REDIRECT_URL
-      - OAUTH_NAVER_CLIENT_ID
-      - OAUTH_NAVER_CLIENT_SECRET
-      - OAUTH_NAVER_REDIRECT_URL
+    env_file:
+      - .env
+#    environment:
+#      - USER_PORT
+#      - EUREKA_DEFAULT_ZONE
+#      - MYSQL_URL
+#      - MYSQL_USERNAME
+#      - MYSQL_PASSWORD
+#      - REDIS_HOST
+#      - REDIS_PASSWORD
+#      - REDIS_PORT
+#      - JWT_ACCESS_PLUS_HOUR
+#      - JWT_REFRESH_PLUS_HOUR
+#      - JWT_SECRET_KEY
+#      - OAUTH_GOOGLE_CLIENT_ID
+#      - OAUTH_GOOGLE_CLIENT_SECRET
+#      - OAUTH_GOOGLE_REDIRECT_URL
+#      - OAUTH_NAVER_CLIENT_ID
+#      - OAUTH_NAVER_CLIENT_SECRET
+#      - OAUTH_NAVER_REDIRECT_URL
     #volumes:
     #  - /home/ubuntu/parrot/logs/user-service:/logs
   
@@ -68,12 +72,14 @@ services:
     container_name: post-service
     networks:
       - parrot-network
-    environment:
-      - POST_PORT
-      - EUREKA_DEFAULT_ZONE
-      - MYSQL_URL
-      - MYSQL_USERNAME
-      - MYSQL_PASSWORD
+    env_file:
+      - .env
+#    environment:
+#      - POST_PORT
+#      - EUREKA_DEFAULT_ZONE
+#      - MYSQL_URL
+#      - MYSQL_USERNAME
+#      - MYSQL_PASSWORD
     #volumes:
     #  - /home/ubuntu/parrot/logs/post-service:/logs
 
@@ -85,19 +91,21 @@ services:
     container_name: media-service
     networks:
       - parrot-network
-    environment:
-      - MEDIA_PORT
-      - EUREKA_DEFAULT_ZONE
-      - MYSQL_URL
-      - MYSQL_USERNAME
-      - MYSQL_PASSWORD
-      - FILE_CONTEXT_PATH
-      - FILE_UPLOAD_DIR
-      - FILE_URL_HOST
-      - FILE_URL_PREFIX
-      - FILE_URL_SCHEME
-      - MAX_FILE_SIZE
-      - MAX_REQUEST_SIZE
+    env_file:
+      - .env
+#    environment:
+#      - MEDIA_PORT
+#      - EUREKA_DEFAULT_ZONE
+#      - MYSQL_URL
+#      - MYSQL_USERNAME
+#      - MYSQL_PASSWORD
+#      - FILE_CONTEXT_PATH
+#      - FILE_UPLOAD_DIR
+#      - FILE_URL_HOST
+#      - FILE_URL_PREFIX
+#      - FILE_URL_SCHEME
+#      - MAX_FILE_SIZE
+#      - MAX_REQUEST_SIZE
     #volumes:
     #  - /home/ubuntu/parrot/logs/post-service:/logs
 
