@@ -6,4 +6,4 @@ springdoc:
 
 openapi:
   service:
-    url: http://localhost:80/post-service
+    url: http://${SERVER_HOST}/post-service

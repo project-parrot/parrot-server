@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: ${GATEWAY_PORT}
 
 eureka:
   instance:
@@ -58,8 +58,7 @@ spring:
                 # allowed-origins 가 '*' 인 경우 false
                 allow-credentials: true
                 allowed-origins:
-                  - http://localhost:3000
-                  - http://localhost:80
+                  - http://${SERVER_ADDRESS}
                 allowed-methods:
                   - POST
                   - GET

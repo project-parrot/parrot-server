@@ -6,4 +6,4 @@ springdoc:
 
 openapi:
   service:
-    url: http://localhost:80/media-service
+    url: http://${SERVER_ADDRESS}/media-service
