@@ -23,6 +23,7 @@ services:
     networks:
       - parrot-network
     environment:
+      - GATEWAY_PORT
       - EUREKA_DEFAULT_ZONE
       - JWT_ACCESS_PLUS_HOUR
       - JWT_REFRESH_PLUS_HOUR
