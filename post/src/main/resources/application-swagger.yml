@@ -6,4 +6,4 @@ springdoc:
 
 openapi:
   service:
-    url: http://${SERVER_ADDRESS}:${GATEWAY_PORT}/post-service
+    url: http://${GATEWAY_HOST}:${GATEWAY_PORT}/post-service

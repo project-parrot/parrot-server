@@ -30,7 +30,7 @@ services:
       - JWT_ACCESS_PLUS_HOUR
       - JWT_REFRESH_PLUS_HOUR
       - JWT_SECRET_KEY
-      - SERVER_ADDRESS
+      - GATEWAY_HOST
     #volumes:
     #  - /home/ubuntu/parrot/logs/gateway:/logs
 
@@ -62,7 +62,7 @@ services:
       - OAUTH_NAVER_CLIENT_ID
       - OAUTH_NAVER_CLIENT_SECRET
       - OAUTH_NAVER_REDIRECT_URL
-      - SERVER_ADDRESS
+      - GATEWAY_HOST
       - GATEWAY_PORT
     #volumes:
     #  - /home/ubuntu/parrot/logs/user-service:/logs
@@ -83,7 +83,7 @@ services:
       - MYSQL_URL
       - MYSQL_USERNAME
       - MYSQL_PASSWORD
-      - SERVER_ADDRESS
+      - GATEWAY_HOST
       - GATEWAY_PORT
     #volumes:
     #  - /home/ubuntu/parrot/logs/post-service:/logs
@@ -111,7 +111,7 @@ services:
       - FILE_URL_SCHEME
       - MAX_FILE_SIZE
       - MAX_REQUEST_SIZE
-      - SERVER_ADDRESS
+      - GATEWAY_HOST
       - GATEWAY_PORT
     #volumes:
     #  - /home/ubuntu/parrot/logs/post-service:/logs

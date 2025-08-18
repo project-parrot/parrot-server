@@ -58,7 +58,7 @@ spring:
                 # allowed-origins 가 '*' 인 경우 false
                 allow-credentials: true
                 allowed-origins:
-                  - http://${SERVER_ADDRESS}:${GATEWAY_PORT}
+                  - http://${GATEWAY_HOST}:${GATEWAY_PORT}
                 allowed-methods:
                   - POST
                   - GET
