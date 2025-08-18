@@ -82,16 +82,16 @@ jobs:
             
             export DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN_PRD }}
             
-            if [ -d PARROT-SERVER ]; then rm -rf PARROT-SERVER; fi
+            if [ -d parrot-server ]; then rm -rf parrot-server; fi
             git clone https://github.com/project-parrot/parrot-server.git
             
-            cd PARROT-SERVER
+            cd parrot-server
             doppler run -- docker compose pull
             doppler run -- docker compose up -d
             docker image prune -f
             
             cd ..
-            rm -rf PARROT-SERVER
+            rm -rf parrot-server
 
 #      - name: Slack Notification
 #        uses: 8398a7/action-slack@v3
