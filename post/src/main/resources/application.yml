@@ -22,9 +22,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        use_sql_comments: true
-        cache:
-          use_second_level_cache: false # 2차 캐시 끄기(Api 성능 테스트 위해)
     database-platform: org.hibernate.dialect.MySQLDialect
 
 eureka:

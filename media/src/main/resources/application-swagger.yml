@@ -6,4 +6,4 @@ springdoc:
 
 openapi:
   service:
-    url: http://${GATEWAY_HOST}:${GATEWAY_PORT}/media-service
+    url: http://${SWAGGER_HOST}/media-service

@@ -64,6 +64,7 @@ services:
       - OAUTH_NAVER_REDIRECT_URL
       - GATEWAY_HOST
       - GATEWAY_PORT
+      - SWAGGER_HOST
     #volumes:
     #  - /home/ubuntu/parrot/logs/user-service:/logs
   
@@ -85,6 +86,7 @@ services:
       - MYSQL_PASSWORD
       - GATEWAY_HOST
       - GATEWAY_PORT
+      - SWAGGER_HOST
     #volumes:
     #  - /home/ubuntu/parrot/logs/post-service:/logs
 
@@ -113,7 +115,9 @@ services:
       - MAX_REQUEST_SIZE
       - GATEWAY_HOST
       - GATEWAY_PORT
-    #volumes:
+      - SWAGGER_HOST
+    volumes:
+      - /home/ubuntu/parrot/images:parrot/images
     #  - /home/ubuntu/parrot/logs/post-service:/logs
 
 networks:
