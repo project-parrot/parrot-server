@@ -2,6 +2,7 @@ package com.fx.post.application.out.persistence
 
 import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
 import com.fx.post.domain.Post
+import com.fx.post.domain.PostQuery
 import java.time.LocalDateTime
 
 interface PostPersistencePort {
@@ -14,7 +15,7 @@ interface PostPersistencePort {
 
     fun findByIdAndIsDeletedNot(postId: Long): Post?
 
-    fun findByUserIdAndPostIdBeforeAndIsDeleted(userIds: List<Long>, postId: Long): List<PostSummaryDto>
-
     fun findLikedPostsByUserIdAndPostIdBeforeAndIsDeleted(userId: Long, postId: Long): List<PostSummaryDto>
+
+    fun getPosts(postQuery: PostQuery): List<PostSummaryDto>
 }

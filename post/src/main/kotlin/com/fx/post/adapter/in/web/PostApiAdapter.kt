@@ -8,6 +8,9 @@ import com.fx.post.adapter.`in`.web.dto.post.*
 import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.PostQueryUseCase
 import jakarta.validation.Valid
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -30,34 +33,47 @@ class PostApiAdapter(
             )
         )
 
-
-    @GetMapping
-    fun getFollowersPosts(@RequestParam postId: Long = Long.MAX_VALUE,
-                          @AuthenticatedUser authUser: AuthUser
+    @GetMapping()
+    fun getFollowersPosts(
+        @AuthenticatedUser authUser: AuthUser,
+        @ModelAttribute postSearchParam: PostSearchParam,
+        @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC, size = 20) pageable: Pageable
     ): ResponseEntity<Api<List<PostResponse>>> =
         Api.OK(
             PostResponse.from(
-                postQueryUseCase.getFollowersPosts(authUser.userId, postId)
+                postQueryUseCase.getFollowersPosts(
+                    postSearchParam.toCommand(pageable = pageable)
+                )
             )
         )
 
+
     @GetMapping("/me")
-    fun getMyPosts(@RequestParam postId: Long = Long.MAX_VALUE,
-                 @AuthenticatedUser authUser: AuthUser
+    fun getMyPosts(
+        @AuthenticatedUser authUser: AuthUser,
+        @ModelAttribute postSearchParam: PostSearchParam,
+        @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC, size = 20) pageable: Pageable
     ): ResponseEntity<Api<List<PostResponse>>> =
         Api.OK(
             PostResponse.from(
-                postQueryUseCase.getMyPosts(authUser.userId, postId)
+                postQueryUseCase.getUserPosts(
+                    postSearchParam.toCommand(authUser.userId, pageable)
+                )
             )
         )
 
     @GetMapping("/{userId}")
-    fun getUserPosts(@PathVariable userId: Long,
-                     @RequestParam postId: Long = Long.MAX_VALUE
+    fun getUserPosts(
+        @AuthenticatedUser authUser: AuthUser,
+        @PathVariable userId: Long,
+        @ModelAttribute postSearchParam: PostSearchParam,
+        @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC, size = 20) pageable: Pageable
     ): ResponseEntity<Api<List<PostResponse>>> =
         Api.OK(
             PostResponse.from(
-                postQueryUseCase.getUserPosts(userId, postId)
+                postQueryUseCase.getUserPosts(
+                    postSearchParam.toCommand(userId, pageable)
+                )
             )
         )
 

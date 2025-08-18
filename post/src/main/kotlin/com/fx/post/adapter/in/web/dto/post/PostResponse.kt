@@ -6,8 +6,8 @@ import java.time.LocalDateTime
 data class PostResponse(
     val postId: Long,
     val userId: Long,
-    //val nickname: String,
-    //val profileImageUrl: String? = null,
+    val nickname: String?= null,
+    val profileImageUrl: String? = null,
     val content: String?,
     val mediaUrls: List<String>?= null,
     val createdAt: LocalDateTime,
