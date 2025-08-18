@@ -56,6 +56,7 @@ jobs:
 
       - name: Build & Push Docker Images
         run: |
+          doppler secrets download --no-file --format env --project parrot-server --config prd > .env
           doppler run -- docker compose build
           doppler run -- docker compose push
 
@@ -83,9 +84,7 @@ jobs:
             git clone https://github.com/project-parrot/parrot-server.git
             
             cd parrot-server
-            
-            doppler secrets download --no-file --format env --project parrot-server --config prd > .env
-            
+                        
             doppler run -- docker compose pull
             doppler run -- docker compose up -d
             docker image prune -f
