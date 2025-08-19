@@ -49,7 +49,7 @@ class PostApiAdapter(
         Api.OK(
             PostResponse.from(
                 postQueryUseCase.getFollowersPosts(
-                    postSearchParam.toCommand(pageable = pageable)
+                    postSearchParam.toCommand(userId = authUser.userId, pageable = pageable)
                 )
             )
         )

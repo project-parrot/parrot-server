@@ -19,6 +19,8 @@ data class PostResponse(
             return PostResponse(
                 postId = postSummaryDto.id,
                 userId = postSummaryDto.userId,
+                nickname = postSummaryDto.nickname,
+                profileImageUrl = postSummaryDto.profileImageUrl,
                 content = postSummaryDto.content,
                 mediaUrls = postSummaryDto.mediaUrls,
                 createdAt = postSummaryDto.createdAt,

@@ -93,6 +93,7 @@ class FollowCommandService(
         return mapMediaUrls(followingUserList)
     }
 
+
     override fun getUserFollowers(followQueryCommand: FollowQueryCommand): List<FollowUserInfo> {
         checkFollowListAccess(followQueryCommand)
 
@@ -102,6 +103,10 @@ class FollowCommandService(
 
         return mapMediaUrls(followerList)
     }
+
+    override fun getFollowerByUserId(userId: Long): List<Long> =
+        followPersistencePort.findByUserId(userId)
+
 
     private fun checkFollowListAccess(followQueryCommand: FollowQueryCommand) {
         val targetUserId = followQueryCommand.targetUserId

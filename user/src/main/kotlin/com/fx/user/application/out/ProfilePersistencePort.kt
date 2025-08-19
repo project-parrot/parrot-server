@@ -12,4 +12,6 @@ interface ProfilePersistencePort {
 
     fun updateProfile(profile: Profile): Profile
 
+    fun findByUserIdIn(userIds: List<Long>): List<Profile>
+
 }
