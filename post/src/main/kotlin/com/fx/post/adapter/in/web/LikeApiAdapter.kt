@@ -4,10 +4,15 @@ import com.fx.global.annotation.AuthenticatedUser
 import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
 import com.fx.global.resolver.AuthUser
+import com.fx.post.adapter.`in`.web.dto.like.LikeSearchParam
 import com.fx.post.adapter.`in`.web.dto.like.LikeUsersResponse
 import com.fx.post.adapter.`in`.web.dto.post.PostResponse
 import com.fx.post.application.`in`.LikeCommandUseCase
 import com.fx.post.application.`in`.LikeQueryUseCase
+import com.fx.post.application.`in`.dto.LikeQueryCommand
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -44,14 +49,18 @@ class LikeApiAdapter(
             LikeUsersResponse.from(likeQueryUseCase.getLikeUsers(postId))
         )
 
+
     @GetMapping("/me/likes")
-    fun getMyLikedPosts(
-        @RequestParam postId: Long = Long.MAX_VALUE,
-        @AuthenticatedUser authUser: AuthUser
+    fun getMyLikedPostsDsl(
+        @AuthenticatedUser authUser: AuthUser,
+        @ModelAttribute likeSearchParam: LikeSearchParam,
+        @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC, size = 20) pageable: Pageable
     ): ResponseEntity<Api<List<PostResponse>>> =
         Api.OK(
             PostResponse.from(
-                likeQueryUseCase.getMyLikedPosts(authUser.userId, postId)
+                likeQueryUseCase.getMyLikedPosts(
+                    likeSearchParam.toCommand(authUser.userId, pageable)
+                )
             )
         )
 

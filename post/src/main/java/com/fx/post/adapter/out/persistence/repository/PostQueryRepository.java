@@ -2,6 +2,7 @@ package com.fx.post.adapter.out.persistence.repository;
 
 import com.fx.post.adapter.out.persistence.dto.PostSummaryDto;
 import com.fx.post.adapter.out.persistence.entity.PostEntity;
+import com.fx.post.domain.LikeQuery;
 import com.fx.post.domain.PostQuery;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -50,6 +51,33 @@ public class PostQueryRepository {
                 .limit(postQuery.getPageable().getPageSize())
                 .fetch();
 
+    }
+
+    public List<PostSummaryDto> findLikedPosts(LikeQuery likeQuery) {
+        return jpaQueryFactory
+                .select(Projections.constructor(
+                        PostSummaryDto.class,
+                        postEntity.id,
+                        postEntity.userId,
+                        postEntity.content,
+                        postEntity.createdAt,
+                        likeEntity.id.countDistinct(),
+                        commentEntity.id.countDistinct()
+                ))
+                .from(postEntity)
+                .innerJoin(likeEntity).on(
+                        postEntity.id.eq(likeEntity.postId)
+                                .and(likeEntity.userId.eq(likeQuery.getUserId()))
+                )
+                .leftJoin(commentEntity).on(postEntity.id.eq(commentEntity.postId))
+                .where(
+                        ltPostId(likeQuery.getPostId()),
+                        postEntity.isDeleted.eq(likeQuery.isDeleted())
+                )
+                .groupBy(postEntity.id, postEntity.userId, postEntity.content, postEntity.createdAt)
+                .orderBy(getOrderSpecifier(likeQuery.getPageable().getSort()).toArray(new OrderSpecifier[0]))
+                .limit(likeQuery.getPageable().getPageSize())
+                .fetch();
     }
 
     private BooleanExpression userIdCondition(Long userId, List<Long> userIds) {
