@@ -43,4 +43,6 @@ class FollowPersistenceAdapter(
     override fun getUserFollowers(followQuery: FollowQuery): List<FollowUserInfo> =
         followQueryRepository.findByFollowers(followQuery)
 
+    override fun findByUserId(userId: Long): List<Long> =
+        followRepository.findByFollowerId(userId).map { it.toDomain().followingId }
 }
