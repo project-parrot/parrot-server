@@ -90,6 +90,8 @@ jobs:
             
             cd ..
             rm -rf parrot-server
+            
+            docker restart nginx
 
 #      - name: Slack Notification
 #        uses: 8398a7/action-slack@v3
