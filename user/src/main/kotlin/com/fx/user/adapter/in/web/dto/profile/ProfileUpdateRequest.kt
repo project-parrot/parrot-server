@@ -8,13 +8,16 @@ data class ProfileUpdateRequest(
 
     val statusMessage: String,
 
-    val isPrivate: Boolean
+    val isPrivate: Boolean,
+
+    val mediaId: Long?= null
 
 ) {
     fun toCommand(): ProfileUpdateCommand =
         ProfileUpdateCommand(
             nickname = this.nickname,
             statusMessage = this.statusMessage,
-            isPrivate = this.isPrivate
+            isPrivate = this.isPrivate,
+            mediaId = this.mediaId
         )
 }

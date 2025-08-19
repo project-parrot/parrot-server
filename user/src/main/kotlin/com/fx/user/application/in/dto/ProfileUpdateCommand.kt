@@ -6,6 +6,7 @@ data class ProfileUpdateCommand(
 
     val statusMessage: String,
 
-    val isPrivate: Boolean
+    val isPrivate: Boolean,
 
+    val mediaId: Long?= null
 )
