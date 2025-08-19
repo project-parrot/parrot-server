@@ -16,4 +16,6 @@ interface FollowCommandUseCase {
 
     fun getUserFollowers(followQueryCommand: FollowQueryCommand): List<FollowUserInfo>
 
+    fun getFollowerByUserId(userId: Long): List<Long>
+
 }

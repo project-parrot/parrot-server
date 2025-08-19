@@ -11,6 +11,7 @@ import com.fx.media.adapter.out.storage.dto.FileStoreCommand
 import com.fx.media.application.`in`.MediaCommandUseCase
 import com.fx.media.application.`in`.MediaQueryUseCase
 import com.fx.media.application.`in`.dto.MediaUploadCommand
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -21,6 +22,9 @@ class MediaApiAdapter(
     private val mediaCommandUseCase: MediaCommandUseCase,
     private val mediaQueryUseCase: MediaQueryUseCase,
 ) {
+    @Operation(summary = "미디어 업로드",
+        description = "context 종류 : POST, CHAT, PROFILE" +
+                " 요청 예시 : /api/v1/media?context=PROFILE + form-data로 files 파라미터에 파일들 업로드")
     @PostMapping
     suspend fun uploadFile(
         @RequestParam("files") files: List<MultipartFile>,
@@ -31,6 +35,7 @@ class MediaApiAdapter(
         return Api.OK(medias.map { MediaUploadResponse.from(it) })
     }
 
+    @Operation(summary = "미디어 조회")
     @GetMapping("/{mediaId}")
     fun getFile(
         @PathVariable mediaId: Long
@@ -39,6 +44,7 @@ class MediaApiAdapter(
         return Api.OK(MediaGetResponse.from(media))
     }
 
+    @Operation(summary = "미디어 삭제")
     @DeleteMapping("/{mediaId}")
     fun deleteFile(
         @PathVariable mediaId: Long,
