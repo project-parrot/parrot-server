@@ -2,10 +2,12 @@ package com.fx.post.application.service
 
 import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
 import com.fx.post.application.`in`.LikeQueryUseCase
+import com.fx.post.application.`in`.dto.LikeQueryCommand
 import com.fx.post.application.out.persistence.LikePersistencePort
 import com.fx.post.application.out.persistence.PostMediaPersistencePort
 import com.fx.post.application.out.persistence.PostPersistencePort
 import com.fx.post.application.out.web.MediaWebPort
+import com.fx.post.domain.LikeQuery
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,13 +26,13 @@ class LikeQueryService(
         return users
     }
 
-    override fun getMyLikedPosts(userId: Long, postId: Long): List<PostSummaryDto> {
-        val posts = postPersistencePort.findLikedPostsByUserIdAndPostIdBeforeAndIsDeleted(userId, postId)
+    override fun getMyLikedPosts(likeQueryCommand: LikeQueryCommand): List<PostSummaryDto> {
+        val posts = postPersistencePort.getLikedPosts(LikeQuery.searchCondition(likeQueryCommand, false))
 
         val mappedList = mappedByMediaUrls(posts)
         // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
 
-        return mappedList
+        return posts
     }
 
     private fun mappedByMediaUrls(posts: List<PostSummaryDto>): List<PostSummaryDto> {

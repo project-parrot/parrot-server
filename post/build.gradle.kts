@@ -8,6 +8,7 @@ plugins {
 
 group = "com.fx"
 version = "0.0.1-SNAPSHOT"
+val queryDslVersion = "5.1.0"
 
 java {
     toolchain {
@@ -36,14 +37,20 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
-    
+    implementation ("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta") // QueryDSL
+    implementation(project(":global"))
+
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
+    annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:jakarta") // QueryDSL
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api") // QueryDSL
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api") // QueryDSL
+
+    runtimeOnly("com.mysql:mysql-connector-j")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    runtimeOnly("com.mysql:mysql-connector-j")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation(project(":global"))
 
 }
 
@@ -75,4 +82,23 @@ tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar
 
 tasks.getByName<Jar>("jar") {
     enabled = false
+}
+
+val querydslDir = "src/main/generated"
+
+sourceSets {
+    getByName("main").java.srcDirs(querydslDir)
+}
+
+tasks.withType<JavaCompile> {
+    options.generatedSourceOutputDirectory = file(querydslDir)
+
+    // 위의 설정이 안되면 아래 설정 사용
+    // options.generatedSourceOutputDirectory.set(file(querydslDir))
+}
+
+tasks.named("clean") {
+    doLast {
+        file(querydslDir).deleteRecursively()
+    }
 }
