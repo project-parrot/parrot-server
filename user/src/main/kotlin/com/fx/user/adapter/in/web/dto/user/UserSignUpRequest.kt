@@ -26,14 +26,17 @@ data class UserSignUpRequest(
 
     @field:NotBlank(message = "닉네임은 필수입니다.")
     @field:Size(min = 2, max = 30, message = "닉네임은 2자 이상 30자 이하여야 합니다.")
-    val nickname: String
+    val nickname: String,
+
+    val mediaId: Long?= null
 ) {
     fun toCommand(): UserSignUpCommand {
         return UserSignUpCommand(
             email = this.email,
             password = this.password,
             phone = this.phone,
-            nickname = this.nickname
+            nickname = this.nickname,
+            mediaId = this.mediaId
         )
     }
 }
