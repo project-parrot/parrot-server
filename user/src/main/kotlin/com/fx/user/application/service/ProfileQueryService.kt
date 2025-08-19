@@ -2,6 +2,7 @@ package com.fx.user.application.service
 
 import com.fx.user.application.`in`.ProfileQueryUseCase
 import com.fx.user.application.out.FollowPersistencePort
+import com.fx.user.application.out.MediaWebPort
 import com.fx.user.application.out.ProfilePersistencePort
 import com.fx.user.domain.FollowStatus
 import com.fx.user.domain.Profile
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service
 class ProfileQueryService(
     private val profilePersistencePort: ProfilePersistencePort,
     private val followPersistencePort: FollowPersistencePort,
+    private val mediaWebPort: MediaWebPort
 ): ProfileQueryUseCase {
 
     override fun getMyProfile(userId: Long): ProfileInfo {
@@ -23,7 +25,9 @@ class ProfileQueryService(
         val followingCount = followPersistencePort.getFollowingCount(userId)
 
         // TODO Image 조회 로직 구현
-        val profileImageUrl: String? = null
+        val profileImageUrl: String? = profile.mediaId?.let { mediaId ->
+            mediaWebPort.getUrl(listOf(mediaId))?.firstOrNull()?.mediaUrl
+        }
 
         return ProfileInfo.createProfileInfo(
             profile = profile,
@@ -49,8 +53,9 @@ class ProfileQueryService(
         val followingCount = followPersistencePort.getFollowingCount(targetUserId)
 
         // TODO Image 조회 로직 구현
-        val profileImageUrl: String? = null
-
+        val profileImageUrl: String? = targetUserProfile.mediaId?.let { mediaId ->
+            mediaWebPort.getUrl(listOf(mediaId))?.firstOrNull()?.mediaUrl
+        }
         return ProfileInfo.createProfileInfo(
             profile = targetUserProfile,
             profileImageUrl = profileImageUrl,

@@ -18,18 +18,20 @@ data class Profile(
         return this.copy(
             nickname = updateCommand.nickname,
             statusMessage = updateCommand.statusMessage,
-            isPrivate = updateCommand.isPrivate
+            isPrivate = updateCommand.isPrivate,
+            mediaId =  updateCommand.mediaId
         )
     }
 
     companion object {
 
         @JvmStatic
-        fun createProfile(userId: Long, nickname: String): Profile {
+        fun createProfile(userId: Long, nickname: String, mediaId: Long?): Profile {
             return Profile(
                 userId = userId,
                 nickname = nickname,
-                isPrivate = false
+                isPrivate = false,
+                mediaId = mediaId,
             )
         }
 

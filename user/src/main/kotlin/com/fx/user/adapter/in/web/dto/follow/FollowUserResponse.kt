@@ -8,7 +8,7 @@ data class FollowUserResponse(
     val followId: Long,
     val userId: Long,
     val nickname: String,
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
     val status: FollowStatus,
     val followCreatedAt: LocalDateTime
 ) {
@@ -21,7 +21,7 @@ data class FollowUserResponse(
                     followId = info.followId,
                     userId = info.userId,
                     nickname = info.nickname,
-                    profileImageUrl = "", //TODO mediaId 기반 URL 로 변경해야 함
+                    profileImageUrl = info.profileImageUrl,
                     status = info.status,
                     followCreatedAt = info.followCreatedAt
                 )

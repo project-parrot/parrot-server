@@ -65,7 +65,7 @@ public class FollowQueryRepository {
                 followEntity.id,
                 profileEntity.userId,
                 profileEntity.nickname,
-                profileEntity.mediaId.stringValue(),
+                profileEntity.mediaId,
                 followEntity.status,
                 followEntity.createdAt
             ))
