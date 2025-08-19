@@ -3,6 +3,7 @@ package com.fx.user.application.service
 import com.fx.user.application.`in`.FollowCommandUseCase
 import com.fx.user.application.`in`.dto.FollowQueryCommand
 import com.fx.user.application.out.FollowPersistencePort
+import com.fx.user.application.out.MediaWebPort
 import com.fx.user.application.out.ProfilePersistencePort
 import com.fx.user.domain.Follow
 import com.fx.user.domain.FollowQuery
@@ -18,7 +19,8 @@ import org.springframework.stereotype.Service
 @Service
 class FollowCommandService(
     private val followPersistencePort: FollowPersistencePort,
-    private val profilePersistencePort: ProfilePersistencePort
+    private val profilePersistencePort: ProfilePersistencePort,
+    private val mediaWebPort: MediaWebPort
 ): FollowCommandUseCase {
 
     @Transactional
@@ -83,19 +85,22 @@ class FollowCommandService(
 
     override fun getUserFollowings(followQueryCommand: FollowQueryCommand): List<FollowUserInfo> {
         checkFollowListAccess(followQueryCommand)
-        // TODO IMAGE 조회
-        return followPersistencePort.getUserFollowings(
+
+        val followingUserList = followPersistencePort.getUserFollowings(
             FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
         )
+        
+        return mapMediaUrls(followingUserList)
     }
 
     override fun getUserFollowers(followQueryCommand: FollowQueryCommand): List<FollowUserInfo> {
         checkFollowListAccess(followQueryCommand)
 
-        // TODO IMAGE 조회
-        return followPersistencePort.getUserFollowers(
+        val followerList = followPersistencePort.getUserFollowers(
             FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
         )
+
+        return mapMediaUrls(followerList)
     }
 
     private fun checkFollowListAccess(followQueryCommand: FollowQueryCommand) {
@@ -130,5 +135,24 @@ class FollowCommandService(
                 status
             )
         )
+
+    private fun mapMediaUrls(followUserInfoList: List<FollowUserInfo>): List<FollowUserInfo> {
+
+        val mediaIdList: List<Long> = followUserInfoList.mapNotNull { it.mediaId }
+
+        val mediaUrlMap: Map<Long, String> = if (mediaIdList.isNotEmpty()) {
+            mediaWebPort.getUrl(mediaIdList)
+                .orEmpty()
+                .associate { it.mediaId to it.mediaUrl }
+        } else {
+            emptyMap()
+        }
+
+        return followUserInfoList.map { user ->
+            user.copy(
+                profileImageUrl = user.mediaId?.let { mediaUrlMap[it] }
+            )
+        }
+    }
 
 }
