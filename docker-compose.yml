@@ -31,6 +31,8 @@ services:
       - JWT_REFRESH_PLUS_HOUR
       - JWT_SECRET_KEY
       - GATEWAY_HOST
+      - SWAGGER_USERNAME
+      - SWAGGER_PASSWORD
     #volumes:
     #  - /home/ubuntu/parrot/logs/gateway:/logs
 
