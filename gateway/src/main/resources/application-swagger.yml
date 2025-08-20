@@ -9,3 +9,7 @@ springdoc:
         url: /user-service/open-api/v3/api/docs
       - name: media-service
         url: /media-service/open-api/v3/api/docs
+
+swagger:
+  username: ${SWAGGER_USERNAME}
+  password: ${SWAGGER_PASSWORD}
