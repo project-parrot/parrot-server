@@ -61,7 +61,7 @@ class CommentApiAdapter(
     ): ResponseEntity<Api<List<MyCommentResponse>>> =
         Api.OK(
             MyCommentResponse.from(
-                commentQueryUseCase.getComments(
+                commentQueryUseCase.getMyComments(
                     commentSearchParam.toCommand(userId = authUser.userId, pageable = pageable)
                 )
             )

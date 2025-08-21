@@ -7,4 +7,6 @@ interface CommentQueryUseCase {
 
     fun getComments(commentQueryCommand: CommentQueryCommand): List<CommentInfo>
 
+    fun getMyComments(commentQueryCommand: CommentQueryCommand): List<CommentInfo>
+
 }
