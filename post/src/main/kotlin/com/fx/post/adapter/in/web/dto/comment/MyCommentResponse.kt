@@ -1,6 +1,7 @@
 package com.fx.post.adapter.`in`.web.dto.comment
 
 import com.fx.post.domain.Comment
+import com.fx.post.domain.CommentInfo
 import java.time.LocalDateTime
 
 data class MyCommentResponse(
@@ -10,17 +11,17 @@ data class MyCommentResponse(
     val createdAt: LocalDateTime?= null
 ) {
     companion object {
-        fun from(comment: Comment): MyCommentResponse {
+        fun from(commentInfo: CommentInfo): MyCommentResponse {
             return MyCommentResponse(
-                commentId = comment.id,
-                postId = comment.postId,
-                content = comment.content,
-                createdAt = comment.createdAt
+                commentId = commentInfo.id,
+                postId = commentInfo.postId!!,
+                content = commentInfo.content,
+                createdAt = commentInfo.createdAt
             )
         }
 
-        fun from(commentList: List<Comment>): List<MyCommentResponse> {
-            return commentList.map { from(it) }
+        fun from(commentInfoList: List<CommentInfo>): List<MyCommentResponse> {
+            return commentInfoList.map { from(it) }
         }
     }
 }

@@ -4,14 +4,14 @@ import com.fx.global.annotation.AuthenticatedUser
 import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
 import com.fx.global.resolver.AuthUser
-import com.fx.post.adapter.`in`.web.dto.comment.CommentCreateRequest
-import com.fx.post.adapter.`in`.web.dto.comment.CommentCreateResponse
-import com.fx.post.adapter.`in`.web.dto.comment.CommentResponse
-import com.fx.post.adapter.`in`.web.dto.comment.MyCommentResponse
+import com.fx.post.adapter.`in`.web.dto.comment.*
 import com.fx.post.application.`in`.CommentCommandUseCase
 import com.fx.post.application.`in`.CommentQueryUseCase
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -36,21 +36,34 @@ class CommentApiAdapter(
             )
         )
 
-    @Operation(summary = "게시글 댓글 목록 조회")
+
     @GetMapping("/{postId}/comments")
-    fun getComments(@PathVariable postId: Long): ResponseEntity<Api<List<CommentResponse>>> =
+    fun getCommentsQueryDsl(
+        @PathVariable postId: Long,
+        @ModelAttribute commentSearchParam: CommentSearchParam,
+        @PageableDefault(sort = ["id"], direction = Sort.Direction.ASC, size = 20) pageable: Pageable
+    ) : ResponseEntity<Api<List<CommentResponse>>> =
         Api.OK(
             CommentResponse.from(
-                commentQueryUseCase.getComments(postId)
+                commentQueryUseCase.getComments(
+                    commentSearchParam.toCommand(postId = postId, pageable = pageable)
+                )
             )
         )
 
+
     @Operation(summary = "내가 작성한 댓글 조회")
     @GetMapping("/me/comments")
-    fun getMyComments(@AuthenticatedUser authUser: AuthUser): ResponseEntity<Api<List<MyCommentResponse>>> =
+    fun getMyComments(
+        @AuthenticatedUser authUser: AuthUser,
+        @ModelAttribute commentSearchParam: CommentSearchParam,
+        @PageableDefault(sort = ["id"], direction = Sort.Direction.ASC, size = 20) pageable: Pageable
+    ): ResponseEntity<Api<List<MyCommentResponse>>> =
         Api.OK(
             MyCommentResponse.from(
-                commentQueryUseCase.getMyComments(authUser.userId)
+                commentQueryUseCase.getComments(
+                    commentSearchParam.toCommand(userId = authUser.userId, pageable = pageable)
+                )
             )
         )
 
