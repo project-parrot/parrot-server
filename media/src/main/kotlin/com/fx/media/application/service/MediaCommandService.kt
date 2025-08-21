@@ -10,6 +10,9 @@ import com.fx.media.domain.Media
 import com.fx.media.exception.MediaException
 import com.fx.media.exception.errorcode.MediaErrorCode
 import jakarta.transaction.Transactional
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,14 +21,18 @@ class MediaCommandService(
     private val fileStoragePort: FileStoragePort
 ) : MediaCommandUseCase {
 
+
     @Transactional
-    override suspend fun uploadFile(mediaUploadCommand: MediaUploadCommand): List<Media> {
+    override suspend fun uploadFile(mediaUploadCommand: MediaUploadCommand): List<Media> = coroutineScope {
         validateFileCount(mediaUploadCommand.files.size)
 
-        val medias = mediaUploadCommand.files.map { fileStoragePort.store(FileStoreCommand.storeFile(it, mediaUploadCommand.context, mediaUploadCommand.userId)) }
+        val medias = mediaUploadCommand.files.map { file ->
+            async {fileStoragePort.store(FileStoreCommand.storeFile(file, mediaUploadCommand.context, mediaUploadCommand.userId)) }
+        }.awaitAll()
+
         val savedMedia = medias.map { mediaPersistencePort.save(it) }
 
-        return savedMedia
+        savedMedia
     }
 
     @Transactional

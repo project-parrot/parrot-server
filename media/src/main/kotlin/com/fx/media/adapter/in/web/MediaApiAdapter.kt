@@ -7,7 +7,6 @@ import com.fx.global.resolver.AuthUser
 import com.fx.media.adapter.`in`.web.dto.Context
 import com.fx.media.adapter.`in`.web.dto.MediaGetResponse
 import com.fx.media.adapter.`in`.web.dto.MediaUploadResponse
-import com.fx.media.adapter.out.storage.dto.FileStoreCommand
 import com.fx.media.application.`in`.MediaCommandUseCase
 import com.fx.media.application.`in`.MediaQueryUseCase
 import com.fx.media.application.`in`.dto.MediaUploadCommand
