@@ -1,29 +1,46 @@
 package com.fx.post.application.service
 
+import com.fx.post.adapter.out.web.impl.dto.ProfileCommand
 import com.fx.post.application.`in`.CommentQueryUseCase
+import com.fx.post.application.`in`.dto.CommentQueryCommand
 import com.fx.post.application.out.persistence.CommentPersistencePort
-import com.fx.post.domain.Comment
+import com.fx.post.application.out.web.UserWebPort
 import com.fx.post.domain.CommentInfo
+import com.fx.post.domain.CommentQuery
 import org.springframework.stereotype.Service
 
 @Service
 class CommentQueryService(
-    private val commentPersistencePort: CommentPersistencePort
+    private val commentPersistencePort: CommentPersistencePort,
+    private val userWebPort: UserWebPort
 ) : CommentQueryUseCase{
 
-    override fun getComments(postId: Long): List<CommentInfo> {
-        val comments = commentPersistencePort.findByPostIdOrderByCreatedAtAsc(postId)
-        // 유저 모듈에서 FeignClient로 userId들의 닉네임들 가져온 뒤 매핑하기(미구현)
+    override fun getComments(commentQueryCommand: CommentQueryCommand): List<CommentInfo> =
+        mappedByProfile(
+            commentPersistencePort.getComments(
+                CommentQuery.searchCondition(commentQueryCommand, false)
+            )
+        )
 
-        val commentInfos = comments.map { CommentInfo.from(null, null, it) }
+    override fun getMyComments(commentQueryCommand: CommentQueryCommand): List<CommentInfo> =
+        commentPersistencePort.getComments(
+            CommentQuery.searchCondition(commentQueryCommand, false)
+        )
 
-        return commentInfos
-    }
+    private fun mappedByProfile(comments: List<CommentInfo>): List<CommentInfo> {
+        if (comments.isEmpty()) return emptyList()
 
-    override fun getMyComments(userId: Long): List<Comment> {
-        val comments = commentPersistencePort.findByUserIdOrderByCreatedAtDesc(userId)
+        val userMap: Map<Long, ProfileCommand> = userWebPort.getUsersInfo(comments.map { it.userId }.distinct())
+            .orEmpty()
+            .associateBy { it.userId }
 
-        return comments
+        return comments.map { comment ->
+            val userInfo = userMap[comment.userId]
+            comment.copy(
+                nickname = userInfo?.nickname,
+                profileImageUrl = userInfo?.profileImageUrl
+            )
+        }
     }
 
 }

@@ -27,16 +27,15 @@ class PostQueryService(
         val posts = postQueryRepository.findPosts(PostQuery.searchCondition(postQueryCommandWithFollowers, false))
 
         val mappedList = mappedByMediaUrls(posts)
-        val mappedMyProfile = mappedByProfile(mappedList)
-        return mappedMyProfile
+
+        return mappedByProfile(mappedList)
     }
 
     override fun getUserPosts(postQueryCommand: PostQueryCommand): List<PostSummaryDto> {
         val posts = PostQuery.searchCondition(postQueryCommand, false)
         val mappedList =  mappedByMediaUrls(postPersistencePort.getPosts(posts))
 
-        val mappedMyProfile = mappedByProfile(mappedList)
-        return mappedMyProfile
+        return mappedByProfile(mappedList)
     }
 
     private fun mappedByMediaUrls(posts: List<PostSummaryDto>): List<PostSummaryDto> {
