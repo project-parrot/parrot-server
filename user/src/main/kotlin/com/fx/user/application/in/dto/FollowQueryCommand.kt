@@ -8,7 +8,6 @@ data class FollowQueryCommand(
     val targetUserId: Long,
 
     val followId: Long?,
-    val createdAt: LocalDateTime?,
     val nickname: String?,
 
     val pageable: Pageable
