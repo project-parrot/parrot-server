@@ -36,7 +36,11 @@ class CommentApiAdapter(
             )
         )
 
-
+    @Operation(summary = "댓글 조회",
+        description = "default : [sort=id, ASC], [size=20] <br>" +
+            " 요청 예시 : /api/v1/posts/{postId}/comments?sort=id, ASC" +
+                "commentId 파라미터 추가 시 해당 파라미터 이후/이전 댓글" +
+                "parentId 파라미터 추가 시 해당 댓글의 대댓글 조회")
     @GetMapping("/{postId}/comments")
     fun getCommentsQueryDsl(
         @PathVariable postId: Long,
@@ -51,8 +55,10 @@ class CommentApiAdapter(
             )
         )
 
-
-    @Operation(summary = "내가 작성한 댓글 조회")
+    @Operation(summary = "내가 작성한 댓글 조회",
+        description = "default : [sort=id, ASC], [size=20] <br>" +
+                " 요청 예시 : /api/v1/posts/me/comments?sort=id, ASC" +
+                "commentId 파라미터 추가 시 해당 파라미터 이후/이전 댓글")
     @GetMapping("/me/comments")
     fun getMyComments(
         @AuthenticatedUser authUser: AuthUser,
