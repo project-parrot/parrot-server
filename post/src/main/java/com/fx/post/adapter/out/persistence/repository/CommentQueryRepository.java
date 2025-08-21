@@ -100,7 +100,8 @@ public class CommentQueryRepository {
             return commentEntity.id.gt(commentId);
         } else {
             return commentEntity.id.lt(commentId);
-        }    }
+        }
+    }
 
     private List<OrderSpecifier> getOrderSpecifier(Sort sort) {
         List<OrderSpecifier> orders = new ArrayList<>();
