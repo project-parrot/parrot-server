@@ -43,7 +43,7 @@ public class PostQueryRepository {
                 .leftJoin(commentEntity).on(postEntity.id.eq(commentEntity.postId))
                 .where(
                         userIdCondition(postQuery.getUserId(), postQuery.getUserIds()),
-                        ltPostId(postQuery.getPostId()),
+                        cursorCondition(postQuery.getPostId(), postQuery.getPageable().getSort()),
                         postEntity.isDeleted.eq(postQuery.isDeleted())
                 )
                 .groupBy(postEntity.id, postEntity.userId, postEntity.content, postEntity.createdAt)
@@ -71,7 +71,7 @@ public class PostQueryRepository {
                 )
                 .leftJoin(commentEntity).on(postEntity.id.eq(commentEntity.postId))
                 .where(
-                        ltPostId(likeQuery.getPostId()),
+                        cursorCondition(likeQuery.getPostId(), likeQuery.getPageable().getSort()),
                         postEntity.isDeleted.eq(likeQuery.isDeleted())
                 )
                 .groupBy(postEntity.id, postEntity.userId, postEntity.content, postEntity.createdAt)
@@ -90,8 +90,16 @@ public class PostQueryRepository {
         }
     }
 
-    private BooleanExpression ltPostId(Long postId) {
-        return postId != null ? postEntity.id.lt(postId) : null;
+    private BooleanExpression cursorCondition(Long postId, Sort sort) {
+        if (postId == null) return null;
+
+        Sort.Order order = sort.stream().findFirst().orElse(Sort.Order.desc("id"));
+
+        if (order.isDescending()) {
+            return postEntity.id.lt(postId);
+        } else {
+            return postEntity.id.gt(postId);
+        }
     }
 
     private List<OrderSpecifier> getOrderSpecifier(Sort sort) {

@@ -11,7 +11,8 @@ data class CommentResponse(
     val profileImageUrl: String?= null,
     val content: String,
     val createdAt: LocalDateTime?= null,
-    val parentId: Long?= null
+    val parentId: Long?= null,
+    val replyCount: Long?= null,
 ) {
     companion object {
         fun from(commentInfo: CommentInfo): CommentResponse {
@@ -22,7 +23,8 @@ data class CommentResponse(
                 profileImageUrl = commentInfo.profileImageUrl,
                 content = commentInfo.content,
                 createdAt = commentInfo.createdAt,
-                parentId = commentInfo.parentId
+                parentId = commentInfo.parentId,
+                replyCount = commentInfo.replyCount
             )
         }
 
