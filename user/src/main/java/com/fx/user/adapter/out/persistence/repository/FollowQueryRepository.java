@@ -1,9 +1,9 @@
 package com.fx.user.adapter.out.persistence.repository;
 
+import static com.fx.user.adapter.out.persistence.entity.QFollowEntity.followEntity;
+import static com.fx.user.adapter.out.persistence.entity.QProfileEntity.profileEntity;
+
 import com.fx.user.adapter.out.persistence.entity.FollowEntity;
-import com.fx.user.adapter.out.persistence.entity.ProfileEntity;
-import com.fx.user.adapter.out.persistence.entity.QFollowEntity;
-import com.fx.user.adapter.out.persistence.entity.QProfileEntity;
 import com.fx.user.domain.FollowQuery;
 import com.fx.user.domain.FollowUserInfo;
 import com.querydsl.core.types.Order;
@@ -12,14 +12,11 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-import static com.fx.user.adapter.out.persistence.entity.QFollowEntity.followEntity;
-import static com.fx.user.adapter.out.persistence.entity.QProfileEntity.profileEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -46,7 +43,7 @@ public class FollowQueryRepository {
             .join(profileEntity).on(followEntity.followingId.eq(profileEntity.userId))
             .where(
                 followEntity.followerId.eq(followQuery.getTargetUserId()),
-                ltCreatedAt(followQuery.getCreatedAt()),
+                cursorCondition(followQuery.getFollowId(), followQuery.getPageable().getSort()),
                 likeNickname(followQuery.getNickname()),
                 followEntity.status.eq(followQuery.getStatus())
             )
@@ -73,7 +70,7 @@ public class FollowQueryRepository {
             .join(profileEntity).on(followEntity.followerId.eq(profileEntity.userId))
             .where(
                 followEntity.followingId.eq(followQuery.getTargetUserId()),
-                ltCreatedAt(followQuery.getCreatedAt()),
+                cursorCondition(followQuery.getFollowId(), followQuery.getPageable().getSort()),
                 likeNickname(followQuery.getNickname()),
                 followEntity.status.eq(followQuery.getStatus())
             )
@@ -82,8 +79,16 @@ public class FollowQueryRepository {
             .fetch();
     }
 
-    private BooleanExpression ltCreatedAt(LocalDateTime createdAt) {
-        return createdAt != null ? followEntity.createdAt.lt(createdAt) : null;
+    private BooleanExpression cursorCondition(Long followId, Sort sort) {
+        if (followId == null) return null;
+
+        Sort.Order order = sort.stream().findFirst().orElse(Sort.Order.desc("id"));
+
+        if (order.isDescending()) {
+            return followEntity.id.lt(followId);
+        } else {
+            return followEntity.id.gt(followId);
+        }
     }
 
     private BooleanExpression likeNickname(String nickname) {

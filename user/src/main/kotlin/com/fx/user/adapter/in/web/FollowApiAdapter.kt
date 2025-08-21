@@ -55,17 +55,18 @@ class FollowApiAdapter(
         )
 
 
-    // TODO createdAt -> ID 기반으로 수정
-    // 예시 : /api/v1/follows/{targetUserId}/followings?sort=createdAt,DESC&size=20
+    // 예시 : /api/v1/follows/{targetUserId}/followings?sort=id,DESC&size=20&nickname=user-nickname
     @Operation(summary = "팔로잉 목록 조회",
-        description = "default : [sort=createdAt,DESC], [size:20] <br>" +
-            " 요청 예시 : /api/v1/follows/{targetUserId}/followings?sort=createdAt,DESC&size=20")
+        description = "default : [sort=id,DESC], [size:20] <br>" +
+            "요청 예시 : /api/v1/follows/{targetUserId}/followings?sort=id,DESC&size=20&nickname=user-nickname <br>" +
+            "다음 요청 파라미터 예시 : ?sort=id,DESC&size=20&followId=15 (**followId** 를 기준으로 조회합니다.)"
+    )
     @GetMapping("/{userId}/followings")
     fun getUserFollowings(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
         @PathVariable userId: Long,
         @ModelAttribute followSearchParam: FollowSearchParam,
-        @PageableDefault(sort = ["createdAt"] , direction = Sort.Direction.DESC, size = 20) pageable: Pageable // DEFAULT : 최신순 조회
+        @PageableDefault(sort = ["id"] , direction = Sort.Direction.DESC, size = 20) pageable: Pageable // DEFAULT : 최신순 조회
     ): ResponseEntity<Api<List<FollowUserResponse>>> {
         val followUserInfoList = followCommandUseCase.getUserFollowings(
             followSearchParam.toCommand(
@@ -83,7 +84,7 @@ class FollowApiAdapter(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
         @PathVariable userId: Long,
         @ModelAttribute followSearchParam: FollowSearchParam,
-        @PageableDefault(sort = ["createdAt"] , direction = Sort.Direction.DESC, size = 20) pageable: Pageable // DEFAULT : 최신순 조회
+        @PageableDefault(sort = ["id"] , direction = Sort.Direction.DESC, size = 20) pageable: Pageable // DEFAULT : 최신순 조회
     ): ResponseEntity<Api<List<FollowUserResponse>>> {
         val followUserInfoList = followCommandUseCase.getUserFollowers(
             followSearchParam.toCommand(
