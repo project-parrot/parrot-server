@@ -58,7 +58,7 @@ class FollowApiAdapter(
     // 예시 : /api/v1/follows/{targetUserId}/followings?sort=id,DESC&size=20&nickname=user-nickname
     @Operation(summary = "팔로잉 목록 조회",
         description = "default : [sort=id,DESC], [size:20] <br>" +
-            "요청 예시 : /api/v1/follows/{targetUserId}/followings?sort=id,DESC&size=20&nickname=user-nickname <br>" +
+            "요청 예시 : /api/v1/follows/{userId}/followings?sort=id,DESC&size=20&nickname=user-nickname <br>" +
             "다음 요청 파라미터 예시 : ?sort=id,DESC&size=20&followId=15 (**followId** 를 기준으로 조회합니다.)"
     )
     @GetMapping("/{userId}/followings")

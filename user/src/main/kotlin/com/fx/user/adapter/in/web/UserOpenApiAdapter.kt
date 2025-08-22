@@ -36,7 +36,7 @@ class UserOpenApiAdapter(
     @Operation(summary = "로그인")
     @PostMapping("/login")
     fun login(
-        @RequestBody loginRequest: UserLoginRequest
+        @RequestBody @Valid loginRequest: UserLoginRequest
     ): ResponseEntity<Api<TokenResponse>> =
         Api.OK(
             TokenResponse.from(
