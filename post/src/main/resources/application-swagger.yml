@@ -6,4 +6,4 @@ springdoc:
 
 openapi:
   service:
-    url: http://${SWAGGER_HOST}/post-service
+    url: ${SWAGGER_HOST}/post-service
