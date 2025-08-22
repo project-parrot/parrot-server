@@ -8,6 +8,7 @@ import com.fx.user.adapter.security.dto.AuthenticatedUser
 import com.fx.user.application.`in`.ProfileCommandUseCase
 import com.fx.user.application.`in`.ProfileQueryUseCase
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
@@ -45,10 +46,10 @@ class ProfileApiAdapter(
     @PatchMapping("/me")
     fun updateProfile(
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-        @RequestBody profileUpdateRequest: ProfileUpdateRequest
+        @RequestBody @Valid profileUpdateRequest: ProfileUpdateRequest
     ): ResponseEntity<Api<Boolean>> =
         Api.OK(profileCommandUseCase.updateProfile(
-            authenticatedUser.userId, profileUpdateRequest.toCommand()),
+            profileUpdateRequest.toCommand(authenticatedUser.userId)),
             "프로필 수정이 완료되었습니다."
         )
 

@@ -1,12 +1,8 @@
 package com.fx.user.adapter.`in`.web
 
-import com.fx.user.adapter.`in`.web.dto.follow.FollowSearchParam
 import com.fx.user.adapter.`in`.web.dto.profile.InternalProfileInfoResponse
 import com.fx.user.application.`in`.FollowCommandUseCase
 import com.fx.user.application.`in`.ProfileQueryUseCase
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
-import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
