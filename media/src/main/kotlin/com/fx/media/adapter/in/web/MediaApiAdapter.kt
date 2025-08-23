@@ -53,7 +53,10 @@ class MediaApiAdapter(
         return Api.OK(Unit)
     }
 
-
+    @Operation(summary = "특정 Context/ReferenceId의 미디어 조회",
+        description = "context 종류 : POST, CHAT, PROFILE <br>" +
+                "referenceId는 Profile/Post/Chat의 id값 <br>" +
+                " 요청 예시 : /api/v1/media?context=PROFILE&referenceId=4")
     @GetMapping
     fun getContextMedias(
         @RequestParam context: Context,
