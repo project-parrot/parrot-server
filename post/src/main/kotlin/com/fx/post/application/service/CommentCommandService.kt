@@ -19,19 +19,16 @@ class CommentCommandService(
 ) : CommentCommandUseCase {
 
     @Transactional
-    override fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment {
-        if (!postPersistencePort.existsById(postId))
+    override fun createComment(commentCreateCommand: CommentCreateCommand): Comment {
+        if (!postPersistencePort.existsById(commentCreateCommand.postId))
             throw PostException(PostErrorCode.POST_NOT_EXIST)
 
         val parentId = commentCreateCommand.parentId
 
-        return if (parentId != null) {
-            if (!commentPersistencePort.existsById(parentId)) {
-                throw CommentException(CommentErrorCode.PARENT_NOT_EXIST)
-            }
-            commentPersistencePort.save(Comment.createComment(postId, commentCreateCommand))
-        } else {
-            commentPersistencePort.save(Comment.createComment(postId, commentCreateCommand))
-        }
+        return if (parentId != null && !commentPersistencePort.existsById(parentId))
+            throw CommentException(CommentErrorCode.PARENT_NOT_EXIST)
+        else
+            commentPersistencePort.save(Comment.createComment(commentCreateCommand))
+
     }
 }

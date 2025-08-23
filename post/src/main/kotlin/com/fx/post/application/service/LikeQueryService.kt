@@ -1,6 +1,6 @@
 package com.fx.post.application.service
 
-import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
+import com.fx.post.application.out.persistence.dto.PostInfo
 import com.fx.post.adapter.out.web.impl.dto.ProfileCommand
 import com.fx.post.application.`in`.LikeQueryUseCase
 import com.fx.post.application.`in`.dto.LikeQueryCommand
@@ -38,7 +38,7 @@ class LikeQueryService(
         }
     }
 
-    override fun getMyLikedPosts(likeQueryCommand: LikeQueryCommand): List<PostSummaryDto> {
+    override fun getMyLikedPosts(likeQueryCommand: LikeQueryCommand): List<PostInfo> {
         val posts = postPersistencePort.getLikedPosts(LikeQuery.searchCondition(likeQueryCommand, false))
 
         val mappedList = mappedByMediaUrls(posts)
@@ -46,7 +46,7 @@ class LikeQueryService(
         return mappedByProfile(mappedList)
     }
 
-    private fun mappedByMediaUrls(posts: List<PostSummaryDto>): List<PostSummaryDto> {
+    private fun mappedByMediaUrls(posts: List<PostInfo>): List<PostInfo> {
         if (posts.isEmpty()) return emptyList()
 
         val postIds = posts.map { it.id }
@@ -69,7 +69,7 @@ class LikeQueryService(
         }
     }
 
-    private fun mappedByProfile(posts: List<PostSummaryDto>): List<PostSummaryDto> {
+    private fun mappedByProfile(posts: List<PostInfo>): List<PostInfo> {
         if (posts.isEmpty()) return emptyList()
 
         val userMap: Map<Long, ProfileCommand> = userWebPort.getUsersInfo(posts.map { it.userId }.distinct())

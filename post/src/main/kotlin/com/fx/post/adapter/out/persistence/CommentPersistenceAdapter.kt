@@ -6,7 +6,7 @@ import com.fx.post.adapter.out.persistence.repository.CommentQueryRepository
 import com.fx.post.adapter.out.persistence.repository.CommentRepository
 import com.fx.post.application.out.persistence.CommentPersistencePort
 import com.fx.post.domain.Comment
-import com.fx.post.domain.CommentInfo
+import com.fx.post.application.out.persistence.dto.CommentInfo
 import com.fx.post.domain.CommentQuery
 
 @PersistenceAdapter

@@ -1,4 +1,4 @@
-package com.fx.post.domain
+package com.fx.post.application.out.persistence.dto
 
 import java.time.LocalDateTime
 

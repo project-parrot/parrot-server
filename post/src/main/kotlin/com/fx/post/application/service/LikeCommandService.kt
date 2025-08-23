@@ -1,6 +1,8 @@
 package com.fx.post.application.service
 
 import com.fx.post.application.`in`.LikeCommandUseCase
+import com.fx.post.application.`in`.dto.LikeAddCommand
+import com.fx.post.application.`in`.dto.LikeCancelCommand
 import com.fx.post.application.out.persistence.LikePersistencePort
 import com.fx.post.application.out.persistence.PostPersistencePort
 import com.fx.post.domain.Like
@@ -18,23 +20,25 @@ class LikeCommandService(
 ) : LikeCommandUseCase {
 
     @Transactional
-    override fun addLike(postId: Long, userId: Long) {
-        if (!postPersistencePort.existsById(postId))
+    override fun addLike(likeAddCommand: LikeAddCommand) {
+        if (!postPersistencePort.existsById(likeAddCommand.postId))
             throw PostException(PostErrorCode.POST_NOT_EXIST)
 
-        if (likePersistencePort.existsByPostIdAndUserId(postId, userId)) {
+        if (likePersistencePort.existsByPostIdAndUserId(likeAddCommand.postId, likeAddCommand.userId)) {
             throw LikeException(LikeErrorCode.LIKE_EXIST)
         }
 
-        likePersistencePort.save(Like.addLike(postId, userId))
+        likePersistencePort.save(Like.addLike(likeAddCommand))
     }
 
     @Transactional
-    override fun cancelLike(postId: Long, userId: Long) {
-        if (!postPersistencePort.existsById(postId))
+    override fun cancelLike(likeCancelCommand: LikeCancelCommand) {
+        if (!postPersistencePort.existsById(likeCancelCommand.postId))
             throw PostException(PostErrorCode.POST_NOT_EXIST)
 
-        val likeCount = likePersistencePort.deleteByPostIdAndUserId(postId, userId)
+        val likeCount = likePersistencePort.deleteByPostIdAndUserId(
+            Like.cancelLike(likeCancelCommand)
+        )
 
         if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
     }
