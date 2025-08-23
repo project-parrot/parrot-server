@@ -104,7 +104,7 @@ class PostApiAdapter(
         Api.OK(
             PostUpdateResponse(
                 postCommandUseCase.updatePost(
-                    postId, postUpdateRequest.toCommand(authUser)
+                    postUpdateRequest.toCommand(postId, authUser)
                 ).id
             )
         )

@@ -1,6 +1,6 @@
 package com.fx.post.adapter.out.persistence.repository;
 
-import com.fx.post.adapter.out.persistence.dto.PostSummaryDto;
+import com.fx.post.application.out.persistence.dto.PostInfo;
 import com.fx.post.adapter.out.persistence.entity.PostEntity;
 import com.fx.post.domain.LikeQuery;
 import com.fx.post.domain.PostQuery;
@@ -27,10 +27,10 @@ public class PostQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<PostSummaryDto> findPosts(PostQuery postQuery) {
+    public List<PostInfo> findPosts(PostQuery postQuery) {
         return jpaQueryFactory
                 .select(Projections.constructor(
-                        PostSummaryDto.class,
+                        PostInfo.class,
                         postEntity.id,
                         postEntity.userId,
                         postEntity.content,
@@ -53,10 +53,10 @@ public class PostQueryRepository {
 
     }
 
-    public List<PostSummaryDto> findLikedPosts(LikeQuery likeQuery) {
+    public List<PostInfo> findLikedPosts(LikeQuery likeQuery) {
         return jpaQueryFactory
                 .select(Projections.constructor(
-                        PostSummaryDto.class,
+                        PostInfo.class,
                         postEntity.id,
                         postEntity.userId,
                         postEntity.content,

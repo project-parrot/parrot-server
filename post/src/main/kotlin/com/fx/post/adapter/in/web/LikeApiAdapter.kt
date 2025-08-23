@@ -9,7 +9,8 @@ import com.fx.post.adapter.`in`.web.dto.like.LikeUsersResponse
 import com.fx.post.adapter.`in`.web.dto.post.PostResponse
 import com.fx.post.application.`in`.LikeCommandUseCase
 import com.fx.post.application.`in`.LikeQueryUseCase
-import com.fx.post.application.`in`.dto.LikeQueryCommand
+import com.fx.post.application.`in`.dto.LikeAddCommand
+import com.fx.post.application.`in`.dto.LikeCancelCommand
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -31,7 +32,9 @@ class LikeApiAdapter(
         @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<Unit?>> =
         Api.OK(
-            likeCommandUseCase.addLike(postId, authUser.userId)
+            likeCommandUseCase.addLike(
+                LikeAddCommand(postId, authUser.userId)
+            )
         )
 
     @Operation(summary = "좋아요 취소")
@@ -41,7 +44,9 @@ class LikeApiAdapter(
         @AuthenticatedUser authUser: AuthUser
     ): ResponseEntity<Api<Unit?>> =
         Api.OK(
-            likeCommandUseCase.cancelLike(postId, authUser.userId)
+            likeCommandUseCase.cancelLike(
+                LikeCancelCommand(postId, authUser.userId)
+            )
         )
 
     @Operation(summary = "게시글을 좋아요 한 사용자 목록 조회")

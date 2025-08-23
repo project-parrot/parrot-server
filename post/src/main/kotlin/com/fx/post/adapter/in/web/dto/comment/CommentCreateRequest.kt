@@ -11,9 +11,10 @@ data class CommentCreateRequest(
     val content: String,
     val parentId: Long? = null
 ) {
-    fun toCommand(authUser: AuthUser): CommentCreateCommand {
+    fun toCommand(postId:Long, authUser: AuthUser): CommentCreateCommand {
         return CommentCreateCommand(
             userId = authUser.userId,
+            postId = postId,
             content = this.content,
             parentId = this.parentId
         )

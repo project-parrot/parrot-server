@@ -5,7 +5,7 @@ import com.fx.post.application.`in`.CommentQueryUseCase
 import com.fx.post.application.`in`.dto.CommentQueryCommand
 import com.fx.post.application.out.persistence.CommentPersistencePort
 import com.fx.post.application.out.web.UserWebPort
-import com.fx.post.domain.CommentInfo
+import com.fx.post.application.out.persistence.dto.CommentInfo
 import com.fx.post.domain.CommentQuery
 import org.springframework.stereotype.Service
 

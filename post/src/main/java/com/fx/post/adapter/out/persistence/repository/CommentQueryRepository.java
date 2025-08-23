@@ -2,7 +2,7 @@ package com.fx.post.adapter.out.persistence.repository;
 
 import com.fx.post.adapter.out.persistence.entity.CommentEntity;
 import com.fx.post.adapter.out.persistence.entity.QCommentEntity;
-import com.fx.post.domain.CommentInfo;
+import com.fx.post.application.out.persistence.dto.CommentInfo;
 import com.fx.post.domain.CommentQuery;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;

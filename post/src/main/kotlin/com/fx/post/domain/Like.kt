@@ -1,5 +1,7 @@
 package com.fx.post.domain
 
+import com.fx.post.application.`in`.dto.LikeAddCommand
+import com.fx.post.application.`in`.dto.LikeCancelCommand
 import java.time.LocalDateTime
 
 data class Like(
@@ -12,10 +14,18 @@ data class Like(
 
     companion object {
         @JvmStatic
-        fun addLike(postId: Long, userId: Long): Like {
+        fun addLike(likeAddCommand: LikeAddCommand): Like {
             return Like(
-                postId = postId,
-                userId = userId
+                postId = likeAddCommand.postId,
+                userId = likeAddCommand.userId
+            )
+        }
+
+        @JvmStatic
+        fun cancelLike(likeCancelCommand: LikeCancelCommand): Like {
+            return Like(
+                postId = likeCancelCommand.postId,
+                userId = likeCancelCommand.userId
             )
         }
     }

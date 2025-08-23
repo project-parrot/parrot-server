@@ -31,8 +31,9 @@ class CommentApiAdapter(
     ): ResponseEntity<Api<CommentCreateResponse>> =
         Api.OK(
             CommentCreateResponse(
-                commentCommandUseCase.createComment(postId,commentCreateRequest.toCommand(authUser))
-                    .id
+                commentCommandUseCase.createComment(
+                    commentCreateRequest.toCommand(postId, authUser)
+                ).id
             )
         )
 
