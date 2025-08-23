@@ -1,9 +1,12 @@
 package com.fx.post.application.`in`
 
+import com.fx.post.application.`in`.dto.LikeAddCommand
+import com.fx.post.application.`in`.dto.LikeCancelCommand
+
 interface LikeCommandUseCase {
 
-    fun addLike(postId:Long, userId: Long)
+    fun addLike(likeAddCommand: LikeAddCommand)
 
-    fun cancelLike(postId:Long, userId:Long)
+    fun cancelLike(likeCancelCommand: LikeCancelCommand)
 
 }

@@ -8,7 +8,7 @@ interface LikePersistencePort {
 
     fun existsByPostIdAndUserId(postId: Long, userId: Long): Boolean
 
-    fun deleteByPostIdAndUserId(postId: Long, userId: Long): Int
+    fun deleteByPostIdAndUserId(like: Like): Int
 
     fun findByPostId(postId: Long): List<Long>
 }
