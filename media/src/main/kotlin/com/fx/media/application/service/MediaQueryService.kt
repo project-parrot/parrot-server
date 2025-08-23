@@ -33,4 +33,7 @@ class MediaQueryService(
         }
     }
 
+    override fun getFiles(context: Context, referenceId: Long): List<Media> =
+        mediaPersistencePort.findByContextAndReferenceIdAndIsDeleted(context, referenceId)
+
 }

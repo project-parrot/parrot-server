@@ -53,4 +53,15 @@ class MediaApiAdapter(
         return Api.OK(Unit)
     }
 
+
+    @GetMapping
+    fun getContextMedias(
+        @RequestParam context: Context,
+        @RequestParam referenceId: Long
+    ) : ResponseEntity<Api<List<MediaGetResponse>>> =
+        Api.OK(
+            mediaQueryUseCase.getFiles(context, referenceId)
+                .map { MediaGetResponse.from(it) }
+        )
+
 }
