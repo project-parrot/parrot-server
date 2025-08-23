@@ -1,6 +1,6 @@
 package com.fx.post.application.service
 
-import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
+import com.fx.post.application.out.persistence.dto.PostInfo
 import com.fx.post.adapter.out.persistence.repository.PostQueryRepository
 import com.fx.post.adapter.out.web.impl.dto.ProfileCommand
 import com.fx.post.application.`in`.PostQueryUseCase
@@ -21,7 +21,7 @@ class PostQueryService(
     private val userWebPort: UserWebPort
 ) : PostQueryUseCase {
 
-    override fun getFollowersPosts(postQueryCommand: PostQueryCommand): List<PostSummaryDto> {
+    override fun getFollowersPosts(postQueryCommand: PostQueryCommand): List<PostInfo> {
         val followingUsers = userWebPort.getFollowersInfo(postQueryCommand.userId!!)
         val postQueryCommandWithFollowers = postQueryCommand.copy(userId = null, userIds = followingUsers)
         val posts = postQueryRepository.findPosts(PostQuery.searchCondition(postQueryCommandWithFollowers, false))
@@ -31,14 +31,14 @@ class PostQueryService(
         return mappedByProfile(mappedList)
     }
 
-    override fun getUserPosts(postQueryCommand: PostQueryCommand): List<PostSummaryDto> {
+    override fun getUserPosts(postQueryCommand: PostQueryCommand): List<PostInfo> {
         val posts = PostQuery.searchCondition(postQueryCommand, false)
         val mappedList =  mappedByMediaUrls(postPersistencePort.getPosts(posts))
 
         return mappedByProfile(mappedList)
     }
 
-    private fun mappedByMediaUrls(posts: List<PostSummaryDto>): List<PostSummaryDto> {
+    private fun mappedByMediaUrls(posts: List<PostInfo>): List<PostInfo> {
         if (posts.isEmpty()) return emptyList()
 
         val postIds = posts.map { it.id }
@@ -61,7 +61,7 @@ class PostQueryService(
         }
     }
 
-    private fun mappedByProfile(posts: List<PostSummaryDto>): List<PostSummaryDto> {
+    private fun mappedByProfile(posts: List<PostInfo>): List<PostInfo> {
         if (posts.isEmpty()) return emptyList()
 
         val userMap: Map<Long, ProfileCommand> = userWebPort.getUsersInfo(posts.map { it.userId }.distinct())

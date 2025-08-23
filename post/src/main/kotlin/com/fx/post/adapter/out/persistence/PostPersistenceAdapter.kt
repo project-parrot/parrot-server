@@ -1,7 +1,7 @@
 package com.fx.post.adapter.out.persistence
 
 import com.fx.global.annotation.hexagonal.PersistenceAdapter
-import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
+import com.fx.post.application.out.persistence.dto.PostInfo
 import com.fx.post.adapter.out.persistence.entity.PostEntity
 import com.fx.post.adapter.out.persistence.repository.PostQueryRepository
 import com.fx.post.adapter.out.persistence.repository.PostRepository
@@ -29,10 +29,10 @@ class PostPersistenceAdapter(
     override fun findByIdAndIsDeletedNot(postId: Long): Post? =
         postRepository.findByIdAndIsDeletedNot(postId, true).orElse(null)?.toDomain()
 
-    override fun getPosts(postQuery: PostQuery): List<PostSummaryDto> =
+    override fun getPosts(postQuery: PostQuery): List<PostInfo> =
         postQueryRepository.findPosts(postQuery)
 
-    override fun getLikedPosts(likeQuery: LikeQuery): List<PostSummaryDto> =
+    override fun getLikedPosts(likeQuery: LikeQuery): List<PostInfo> =
         postQueryRepository.findLikedPosts(likeQuery)
 
 }

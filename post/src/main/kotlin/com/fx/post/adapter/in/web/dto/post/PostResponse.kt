@@ -1,6 +1,6 @@
 package com.fx.post.adapter.`in`.web.dto.post
 
-import com.fx.post.adapter.out.persistence.dto.PostSummaryDto
+import com.fx.post.application.out.persistence.dto.PostInfo
 import java.time.LocalDateTime
 
 data class PostResponse(
@@ -15,22 +15,22 @@ data class PostResponse(
     val commentCount: Long
 ) {
     companion object {
-        fun from(postSummaryDto: PostSummaryDto): PostResponse {
+        fun from(postInfo: PostInfo): PostResponse {
             return PostResponse(
-                postId = postSummaryDto.id,
-                userId = postSummaryDto.userId,
-                nickname = postSummaryDto.nickname,
-                profileImageUrl = postSummaryDto.profileImageUrl,
-                content = postSummaryDto.content,
-                mediaUrls = postSummaryDto.mediaUrls,
-                createdAt = postSummaryDto.createdAt,
-                likeCount = postSummaryDto.likeCount,
-                commentCount = postSummaryDto.commentCount
+                postId = postInfo.id,
+                userId = postInfo.userId,
+                nickname = postInfo.nickname,
+                profileImageUrl = postInfo.profileImageUrl,
+                content = postInfo.content,
+                mediaUrls = postInfo.mediaUrls,
+                createdAt = postInfo.createdAt,
+                likeCount = postInfo.likeCount,
+                commentCount = postInfo.commentCount
             )
         }
 
-        fun from(postSummaryDtoList: List<PostSummaryDto>): List<PostResponse> {
-            return postSummaryDtoList.map { from(it) }
+        fun from(postInfoList: List<PostInfo>): List<PostResponse> {
+            return postInfoList.map { from(it) }
         }
     }
 

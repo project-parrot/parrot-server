@@ -1,7 +1,7 @@
 package com.fx.post.application.`in`
 
 import com.fx.post.application.`in`.dto.CommentQueryCommand
-import com.fx.post.domain.CommentInfo
+import com.fx.post.application.out.persistence.dto.CommentInfo
 
 interface CommentQueryUseCase {
 

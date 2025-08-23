@@ -1,8 +1,8 @@
-package com.fx.post.adapter.out.persistence.dto
+package com.fx.post.application.out.persistence.dto
 
 import java.time.LocalDateTime
 
-data class PostSummaryDto(
+data class PostInfo(
     var id: Long,
     val userId: Long,
     val nickname: String?= null,
