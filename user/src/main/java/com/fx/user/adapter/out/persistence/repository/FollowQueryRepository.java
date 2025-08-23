@@ -35,7 +35,6 @@ public class FollowQueryRepository {
                 followEntity.id,
                 profileEntity.userId,
                 profileEntity.nickname,
-                profileEntity.mediaId,
                 followEntity.status,
                 followEntity.createdAt
             ))
@@ -62,7 +61,6 @@ public class FollowQueryRepository {
                 followEntity.id,
                 profileEntity.userId,
                 profileEntity.nickname,
-                profileEntity.mediaId,
                 followEntity.status,
                 followEntity.createdAt
             ))

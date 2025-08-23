@@ -1,5 +1,6 @@
 package com.fx.media.application.service
 
+import com.fx.global.dto.MediaMappingEventDto
 import com.fx.global.dto.UserRole
 import com.fx.media.adapter.out.storage.dto.FileStoreCommand
 import com.fx.media.application.`in`.MediaCommandUseCase
@@ -42,6 +43,37 @@ class MediaCommandService(
             throw MediaException(MediaErrorCode.MEDIA_FORBIDDEN)
         }
         mediaPersistencePort.delete(Media.deleteMedia(media))
+    }
+
+    @Transactional
+    override fun mediaMapping(mediaMappingEventDto: MediaMappingEventDto) {
+        val incomingIds = mediaMappingEventDto.mediaIds.orEmpty()
+
+        val existingMedias = mediaPersistencePort.findByContextAndReferenceIdAndIsDeleted(
+            mediaMappingEventDto.context,
+            mediaMappingEventDto.referenceId!!
+        )
+
+        val existingMap = existingMedias.associateBy { it.id }
+
+        val existingIds = existingMap.keys.toSet()
+        val addIds = incomingIds.subtract(existingIds)
+        val removeIds = existingIds.subtract(incomingIds.toSet())
+
+        addIds.forEach { id ->
+            val media = mediaPersistencePort.findByIdAndIsDeleted(id!!)
+            media?.let {
+                if (it.context == mediaMappingEventDto.context && it.userId == mediaMappingEventDto.userId)
+                    mediaPersistencePort.save(it.copy(referenceId = mediaMappingEventDto.referenceId))
+            }
+        }
+
+        removeIds.forEach { id ->
+            existingMap[id]?.let { media ->
+                if (media.context == mediaMappingEventDto.context && media.userId == mediaMappingEventDto.userId)
+                    mediaPersistencePort.save(media.copy(referenceId = null))
+            }
+        }
     }
 
     private fun validateFileCount(count: Int) {

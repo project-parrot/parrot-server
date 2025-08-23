@@ -1,8 +1,8 @@
 package com.fx.media.adapter.out.storage
 
 import com.fx.global.annotation.hexagonal.FileStorageAdapter
+import com.fx.global.dto.Context
 import com.fx.global.dto.FileType
-import com.fx.media.adapter.`in`.web.dto.Context
 import com.fx.media.adapter.out.storage.dto.FileInfo
 import com.fx.media.adapter.out.storage.dto.FileStoreCommand
 import com.fx.media.application.`in`.dto.MediaUploadCommand
@@ -92,6 +92,7 @@ class LocalFileStorageAdapter (
             fileSize = fileStoreCommand.file.size,
             serverName = fileInfo.serverName,
             originalName = fileInfo.originalName,
+            context = fileStoreCommand.context,
             extension = fileInfo.extension
         )
     }

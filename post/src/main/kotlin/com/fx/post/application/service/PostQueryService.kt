@@ -1,5 +1,6 @@
 package com.fx.post.application.service
 
+import com.fx.global.dto.Context
 import com.fx.post.application.out.persistence.dto.PostInfo
 import com.fx.post.adapter.out.persistence.repository.PostQueryRepository
 import com.fx.post.adapter.out.web.impl.dto.ProfileCommand
@@ -43,20 +44,12 @@ class PostQueryService(
 
         val postIds = posts.map { it.id }
 
-        val postToMediaIds = postMediaPersistencePort
-            .findByPostIdIn(postIds)
-            .groupBy({ it.postId }, { it.mediaId })
+        val mediaUrlCommands = mediaWebPort.getUrls(Context.POST, postIds)
 
-        val mediaUrls = mediaWebPort
-            .getUrl(postToMediaIds.values.flatten())
-            .orEmpty()
-            .associate { it.mediaId to it.mediaUrl }
+        val mediaMap = mediaUrlCommands?.associate { it.referenceId to it.mediaUrls }
 
         return posts.map { post ->
-            val urls = postToMediaIds[post.id]
-                ?.mapNotNull(mediaUrls::get)
-                .orEmpty()
-
+            val urls = mediaMap?.get(post.id).orEmpty()
             post.copy(mediaUrls = urls)
         }
     }

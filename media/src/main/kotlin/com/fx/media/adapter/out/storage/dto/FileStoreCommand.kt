@@ -1,6 +1,6 @@
 package com.fx.media.adapter.out.storage.dto
 
-import com.fx.media.adapter.`in`.web.dto.Context
+import com.fx.global.dto.Context
 import org.springframework.web.multipart.MultipartFile
 
 data class FileStoreCommand(

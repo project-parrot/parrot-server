@@ -38,7 +38,13 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
     implementation ("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta") // QueryDSL
+
     implementation(project(":global"))
+
+    //Kafka
+    implementation("org.springframework.kafka:spring-kafka")
+    // Embedded Kafka
+    testImplementation("org.springframework.kafka:spring-kafka-test")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

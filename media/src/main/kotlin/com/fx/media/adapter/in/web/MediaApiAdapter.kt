@@ -3,8 +3,8 @@ package com.fx.media.adapter.`in`.web
 import com.fx.global.annotation.AuthenticatedUser
 import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
+import com.fx.global.dto.Context
 import com.fx.global.resolver.AuthUser
-import com.fx.media.adapter.`in`.web.dto.Context
 import com.fx.media.adapter.`in`.web.dto.MediaGetResponse
 import com.fx.media.adapter.`in`.web.dto.MediaUploadResponse
 import com.fx.media.application.`in`.MediaCommandUseCase

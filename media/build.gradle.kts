@@ -37,6 +37,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.3")
 
+    //Kafka
+    implementation("org.springframework.kafka:spring-kafka")
+    // Embedded Kafka
+    testImplementation("org.springframework.kafka:spring-kafka-test")
+
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
