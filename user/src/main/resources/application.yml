@@ -35,6 +35,11 @@ spring:
       repositories:
         enabled: true
 
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_URL}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 eureka:
   instance:

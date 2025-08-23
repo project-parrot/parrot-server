@@ -1,4 +1,4 @@
-package com.fx.media.adapter.`in`.web.dto
+package com.fx.global.dto
 
 enum class Context(
     private val description: String

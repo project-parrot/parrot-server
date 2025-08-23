@@ -1,9 +1,10 @@
 package com.fx.user.application.out
 
-import com.fx.post.adapter.out.web.impl.dto.MediaUrlCommand
+import com.fx.global.dto.Context
+import com.fx.user.adapter.out.web.impl.dto.MediaUrlCommand
 
 interface MediaWebPort {
 
-    fun getUrl(mediaIds: List<Long>): List<MediaUrlCommand>?
+    fun getUrls(context: Context, referenceIds: List<Long>): List<MediaUrlCommand>?
 
 }

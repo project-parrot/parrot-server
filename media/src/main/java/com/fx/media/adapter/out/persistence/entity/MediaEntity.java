@@ -1,5 +1,6 @@
 package com.fx.media.adapter.out.persistence.entity;
 
+import com.fx.global.dto.Context;
 import com.fx.global.dto.FileType;
 import com.fx.media.domain.Media;
 import jakarta.persistence.*;
@@ -29,6 +30,11 @@ public class MediaEntity extends BaseEntity {
 
     private String extension;
 
+    @Enumerated(EnumType.STRING)
+    private Context context;
+
+    private Long referenceId;
+
     @Column(columnDefinition = "TINYINT(1)")
     private Boolean isDeleted;
 
@@ -42,6 +48,8 @@ public class MediaEntity extends BaseEntity {
                 .serverName(media.getServerName())
                 .originalName(media.getOriginalName())
                 .extension(media.getExtension())
+                .context(media.getContext())
+                .referenceId(media.getReferenceId())
                 .isDeleted(media.isDeleted())
                 .build();
     }
@@ -56,6 +64,8 @@ public class MediaEntity extends BaseEntity {
                 this.serverName,
                 this.originalName,
                 this.extension,
+                this.context,
+                this.referenceId,
                 this.isDeleted,
                 this.createdAt,
                 this.updatedAt

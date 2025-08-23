@@ -17,8 +17,6 @@ public class ProfileEntity extends BaseEntity {
 
     private Long userId;
 
-    private Long mediaId;
-
     private String nickname;
 
     private String statusMessage;
@@ -30,7 +28,6 @@ public class ProfileEntity extends BaseEntity {
         return ProfileEntity.builder()
             .id(profile.getId()) // nullable -> save / not null -> update
             .userId(profile.getUserId())
-            .mediaId(profile.getMediaId())
             .nickname(profile.getNickname())
             .statusMessage(profile.getStatusMessage())
             .isPrivate(profile.isPrivate())
@@ -41,7 +38,6 @@ public class ProfileEntity extends BaseEntity {
         return new Profile(
             this.id,
             this.userId,
-            this.mediaId,
             this.nickname,
             this.statusMessage,
             this.isPrivate,

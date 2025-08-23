@@ -1,20 +1,18 @@
 package com.fx.post.application.service
 
+import com.fx.global.dto.Context
+import com.fx.global.dto.MediaMappingEventDto
 import com.fx.global.dto.UserRole
 import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.dto.PostCreateCommand
 import com.fx.post.application.`in`.dto.PostUpdateCommand
-import com.fx.post.application.out.persistence.LikePersistencePort
+import com.fx.post.application.out.message.MessageProducerUseCase
 import com.fx.post.application.out.persistence.PostMediaPersistencePort
 import com.fx.post.application.out.persistence.PostPersistencePort
-import com.fx.post.application.out.web.UserWebPort
-import com.fx.post.domain.Like
 import com.fx.post.domain.Post
 import com.fx.post.domain.PostMedia
-import com.fx.post.exception.LikeException
 import com.fx.post.exception.PostException
 import com.fx.post.exception.PostMediaException
-import com.fx.post.exception.errorcode.LikeErrorCode
 import com.fx.post.exception.errorcode.PostErrorCode
 import com.fx.post.exception.errorcode.PostMediaErrorCode
 import jakarta.transaction.Transactional
@@ -26,6 +24,7 @@ import java.time.LocalTime
 class PostCommandService(
     private val postPersistencePort: PostPersistencePort,
     private val postMediaPersistencePort: PostMediaPersistencePort,
+    private val messageProducerUseCase: MessageProducerUseCase
 ) : PostCommandUseCase {
 
     @Transactional
@@ -46,7 +45,9 @@ class PostCommandService(
         val savedPost = postPersistencePort.save(Post.createPost(postCreateCommand))
 
         savePostMedia(savedPost.id!!, mediaIds)
-
+        messageProducerUseCase.sendMapping(
+            MediaMappingEventDto(context = Context.POST, referenceId = savedPost.id, userId = savedPost.userId, mediaIds = mediaIds)
+        )
         return savedPost
     }
 
@@ -64,6 +65,10 @@ class PostCommandService(
         if (mediaIds.size > 5) throw PostMediaException(PostMediaErrorCode.TOO_MANY_FILE)
 
         updatePostMedia(postUpdateCommand.postId, mediaIds)
+
+        messageProducerUseCase.sendMapping(
+            MediaMappingEventDto(context = Context.POST, referenceId = post.id, userId = post.userId, mediaIds = postUpdateCommand.mediaIds)
+        )
 
         return postPersistencePort.save(Post.updatePost(post.userId, now, postUpdateCommand)) // 운영자가 수정했을 때에도 게시글의 작성자는 변경되면 안되므로
     }

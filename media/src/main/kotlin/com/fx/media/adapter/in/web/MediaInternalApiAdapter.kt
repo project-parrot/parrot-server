@@ -1,6 +1,7 @@
 package com.fx.media.adapter.`in`.web
 
 import com.fx.global.annotation.hexagonal.WebInputAdapter
+import com.fx.global.dto.Context
 import com.fx.media.adapter.`in`.web.dto.MediaUrlResponse
 import com.fx.media.application.`in`.MediaQueryUseCase
 import org.springframework.http.ResponseEntity
@@ -13,11 +14,27 @@ import org.springframework.web.bind.annotation.RequestParam
 class MediaInternalApiAdapter(
     private val mediaQueryUseCase: MediaQueryUseCase
 ) {
-    @GetMapping("/url")
-    fun getMediaUrl(
-        @RequestParam mediaIds: List<Long>
+//    @GetMapping("/url")
+//    fun getMediaUrl(
+//        @RequestParam mediaIds: List<Long>
+//    ) : ResponseEntity<List<MediaUrlResponse>> {
+//
+//        return ResponseEntity.ok(mediaQueryUseCase.getUrl(mediaIds).map { MediaUrlResponse( it.id!!, it.fileUrl )})
+//    }
+
+    @GetMapping("/urls")
+    fun getMediaUrls(
+        @RequestParam context: Context,
+        @RequestParam referenceIds: List<Long>
     ) : ResponseEntity<List<MediaUrlResponse>> {
 
-        return ResponseEntity.ok(mediaQueryUseCase.getUrl(mediaIds).map { MediaUrlResponse( it.id!!, it.fileUrl )})
+        return ResponseEntity.ok(
+            mediaQueryUseCase.getUrls(context, referenceIds).map { cmd ->
+                MediaUrlResponse(
+                    referenceId = cmd.referenceId,
+                    mediaUrls = cmd.mediaUrls
+                )
+            }
+        )
     }
 }

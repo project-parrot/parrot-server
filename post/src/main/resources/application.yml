@@ -24,6 +24,12 @@ spring:
         format_sql: true
     database-platform: org.hibernate.dialect.MySQLDialect
 
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_URL}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 eureka:
   instance:
     prefer-ip-address: true
