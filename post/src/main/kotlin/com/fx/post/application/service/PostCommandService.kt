@@ -26,8 +26,6 @@ import java.time.LocalTime
 class PostCommandService(
     private val postPersistencePort: PostPersistencePort,
     private val postMediaPersistencePort: PostMediaPersistencePort,
-    private val likePersistencePort: LikePersistencePort,
-    private val userWebPort: UserWebPort
 ) : PostCommandUseCase {
 
     @Transactional
@@ -53,8 +51,8 @@ class PostCommandService(
     }
 
     @Transactional
-    override fun updatePost(postId:Long, postUpdateCommand: PostUpdateCommand): Post {
-        val post = postPersistencePort.findByIdAndIsDeletedNot(postId)?: throw PostException(PostErrorCode.POST_NOT_EXIST)
+    override fun updatePost(postUpdateCommand: PostUpdateCommand): Post {
+        val post = postPersistencePort.findByIdAndIsDeletedNot(postUpdateCommand.postId)?: throw PostException(PostErrorCode.POST_NOT_EXIST)
 
         val now = LocalDateTime.now()
 
@@ -65,33 +63,10 @@ class PostCommandService(
 
         if (mediaIds.size > 5) throw PostMediaException(PostMediaErrorCode.TOO_MANY_FILE)
 
-        updatePostMedia(postId, mediaIds)
+        updatePostMedia(postUpdateCommand.postId, mediaIds)
 
-        return postPersistencePort.save(Post.updatePost(postId, post.userId, now, postUpdateCommand))
+        return postPersistencePort.save(Post.updatePost(post.userId, now, postUpdateCommand)) // 운영자가 수정했을 때에도 게시글의 작성자는 변경되면 안되므로
     }
-
-    @Transactional
-    override fun addLike(postId: Long, userId: Long) {
-        if (!postPersistencePort.existsById(postId))
-            throw PostException(PostErrorCode.POST_NOT_EXIST)
-
-        if (likePersistencePort.existsByPostIdAndUserId(postId, userId)) {
-            throw LikeException(LikeErrorCode.LIKE_EXIST)
-        }
-
-        likePersistencePort.save(Like.addLike(postId, userId))
-    }
-
-    @Transactional
-    override fun cancelLike(postId: Long, userId: Long) {
-        if (!postPersistencePort.existsById(postId))
-            throw PostException(PostErrorCode.POST_NOT_EXIST)
-
-        val likeCount = likePersistencePort.deleteByPostIdAndUserId(postId, userId)
-
-        if (likeCount == 0) throw LikeException(LikeErrorCode.LIKE_NOT_EXIST)
-    }
-
 
     private fun validateUserPermission(postUserId: Long, userId: Long, role: UserRole) {
         if (postUserId != userId && role != UserRole.ADMIN)

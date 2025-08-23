@@ -16,10 +16,10 @@ data class Comment(
 
     companion object {
         @JvmStatic
-        fun createComment(postId: Long, commentCreateCommand: CommentCreateCommand): Comment {
+        fun createComment(commentCreateCommand: CommentCreateCommand): Comment {
             return Comment(
                 userId = commentCreateCommand.userId,
-                postId = postId,
+                postId = commentCreateCommand.postId,
                 parentId = commentCreateCommand.parentId,
                 content = commentCreateCommand.content
             )

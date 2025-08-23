@@ -9,10 +9,11 @@ data class PostUpdateRequest(
     val content: String,
     val mediaIds: List<Long>?
 ) {
-    fun toCommand(authUser: AuthUser): PostUpdateCommand {
+    fun toCommand(postId:Long, authUser: AuthUser): PostUpdateCommand {
         return PostUpdateCommand(
             userId = authUser.userId,
             role = authUser.role,
+            postId = postId,
             content = this.content,
             mediaIds = this.mediaIds
         )

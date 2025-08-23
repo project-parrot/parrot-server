@@ -5,6 +5,6 @@ import com.fx.post.domain.Comment
 
 interface CommentCommandUseCase {
 
-    fun createComment(postId:Long, commentCreateCommand: CommentCreateCommand): Comment
+    fun createComment(commentCreateCommand: CommentCreateCommand): Comment
 
 }

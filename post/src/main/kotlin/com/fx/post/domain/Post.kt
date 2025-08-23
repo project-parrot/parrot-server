@@ -23,9 +23,9 @@ data class Post(
         }
 
         @JvmStatic
-        fun updatePost(postId:Long, userId: Long, today: LocalDateTime, postUpdateCommand: PostUpdateCommand): Post {
+        fun updatePost(userId: Long, today: LocalDateTime, postUpdateCommand: PostUpdateCommand): Post {
             return Post(
-                id = postId,
+                id = postUpdateCommand.postId,
                 userId = userId,
                 content = postUpdateCommand.content,
                 updatedAt = today

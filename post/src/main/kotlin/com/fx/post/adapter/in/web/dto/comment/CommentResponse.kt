@@ -1,6 +1,5 @@
 package com.fx.post.adapter.`in`.web.dto.comment
 
-import com.fx.post.domain.Comment
 import com.fx.post.domain.CommentInfo
 import java.time.LocalDateTime
 
