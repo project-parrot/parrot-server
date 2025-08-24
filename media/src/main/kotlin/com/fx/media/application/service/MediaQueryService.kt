@@ -1,6 +1,7 @@
 package com.fx.media.application.service
 
 import com.fx.global.dto.Context
+import com.fx.media.adapter.`in`.web.dto.MediaInfo
 import com.fx.media.application.`in`.MediaQueryUseCase
 import com.fx.media.application.`in`.dto.MediaUrlCommand
 import com.fx.media.application.out.persistence.MediaPersistencePort
@@ -24,7 +25,7 @@ class MediaQueryService(
             val mediaList = medias.filter { it.referenceId == referenceId }
             MediaUrlCommand(
                 referenceId = referenceId,
-                mediaUrls = mediaList.map { it.fileUrl }
+                mediaInfos = mediaList.map { MediaInfo( it.id, it.fileUrl ) }
             )
         }
     }
