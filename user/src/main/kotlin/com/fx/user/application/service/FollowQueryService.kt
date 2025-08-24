@@ -74,10 +74,10 @@ class FollowQueryService(
 
         val referenceIdList: List<Long> = followUserInfoList.mapNotNull { it.userId }
 
-        val mediaUrlMap: Map<Long, String> = if (referenceIdList.isNotEmpty()) {
+        val mediaUrlMap: Map<Long, String?> = if (referenceIdList.isNotEmpty()) {
             mediaWebPort.getUrls(Context.PROFILE, referenceIdList)
                 .orEmpty()
-                .associate { it.referenceId to (it.mediaUrls?.firstOrNull().orEmpty()) }
+                .associate { it.referenceId to it.mediaInfos?.firstOrNull()?.mediaUrl }
         } else {
             emptyMap()
         }

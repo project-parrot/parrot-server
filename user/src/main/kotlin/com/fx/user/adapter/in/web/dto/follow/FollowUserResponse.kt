@@ -8,7 +8,7 @@ data class FollowUserResponse(
     val followId: Long,
     val userId: Long,
     val nickname: String,
-    val profileImageUrl: String?,
+    val profileImageUrl: String? = null,
     val status: FollowStatus,
     val followCreatedAt: LocalDateTime
 ) {
