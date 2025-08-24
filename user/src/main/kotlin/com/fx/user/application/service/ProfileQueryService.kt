@@ -1,11 +1,11 @@
 package com.fx.user.application.service
 
+import com.fx.global.dto.Context
 import com.fx.user.application.`in`.ProfileQueryUseCase
-import com.fx.user.application.out.FollowPersistencePort
-import com.fx.user.application.out.MediaWebPort
-import com.fx.user.application.out.ProfilePersistencePort
+import com.fx.user.application.out.persistence.FollowPersistencePort
+import com.fx.user.application.out.web.MediaWebPort
+import com.fx.user.application.out.persistence.ProfilePersistencePort
 import com.fx.user.domain.FollowStatus
-import com.fx.user.domain.Profile
 import com.fx.user.domain.ProfileInfo
 import com.fx.user.exception.ProfileException
 import com.fx.user.exception.errorcode.ProfileErrorCode
@@ -25,8 +25,11 @@ class ProfileQueryService(
         val followingCount = followPersistencePort.getFollowingCount(userId)
 
         // TODO Image 조회 로직 구현
-        val profileImageUrl: String? = profile.mediaId?.let { mediaId ->
-            mediaWebPort.getUrl(listOf(mediaId))?.firstOrNull()?.mediaUrl
+        val profileImageUrl: String? = profile.id?.let { id ->
+            mediaWebPort.getUrls(Context.PROFILE, listOf(id))
+                ?.firstOrNull()
+                ?.mediaUrls
+                ?.firstOrNull()
         }
 
         return ProfileInfo.createProfileInfo(
@@ -53,9 +56,13 @@ class ProfileQueryService(
         val followingCount = followPersistencePort.getFollowingCount(targetUserId)
 
         // TODO Image 조회 로직 구현
-        val profileImageUrl: String? = targetUserProfile.mediaId?.let { mediaId ->
-            mediaWebPort.getUrl(listOf(mediaId))?.firstOrNull()?.mediaUrl
+        val profileImageUrl: String? = targetUserProfile.id?.let { id ->
+            mediaWebPort.getUrls(Context.PROFILE, listOf(id))
+                ?.firstOrNull()
+                ?.mediaUrls
+                ?.firstOrNull()
         }
+
         return ProfileInfo.createProfileInfo(
             profile = targetUserProfile,
             profileImageUrl = profileImageUrl,
@@ -68,17 +75,17 @@ class ProfileQueryService(
     override fun getUsersProfile(userIds: List<Long>): List<ProfileInfo> {
         val userProfiles = profilePersistencePort.findByUserIdIn(userIds)
 
-        val mediaIdList = userProfiles.mapNotNull { it.mediaId }
-        val mediaUrlMap: Map<Long, String> = if (mediaIdList.isNotEmpty()) {
-            mediaWebPort.getUrl(mediaIdList)
+        val idList = userProfiles.mapNotNull { it.id }
+        val mediaUrlMap: Map<Long, String> = if (idList.isNotEmpty()) {
+            mediaWebPort.getUrls(Context.PROFILE, idList)
                 .orEmpty()
-                .associate { it.mediaId to it.mediaUrl }
+                .associate { it.referenceId to (it.mediaUrls?.firstOrNull().orEmpty()) }
         } else {
             emptyMap()
         }
 
         return userProfiles.map { profile ->
-            val profileImageUrl = profile.mediaId?.let { mediaUrlMap[it] }
+            val profileImageUrl = profile.id?.let { mediaUrlMap[it] }
             ProfileInfo.createProfileInfo(
                 profile = profile,
                 profileImageUrl = profileImageUrl,
@@ -87,7 +94,6 @@ class ProfileQueryService(
                 isFollowing = true
             )
         }
-
 
     }
 

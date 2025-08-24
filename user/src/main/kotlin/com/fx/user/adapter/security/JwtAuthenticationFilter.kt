@@ -2,7 +2,7 @@ package com.fx.user.adapter.security
 
 import com.fx.global.annotation.hexagonal.SecurityAdapter
 import com.fx.user.adapter.security.dto.AuthenticatedUser
-import com.fx.user.application.out.JwtProviderPort
+import com.fx.user.application.out.security.JwtProviderPort
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

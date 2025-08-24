@@ -3,8 +3,8 @@ package com.fx.media.adapter.`in`.web
 import com.fx.global.annotation.AuthenticatedUser
 import com.fx.global.annotation.hexagonal.WebInputAdapter
 import com.fx.global.api.Api
+import com.fx.global.dto.Context
 import com.fx.global.resolver.AuthUser
-import com.fx.media.adapter.`in`.web.dto.Context
 import com.fx.media.adapter.`in`.web.dto.MediaGetResponse
 import com.fx.media.adapter.`in`.web.dto.MediaUploadResponse
 import com.fx.media.application.`in`.MediaCommandUseCase
@@ -52,5 +52,19 @@ class MediaApiAdapter(
         mediaCommandUseCase.deleteFile(mediaId, authUser.userId, authUser.role)
         return Api.OK(Unit)
     }
+
+    @Operation(summary = "특정 Context/ReferenceId의 미디어 조회",
+        description = "context 종류 : POST, CHAT, PROFILE <br>" +
+                "referenceId는 Profile/Post/Chat의 id값 <br>" +
+                " 요청 예시 : /api/v1/media?context=PROFILE&referenceId=4")
+    @GetMapping
+    fun getContextMedias(
+        @RequestParam context: Context,
+        @RequestParam referenceId: Long
+    ) : ResponseEntity<Api<List<MediaGetResponse>>> =
+        Api.OK(
+            mediaQueryUseCase.getFiles(context, referenceId)
+                .map { MediaGetResponse.from(it) }
+        )
 
 }

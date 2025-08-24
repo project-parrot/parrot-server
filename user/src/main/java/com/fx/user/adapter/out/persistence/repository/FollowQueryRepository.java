@@ -5,7 +5,7 @@ import static com.fx.user.adapter.out.persistence.entity.QProfileEntity.profileE
 
 import com.fx.user.adapter.out.persistence.entity.FollowEntity;
 import com.fx.user.domain.FollowQuery;
-import com.fx.user.domain.FollowUserInfo;
+import com.fx.user.application.out.persistence.dto.FollowUserInfo;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -35,7 +35,6 @@ public class FollowQueryRepository {
                 followEntity.id,
                 profileEntity.userId,
                 profileEntity.nickname,
-                profileEntity.mediaId,
                 followEntity.status,
                 followEntity.createdAt
             ))
@@ -62,7 +61,6 @@ public class FollowQueryRepository {
                 followEntity.id,
                 profileEntity.userId,
                 profileEntity.nickname,
-                profileEntity.mediaId,
                 followEntity.status,
                 followEntity.createdAt
             ))

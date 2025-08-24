@@ -1,7 +1,7 @@
 package com.fx.user.adapter.security
 
 import com.fx.global.annotation.hexagonal.SecurityAdapter
-import com.fx.user.application.out.PasswordEncoderPort
+import com.fx.user.application.out.security.PasswordEncoderPort
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @SecurityAdapter

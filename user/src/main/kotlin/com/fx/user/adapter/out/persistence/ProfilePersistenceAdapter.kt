@@ -3,7 +3,7 @@ package com.fx.user.adapter.out.persistence
 import com.fx.global.annotation.hexagonal.PersistenceAdapter
 import com.fx.user.adapter.out.persistence.entity.ProfileEntity
 import com.fx.user.adapter.out.persistence.repository.ProfileRepository
-import com.fx.user.application.out.ProfilePersistencePort
+import com.fx.user.application.out.persistence.ProfilePersistencePort
 import com.fx.user.domain.Profile
 
 @PersistenceAdapter

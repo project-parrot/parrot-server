@@ -3,7 +3,7 @@ package com.fx.user.config.security
 import com.fx.user.adapter.security.CustomOAuth2UserService
 import com.fx.user.adapter.security.CustomSuccessHandler
 import com.fx.user.adapter.security.JwtAuthenticationFilter
-import com.fx.user.application.out.JwtProviderPort
+import com.fx.user.application.out.security.JwtProviderPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity

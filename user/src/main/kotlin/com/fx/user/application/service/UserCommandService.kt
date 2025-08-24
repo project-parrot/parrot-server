@@ -1,13 +1,17 @@
 package com.fx.user.application.service
 
+import com.fx.global.dto.Context
+import com.fx.global.dto.MediaMappingEventDto
 import com.fx.user.application.`in`.UserCommandUseCase
 import com.fx.user.application.`in`.dto.UserLoginCommand
 import com.fx.user.application.`in`.dto.UserOAuthCommand
 import com.fx.user.application.`in`.dto.UserSignUpCommand
-import com.fx.user.application.out.ProfilePersistencePort
-import com.fx.user.application.out.UserPersistencePort
-import com.fx.user.application.out.JwtProviderPort
-import com.fx.user.application.out.PasswordEncoderPort
+import com.fx.user.application.out.*
+import com.fx.user.application.out.message.MessageProducerUseCase
+import com.fx.user.application.out.persistence.ProfilePersistencePort
+import com.fx.user.application.out.persistence.UserPersistencePort
+import com.fx.user.application.out.security.JwtProviderPort
+import com.fx.user.application.out.security.PasswordEncoderPort
 import com.fx.user.domain.Profile
 import com.fx.user.domain.TokenInfo
 import com.fx.user.domain.User
@@ -23,7 +27,8 @@ class UserCommandService(
     private val userPersistencePort: UserPersistencePort,
     private val profilePersistencePort: ProfilePersistencePort,
     private val jwtProviderPort: JwtProviderPort,
-    private val passwordEncoderPort: PasswordEncoderPort
+    private val passwordEncoderPort: PasswordEncoderPort,
+    private val messageProducerUseCase: MessageProducerUseCase
 ) : UserCommandUseCase {
 
     @Transactional
@@ -41,10 +46,17 @@ class UserCommandService(
         // 암호화
         signUpCommand.password = passwordEncoderPort.encode(signUpCommand.password)
 
+        val mediaIds = signUpCommand.mediaId?.let { listOf(it) } ?: emptyList()
+
         // 등록
         val savedUser = userPersistencePort.save(User.createUser(signUpCommand))
         savedUser.id?.let { userId ->
-            profilePersistencePort.save(Profile.createProfile(userId, signUpCommand.nickname, signUpCommand.mediaId))
+            val savedProfile = profilePersistencePort.save(
+                Profile.createProfile(userId, signUpCommand.nickname)
+            )
+            messageProducerUseCase.sendMapping(
+                MediaMappingEventDto(context = Context.PROFILE, referenceId = savedProfile.id, userId = userId, mediaIds = mediaIds)
+            )
         } ?: throw UserException(UserErrorCode.USER_ID_NULL)
 
         return savedUser
