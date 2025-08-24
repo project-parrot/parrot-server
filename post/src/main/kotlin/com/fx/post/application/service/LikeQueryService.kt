@@ -7,7 +7,6 @@ import com.fx.post.application.`in`.LikeQueryUseCase
 import com.fx.post.application.`in`.dto.LikeQueryCommand
 import com.fx.post.application.`in`.dto.LikeUserCommand
 import com.fx.post.application.out.persistence.LikePersistencePort
-import com.fx.post.application.out.persistence.PostMediaPersistencePort
 import com.fx.post.application.out.persistence.PostPersistencePort
 import com.fx.post.application.out.web.MediaWebPort
 import com.fx.post.application.out.web.UserWebPort
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service
 class LikeQueryService(
     private val likePersistencePort: LikePersistencePort,
     private val postPersistencePort: PostPersistencePort,
-    private val postMediaPersistencePort: PostMediaPersistencePort,
     private val mediaWebPort: MediaWebPort,
     private val userWebPort: UserWebPort
 ) : LikeQueryUseCase{
