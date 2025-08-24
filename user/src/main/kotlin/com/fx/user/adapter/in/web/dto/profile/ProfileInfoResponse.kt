@@ -1,11 +1,12 @@
 package com.fx.user.adapter.`in`.web.dto.profile
 
+import com.fx.user.adapter.out.web.impl.dto.MediaInfo
 import com.fx.user.domain.ProfileInfo
 
 data class ProfileInfoResponse(
     val profileId: Long,
     val userId: Long,
-    val profileImageUrl: String? = null,
+    val mediaInfo: MediaInfo? = null,
     val nickname: String,
     val statusMessage: String? = null,
     val isPrivate: Boolean,
@@ -20,7 +21,7 @@ data class ProfileInfoResponse(
             ProfileInfoResponse(
                 profileId = profileInfo.id,
                 userId = profileInfo.userId,
-                profileImageUrl = profileInfo.profileImageUrl,
+                mediaInfo = profileInfo.mediaInfo,
                 nickname = profileInfo.nickname,
                 statusMessage = profileInfo.statusMessage,
                 isPrivate = profileInfo.isPrivate,

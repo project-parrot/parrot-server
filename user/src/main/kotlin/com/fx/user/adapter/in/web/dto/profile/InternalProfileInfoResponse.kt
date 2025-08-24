@@ -13,7 +13,7 @@ data class InternalProfileInfoResponse(
             return InternalProfileInfoResponse(
                 userId = profileInfo.userId,
                 nickname = profileInfo.nickname,
-                profileImageUrl = profileInfo.profileImageUrl
+                profileImageUrl = profileInfo.mediaInfo?.mediaUrl
             )
         }
 
