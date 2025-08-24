@@ -10,6 +10,4 @@ interface MediaQueryUseCase {
 
     fun getUrls(context: Context, referenceIds: List<Long>) : List<MediaUrlCommand>
 
-    fun getFiles(context: Context, referenceId: Long) : List<Media>
-
 }
