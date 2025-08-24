@@ -1,5 +1,6 @@
 package com.fx.post.adapter.`in`.web.dto.post
 
+import com.fx.post.adapter.out.web.impl.dto.MediaInfo
 import com.fx.post.application.out.persistence.dto.PostInfo
 import java.time.LocalDateTime
 
@@ -9,7 +10,7 @@ data class PostResponse(
     val nickname: String?= null,
     val profileImageUrl: String? = null,
     val content: String?,
-    val mediaUrls: List<String>?= null,
+    val mediaInfos: List<MediaInfo>?= null,
     val createdAt: LocalDateTime,
     val likeCount: Long,
     val commentCount: Long
@@ -22,7 +23,7 @@ data class PostResponse(
                 nickname = postInfo.nickname,
                 profileImageUrl = postInfo.profileImageUrl,
                 content = postInfo.content,
-                mediaUrls = postInfo.mediaUrls,
+                mediaInfos = postInfo.mediaInfos,
                 createdAt = postInfo.createdAt,
                 likeCount = postInfo.likeCount,
                 commentCount = postInfo.commentCount

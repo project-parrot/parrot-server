@@ -52,11 +52,11 @@ class LikeQueryService(
 
         val mediaUrlCommands = mediaWebPort.getUrls(Context.POST, postIds)
 
-        val mediaMap = mediaUrlCommands?.associate { it.referenceId to it.mediaUrls }
+        val mediaMap = mediaUrlCommands?.associate { it.referenceId to it.mediaInfos }
 
         return posts.map { post ->
-            val urls = mediaMap?.get(post.id).orEmpty()
-            post.copy(mediaUrls = urls)
+            val infos = mediaMap?.get(post.id).orEmpty()
+            post.copy(mediaInfos = infos)
         }
     }
 

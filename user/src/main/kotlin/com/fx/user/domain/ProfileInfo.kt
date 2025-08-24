@@ -1,9 +1,11 @@
 package com.fx.user.domain
 
+import com.fx.user.adapter.out.web.impl.dto.MediaInfo
+
 data class ProfileInfo(
     val id: Long,
     val userId: Long,
-    val profileImageUrl: String?,
+    val mediaInfo: MediaInfo?,
     val nickname: String,
     val statusMessage: String? = null,
     val isPrivate: Boolean = false,
@@ -15,14 +17,14 @@ data class ProfileInfo(
         @JvmStatic
         fun createProfileInfo(
             profile: Profile,
-            profileImageUrl: String?,
+            mediaInfo: MediaInfo?,
             followerCount: Int,
             followingCount: Int,
             isFollowing: Boolean
         ) = ProfileInfo(
             id = profile.id!!,
             userId = profile.userId,
-            profileImageUrl = profileImageUrl,
+            mediaInfo = mediaInfo,
             nickname = profile.nickname,
             statusMessage = profile.statusMessage,
             isPrivate = profile.isPrivate,

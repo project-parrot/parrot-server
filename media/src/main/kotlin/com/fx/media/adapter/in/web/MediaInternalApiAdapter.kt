@@ -25,7 +25,7 @@ class MediaInternalApiAdapter(
             mediaQueryUseCase.getUrls(context, referenceIds).map { cmd ->
                 MediaUrlResponse(
                     referenceId = cmd.referenceId,
-                    mediaUrls = cmd.mediaUrls
+                    mediaInfos = cmd.mediaInfos,
                 )
             }
         )
