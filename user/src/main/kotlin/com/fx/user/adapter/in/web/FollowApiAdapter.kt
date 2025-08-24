@@ -7,6 +7,7 @@ import com.fx.user.adapter.`in`.web.dto.follow.FollowSearchParam
 import com.fx.user.adapter.`in`.web.dto.follow.FollowUserResponse
 import com.fx.user.adapter.security.dto.AuthenticatedUser
 import com.fx.user.application.`in`.FollowCommandUseCase
+import com.fx.user.application.`in`.FollowQueryUseCase
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -24,7 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 @WebInputAdapter
 @RequestMapping("/api/v1/follows")
 class FollowApiAdapter(
-    private val followCommandUseCase: FollowCommandUseCase
+    private val followCommandUseCase: FollowCommandUseCase,
+    private val followQueryUseCase: FollowQueryUseCase
 ) {
 
     @Operation(summary = "상대 팔로우하기", description = "{userId} 는 팔로우 대상 userId 입니다.")
@@ -68,7 +70,7 @@ class FollowApiAdapter(
         @ModelAttribute followSearchParam: FollowSearchParam,
         @PageableDefault(sort = ["id"] , direction = Sort.Direction.DESC, size = 20) pageable: Pageable // DEFAULT : 최신순 조회
     ): ResponseEntity<Api<List<FollowUserResponse>>> {
-        val followUserInfoList = followCommandUseCase.getUserFollowings(
+        val followUserInfoList = followQueryUseCase.getUserFollowings(
             followSearchParam.toCommand(
                 authenticatedUser.userId,
                 userId,
@@ -86,7 +88,7 @@ class FollowApiAdapter(
         @ModelAttribute followSearchParam: FollowSearchParam,
         @PageableDefault(sort = ["id"] , direction = Sort.Direction.DESC, size = 20) pageable: Pageable // DEFAULT : 최신순 조회
     ): ResponseEntity<Api<List<FollowUserResponse>>> {
-        val followUserInfoList = followCommandUseCase.getUserFollowers(
+        val followUserInfoList = followQueryUseCase.getUserFollowers(
             followSearchParam.toCommand(
                 authenticatedUser.userId,
                 userId,

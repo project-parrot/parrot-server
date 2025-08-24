@@ -15,10 +15,6 @@ interface FollowCommandUseCase {
 
     fun approveFollowUser(userId: Long, followId: Long): Follow
 
-    fun getUserFollowings(@Valid followQueryCommand: FollowQueryCommand): List<FollowUserInfo>
-
-    fun getUserFollowers(@Valid followQueryCommand: FollowQueryCommand): List<FollowUserInfo>
-
     fun getFollowerByUserId(userId: Long): List<Long>
 
 }
