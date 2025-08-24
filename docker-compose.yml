@@ -67,6 +67,7 @@ services:
       - GATEWAY_HOST
       - GATEWAY_PORT
       - SWAGGER_HOST
+      - KAFKA_BOOTSTRAP_URL
     #volumes:
     #  - /home/ubuntu/parrot/logs/user-service:/logs
   
@@ -89,6 +90,7 @@ services:
       - GATEWAY_HOST
       - GATEWAY_PORT
       - SWAGGER_HOST
+      - KAFKA_BOOTSTRAP_URL
     #volumes:
     #  - /home/ubuntu/parrot/logs/post-service:/logs
 
@@ -118,6 +120,7 @@ services:
       - GATEWAY_HOST
       - GATEWAY_PORT
       - SWAGGER_HOST
+      - KAFKA_BOOTSTRAP_URL
     volumes:
       - /home/ubuntu/parrot/images:/parrot/images
     #  - /home/ubuntu/parrot/logs/post-service:/logs
