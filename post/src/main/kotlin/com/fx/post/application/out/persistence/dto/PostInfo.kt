@@ -1,5 +1,6 @@
 package com.fx.post.application.out.persistence.dto
 
+import com.fx.post.adapter.out.web.impl.dto.MediaInfo
 import java.time.LocalDateTime
 
 data class PostInfo(
@@ -8,7 +9,7 @@ data class PostInfo(
     val nickname: String?= null,
     val profileImageUrl: String? = null,
     val content: String,
-    var mediaUrls: List<String>?= null,
+    var mediaInfos: List<MediaInfo>?= null,
     val createdAt: LocalDateTime,
     val likeCount: Long,
     val commentCount: Long,
