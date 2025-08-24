@@ -17,10 +17,6 @@ class MediaQueryService(
     override fun getFile(mediaId: Long): Media =
         mediaPersistencePort.findByIdAndIsDeleted(mediaId) ?: throw MediaException(MediaErrorCode.MEDIA_NOT_FOUND)
 
-
-    override fun getUrl(mediaIds: List<Long>): List<Media> =
-        mediaPersistencePort.findByIdInAndIsDeleted(mediaIds)
-
     override fun getUrls(context: Context, referenceIds: List<Long>): List<MediaUrlCommand> {
         val medias = mediaPersistencePort.findByContextAndReferenceIdInAndIsDeleted(context, referenceIds)
 

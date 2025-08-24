@@ -14,13 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam
 class MediaInternalApiAdapter(
     private val mediaQueryUseCase: MediaQueryUseCase
 ) {
-//    @GetMapping("/url")
-//    fun getMediaUrl(
-//        @RequestParam mediaIds: List<Long>
-//    ) : ResponseEntity<List<MediaUrlResponse>> {
-//
-//        return ResponseEntity.ok(mediaQueryUseCase.getUrl(mediaIds).map { MediaUrlResponse( it.id!!, it.fileUrl )})
-//    }
 
     @GetMapping("/urls")
     fun getMediaUrls(
