@@ -25,7 +25,7 @@ data class InternalProfileInfoResponse(
             return InternalProfileInfoResponse(
                 userId = followUserInfo.userId,
                 nickname = followUserInfo.nickname,
-                profileImageUrl = followUserInfo.profileImageUrl
+                profileImageUrl = followUserInfo.mediaInfo?.mediaUrl
             )
         }
 

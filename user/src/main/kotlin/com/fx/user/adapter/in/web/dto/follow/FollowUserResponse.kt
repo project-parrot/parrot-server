@@ -1,5 +1,6 @@
 package com.fx.user.adapter.`in`.web.dto.follow
 
+import com.fx.user.adapter.out.web.impl.dto.MediaInfo
 import com.fx.user.domain.FollowStatus
 import com.fx.user.application.out.persistence.dto.FollowUserInfo
 import java.time.LocalDateTime
@@ -8,7 +9,7 @@ data class FollowUserResponse(
     val followId: Long,
     val userId: Long,
     val nickname: String,
-    val profileImageUrl: String? = null,
+    val mediaInfo: MediaInfo? = null,
     val status: FollowStatus,
     val followCreatedAt: LocalDateTime
 ) {
@@ -21,7 +22,7 @@ data class FollowUserResponse(
                     followId = info.followId,
                     userId = info.userId,
                     nickname = info.nickname,
-                    profileImageUrl = info.profileImageUrl,
+                    mediaInfo = info.mediaInfo,
                     status = info.status,
                     followCreatedAt = info.followCreatedAt
                 )

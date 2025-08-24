@@ -72,28 +72,27 @@ class ProfileQueryService(
     }
 
     override fun getUsersProfile(userIds: List<Long>): List<ProfileInfo> {
-//        val userProfiles = profilePersistencePort.findByUserIdIn(userIds)
-//
-//        val idList = userProfiles.mapNotNull { it.id }
-//        val mediaUrlMap: Map<Long, String> = if (idList.isNotEmpty()) {
-//            mediaWebPort.getUrls(Context.PROFILE, idList)
-//                .orEmpty()
-//                .associate { it.referenceId to (it.mediaUrls?.firstOrNull().orEmpty()) }
-//        } else {
-//            emptyMap()
-//        }
-//
-//        return userProfiles.map { profile ->
-//            val profileImageUrl = profile.id?.let { mediaUrlMap[it] }
-//            ProfileInfo.createProfileInfo(
-//                profile = profile,
-//                profileImageUrl = profileImageUrl,
-//                followerCount = 0,
-//                followingCount = 0,
-//                isFollowing = true
-//            )
-//        }
-        return listOf()
+        val userProfiles = profilePersistencePort.findByUserIdIn(userIds)
+
+        val idList = userProfiles.mapNotNull { it.id }
+        val mediaInfoMap: Map<Long, MediaInfo?> = if (idList.isNotEmpty()) {
+            mediaWebPort.getUrls(Context.PROFILE, idList)
+                .orEmpty()
+                .associate { it.referenceId to (it.mediaInfos?.firstOrNull()) }
+        } else {
+            emptyMap()
+        }
+
+        return userProfiles.map { profile ->
+            val mediaInfo: MediaInfo? = profile.id?.let { mediaInfoMap[it] }
+            ProfileInfo.createProfileInfo(
+                profile = profile,
+                mediaInfo = mediaInfo,
+                followerCount = 0,
+                followingCount = 0,
+                isFollowing = true
+            )
+        }
 
     }
 
