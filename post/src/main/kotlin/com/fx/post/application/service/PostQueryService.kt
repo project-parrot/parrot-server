@@ -6,7 +6,6 @@ import com.fx.post.adapter.out.persistence.repository.PostQueryRepository
 import com.fx.post.adapter.out.web.impl.dto.ProfileCommand
 import com.fx.post.application.`in`.PostQueryUseCase
 import com.fx.post.application.`in`.dto.PostQueryCommand
-import com.fx.post.application.out.persistence.PostMediaPersistencePort
 import com.fx.post.application.out.persistence.PostPersistencePort
 import com.fx.post.application.out.web.MediaWebPort
 import com.fx.post.application.out.web.UserWebPort
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service
 @Service
 class PostQueryService(
     private val postPersistencePort: PostPersistencePort,
-    private val postMediaPersistencePort: PostMediaPersistencePort,
     private val mediaWebPort: MediaWebPort,
     private val postQueryRepository: PostQueryRepository,
     private val userWebPort: UserWebPort

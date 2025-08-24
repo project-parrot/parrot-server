@@ -7,14 +7,10 @@ import com.fx.post.application.`in`.PostCommandUseCase
 import com.fx.post.application.`in`.dto.PostCreateCommand
 import com.fx.post.application.`in`.dto.PostUpdateCommand
 import com.fx.post.application.out.message.MessageProducerUseCase
-import com.fx.post.application.out.persistence.PostMediaPersistencePort
 import com.fx.post.application.out.persistence.PostPersistencePort
 import com.fx.post.domain.Post
-import com.fx.post.domain.PostMedia
 import com.fx.post.exception.PostException
-import com.fx.post.exception.PostMediaException
 import com.fx.post.exception.errorcode.PostErrorCode
-import com.fx.post.exception.errorcode.PostMediaErrorCode
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -23,7 +19,6 @@ import java.time.LocalTime
 @Service
 class PostCommandService(
     private val postPersistencePort: PostPersistencePort,
-    private val postMediaPersistencePort: PostMediaPersistencePort,
     private val messageProducerUseCase: MessageProducerUseCase
 ) : PostCommandUseCase {
 
@@ -40,11 +35,10 @@ class PostCommandService(
 
         val mediaIds = postCreateCommand.mediaIds.orEmpty()
 
-        if (mediaIds.size > 5) throw PostMediaException(PostMediaErrorCode.TOO_MANY_FILE)
+        if (mediaIds.size > 5) throw PostException(PostErrorCode.TOO_MANY_FILE)
 
         val savedPost = postPersistencePort.save(Post.createPost(postCreateCommand))
 
-        savePostMedia(savedPost.id!!, mediaIds)
         messageProducerUseCase.sendMapping(
             MediaMappingEventDto(context = Context.POST, referenceId = savedPost.id, userId = savedPost.userId, mediaIds = mediaIds)
         )
@@ -62,9 +56,7 @@ class PostCommandService(
 
         val mediaIds = postUpdateCommand.mediaIds.orEmpty().toSet()
 
-        if (mediaIds.size > 5) throw PostMediaException(PostMediaErrorCode.TOO_MANY_FILE)
-
-        updatePostMedia(postUpdateCommand.postId, mediaIds)
+        if (mediaIds.size > 5) throw PostException(PostErrorCode.TOO_MANY_FILE)
 
         messageProducerUseCase.sendMapping(
             MediaMappingEventDto(context = Context.POST, referenceId = post.id, userId = post.userId, mediaIds = postUpdateCommand.mediaIds)
@@ -82,22 +74,6 @@ class PostCommandService(
         if (now.toLocalDate() != createdAt?.toLocalDate()) {
             throw PostException(PostErrorCode.POST_EDIT_DATE_MISMATCH)
         }
-    }
-
-    private fun savePostMedia(postId: Long, mediaIds: List<Long>) {
-        mediaIds.forEach { mediaId ->
-            postMediaPersistencePort.save(PostMedia(postId = postId, mediaId = mediaId))
-        }
-    }
-
-    private fun updatePostMedia(postId: Long, newMediaIds: Set<Long>) {
-        val existingMediaIds = postMediaPersistencePort.findByPostId(postId).map {it}.toSet()
-
-        val toAdd = newMediaIds - existingMediaIds
-        val toRemove = existingMediaIds - newMediaIds
-
-        toAdd.forEach { mediaId -> postMediaPersistencePort.save(PostMedia(postId = postId, mediaId = mediaId)) }
-        toRemove.forEach { mediaId -> postMediaPersistencePort.delete(postId, mediaId) }
     }
 
 }
