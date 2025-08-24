@@ -22,9 +22,6 @@ class MediaPersistenceAdapter(
         mediaRepository.save(MediaEntity.from(media)).toDomain()
     }
 
-    override fun findByIdInAndIsDeleted(mediaIds: List<Long>): List<Media> =
-        mediaRepository.findByIdInAndIsDeleted(mediaIds, false).map { it.toDomain() }
-
     override fun findByContextAndReferenceIdAndIsDeleted(context: Context, referenceId: Long): List<Media> =
         mediaRepository.findByContextAndReferenceIdAndIsDeleted(context, referenceId, false).map { it.toDomain() }
 

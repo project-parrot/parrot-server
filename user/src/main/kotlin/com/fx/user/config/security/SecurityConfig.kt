@@ -4,6 +4,7 @@ import com.fx.user.adapter.security.CustomOAuth2UserService
 import com.fx.user.adapter.security.CustomSuccessHandler
 import com.fx.user.adapter.security.JwtAuthenticationFilter
 import com.fx.user.application.out.security.JwtProviderPort
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -48,6 +49,14 @@ class SecurityConfig(
                 JwtAuthenticationFilter(jwtProviderPort),
                 UsernamePasswordAuthenticationFilter::class.java
             )
+            .exceptionHandling { exceptions -> // 기타 예외 응답 처리 -> OAuth Login Html 응답을 방지합니다.
+                exceptions
+                    .authenticationEntryPoint { request, response, authException ->
+                        response.contentType = "application/json"
+                        response.status = HttpServletResponse.SC_UNAUTHORIZED
+                        response.writer.write("{\"error\": \"Unauthorized\"}")
+                    }
+            }
 
         return http.build()
     }

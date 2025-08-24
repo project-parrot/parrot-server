@@ -11,8 +11,6 @@ interface MediaPersistencePort {
 
     fun delete(media: Media)
 
-    fun findByIdInAndIsDeleted(mediaIds: List<Long>) : List<Media>
-
     fun findByContextAndReferenceIdAndIsDeleted(context: Context, referenceId: Long) : List<Media>
 
     fun findByContextAndReferenceIdInAndIsDeleted(context: Context, referenceIds: List<Long>) : List<Media>

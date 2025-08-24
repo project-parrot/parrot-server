@@ -121,6 +121,7 @@ services:
       - GATEWAY_PORT
       - SWAGGER_HOST
       - KAFKA_BOOTSTRAP_URL
+      - KAFKA_GROUP_ID
     volumes:
       - /home/ubuntu/parrot/images:/parrot/images
     #  - /home/ubuntu/parrot/logs/post-service:/logs
