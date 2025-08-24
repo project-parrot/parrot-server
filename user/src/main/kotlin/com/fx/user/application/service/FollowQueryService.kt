@@ -2,21 +2,18 @@ package com.fx.user.application.service
 
 import com.fx.global.dto.Context
 import com.fx.user.adapter.out.web.impl.dto.MediaInfo
-import com.fx.user.application.`in`.FollowCommandUseCase
 import com.fx.user.application.`in`.FollowQueryUseCase
 import com.fx.user.application.`in`.dto.FollowQueryCommand
 import com.fx.user.application.out.persistence.FollowPersistencePort
-import com.fx.user.application.out.web.MediaWebPort
 import com.fx.user.application.out.persistence.ProfilePersistencePort
-import com.fx.user.domain.Follow
+import com.fx.user.application.out.persistence.dto.FollowUserInfo
+import com.fx.user.application.out.web.MediaWebPort
 import com.fx.user.domain.FollowQuery
 import com.fx.user.domain.FollowStatus
-import com.fx.user.application.out.persistence.dto.FollowUserInfo
 import com.fx.user.exception.FollowException
 import com.fx.user.exception.ProfileException
 import com.fx.user.exception.errorcode.FollowErrorCode
 import com.fx.user.exception.errorcode.ProfileErrorCode
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
@@ -44,6 +41,13 @@ class FollowQueryService(
             FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
         )
 
+        return mapMediaInfoToUsers(followerList)
+    }
+
+    override fun getFollowPendingRequests(followQueryCommand: FollowQueryCommand): List<FollowUserInfo> {
+        val followerList = followPersistencePort.getUserFollowers(
+            FollowQuery.searchCondition(followQueryCommand, FollowStatus.PENDING)
+        )
         return mapMediaInfoToUsers(followerList)
     }
 

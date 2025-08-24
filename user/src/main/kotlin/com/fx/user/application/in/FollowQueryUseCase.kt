@@ -12,4 +12,6 @@ interface FollowQueryUseCase {
 
     fun getUserFollowers(@Valid followQueryCommand: FollowQueryCommand): List<FollowUserInfo>
 
+    fun getFollowPendingRequests(@Valid followQueryCommand: FollowQueryCommand): List<FollowUserInfo>
+
 }

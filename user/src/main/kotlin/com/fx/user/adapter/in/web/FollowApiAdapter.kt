@@ -98,5 +98,22 @@ class FollowApiAdapter(
         return Api.OK(FollowUserResponse.from(followUserInfoList))
     }
 
+    @Operation(summary = "팔로우 요청 목록 조회", description = "나에게 팔로우 요청을 보낸 사용자 목록을 조회합니다. (PENDING 상태 조회)")
+    @GetMapping("/requests")
+    fun getFollowRequests(
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+        @ModelAttribute followSearchParam: FollowSearchParam,
+        @PageableDefault(sort = ["id"] , direction = Sort.Direction.DESC, size = 20) pageable: Pageable // DEFAULT : 최신순 조회
+    ): ResponseEntity<Api<List<FollowUserResponse>>> {
+        val followRequests = followQueryUseCase.getFollowPendingRequests(
+            followSearchParam.toCommand(
+                requestUserId = authenticatedUser.userId,
+                targetUserId = authenticatedUser.userId, // 나에게 온 요청 조회
+                pageable = pageable
+            )
+        )
+        return Api.OK(FollowUserResponse.from(followRequests))
+    }
+
 
 }
