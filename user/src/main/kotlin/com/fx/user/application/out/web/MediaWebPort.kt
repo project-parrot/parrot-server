@@ -1,4 +1,4 @@
-package com.fx.user.application.out
+package com.fx.user.application.out.web
 
 import com.fx.global.dto.Context
 import com.fx.user.adapter.out.web.impl.dto.MediaUrlCommand

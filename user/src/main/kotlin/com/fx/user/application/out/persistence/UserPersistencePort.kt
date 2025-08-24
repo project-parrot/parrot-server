@@ -1,4 +1,4 @@
-package com.fx.user.application.out
+package com.fx.user.application.out.persistence
 
 import com.fx.user.domain.User
 

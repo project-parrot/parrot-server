@@ -2,7 +2,7 @@ package com.fx.user.application.`in`
 
 import com.fx.user.application.`in`.dto.FollowQueryCommand
 import com.fx.user.domain.Follow
-import com.fx.user.domain.FollowUserInfo
+import com.fx.user.application.out.persistence.dto.FollowUserInfo
 import jakarta.validation.Valid
 import org.springframework.validation.annotation.Validated
 

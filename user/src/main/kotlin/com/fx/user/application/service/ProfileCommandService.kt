@@ -4,8 +4,8 @@ import com.fx.global.dto.Context
 import com.fx.global.dto.MediaMappingEventDto
 import com.fx.user.application.`in`.ProfileCommandUseCase
 import com.fx.user.application.`in`.dto.ProfileUpdateCommand
-import com.fx.user.application.out.MessageProducerUseCase
-import com.fx.user.application.out.ProfilePersistencePort
+import com.fx.user.application.out.message.MessageProducerUseCase
+import com.fx.user.application.out.persistence.ProfilePersistencePort
 import com.fx.user.exception.ProfileException
 import com.fx.user.exception.errorcode.ProfileErrorCode
 import jakarta.transaction.Transactional

@@ -3,13 +3,13 @@ package com.fx.user.application.service
 import com.fx.global.dto.Context
 import com.fx.user.application.`in`.FollowCommandUseCase
 import com.fx.user.application.`in`.dto.FollowQueryCommand
-import com.fx.user.application.out.FollowPersistencePort
-import com.fx.user.application.out.MediaWebPort
-import com.fx.user.application.out.ProfilePersistencePort
+import com.fx.user.application.out.persistence.FollowPersistencePort
+import com.fx.user.application.out.web.MediaWebPort
+import com.fx.user.application.out.persistence.ProfilePersistencePort
 import com.fx.user.domain.Follow
 import com.fx.user.domain.FollowQuery
 import com.fx.user.domain.FollowStatus
-import com.fx.user.domain.FollowUserInfo
+import com.fx.user.application.out.persistence.dto.FollowUserInfo
 import com.fx.user.exception.FollowException
 import com.fx.user.exception.ProfileException
 import com.fx.user.exception.errorcode.FollowErrorCode
@@ -144,7 +144,7 @@ class FollowCommandService(
 
     private fun mapMediaUrls(followUserInfoList: List<FollowUserInfo>): List<FollowUserInfo> {
 
-        val referenceIdList: List<Long> = followUserInfoList.mapNotNull { it.mediaId }
+        val referenceIdList: List<Long> = followUserInfoList.mapNotNull { it.userId }
 
         val mediaUrlMap: Map<Long, String> = if (referenceIdList.isNotEmpty()) {
             mediaWebPort.getUrls(Context.PROFILE, referenceIdList)

@@ -1,7 +1,7 @@
 package com.fx.user.adapter.`in`.web.dto.follow
 
 import com.fx.user.domain.FollowStatus
-import com.fx.user.domain.FollowUserInfo
+import com.fx.user.application.out.persistence.dto.FollowUserInfo
 import java.time.LocalDateTime
 
 data class FollowUserResponse(
