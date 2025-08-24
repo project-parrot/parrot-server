@@ -30,7 +30,7 @@ class AuthenticationFilter(
     override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain): Mono<Void> {
         val path = exchange.request.path.toString()
 
-        if (path.contains("/open-api")) {
+        if (path.contains("/open-api") || path.contains("/oauth2")) {
             return chain.filter(exchange)
         }
 
