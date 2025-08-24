@@ -9,6 +9,5 @@ data class FollowUserInfo @JvmOverloads constructor (
     val nickname: String,
     val status: FollowStatus,
     val followCreatedAt: LocalDateTime,
-    val mediaId: Long? = null,
     val profileImageUrl: String? = null,
 )
