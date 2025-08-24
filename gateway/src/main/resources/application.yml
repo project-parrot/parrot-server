@@ -56,9 +56,10 @@ spring:
             cors-configurations:
               '[/**]':
                 # allowed-origins 가 '*' 인 경우 false
-                allow-credentials: true
-                allowed-origins:
-                  - http://${GATEWAY_HOST}:${GATEWAY_PORT}
+                allow-credentials: false
+#                allowed-origins:
+#                  - http://${GATEWAY_HOST}:${GATEWAY_PORT}
+                allowedOriginPatterns: "*"
                 allowed-methods:
                   - POST
                   - GET
