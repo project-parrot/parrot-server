@@ -1,6 +1,7 @@
 package com.fx.user.application.service
 
 import com.fx.global.dto.Context
+import com.fx.user.adapter.out.web.impl.dto.MediaInfo
 import com.fx.user.application.`in`.FollowCommandUseCase
 import com.fx.user.application.`in`.FollowQueryUseCase
 import com.fx.user.application.`in`.dto.FollowQueryCommand
@@ -32,7 +33,7 @@ class FollowQueryService(
             FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
         )
         
-        return mapMediaUrls(followingUserList)
+        return mapMediaInfoToUsers(followingUserList)
     }
 
 
@@ -43,7 +44,7 @@ class FollowQueryService(
             FollowQuery.searchCondition(followQueryCommand, FollowStatus.APPROVED)
         )
 
-        return mapMediaUrls(followerList)
+        return mapMediaInfoToUsers(followerList)
     }
 
     private fun checkFollowListAccess(followQueryCommand: FollowQueryCommand) {
@@ -70,21 +71,21 @@ class FollowQueryService(
         }
     }
 
-    private fun mapMediaUrls(followUserInfoList: List<FollowUserInfo>): List<FollowUserInfo> {
+    private fun mapMediaInfoToUsers(followUserInfoList: List<FollowUserInfo>): List<FollowUserInfo> {
 
-        val referenceIdList: List<Long> = followUserInfoList.mapNotNull { it.userId }
+        val referenceIdList: List<Long> = followUserInfoList.map { it.userId }
 
-        val mediaUrlMap: Map<Long, String?> = if (referenceIdList.isNotEmpty()) {
+        val mediaInfoMap: Map<Long, MediaInfo?> = if (referenceIdList.isNotEmpty()) {
             mediaWebPort.getUrls(Context.PROFILE, referenceIdList)
                 .orEmpty()
-                .associate { it.referenceId to it.mediaInfos?.firstOrNull()?.mediaUrl }
+                .associate { it.referenceId to it.mediaInfos?.firstOrNull() }
         } else {
             emptyMap()
         }
 
         return followUserInfoList.map { user ->
             user.copy(
-                profileImageUrl = mediaUrlMap[user.userId]
+                mediaInfo = mediaInfoMap[user.userId]
             )
         }
     }
