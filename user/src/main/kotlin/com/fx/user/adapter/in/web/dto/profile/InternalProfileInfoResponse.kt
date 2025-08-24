@@ -1,6 +1,6 @@
 package com.fx.user.adapter.`in`.web.dto.profile
 
-import com.fx.user.domain.FollowUserInfo
+import com.fx.user.application.out.persistence.dto.FollowUserInfo
 import com.fx.user.domain.ProfileInfo
 
 data class InternalProfileInfoResponse(

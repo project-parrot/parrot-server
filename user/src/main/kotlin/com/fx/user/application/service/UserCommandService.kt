@@ -7,6 +7,11 @@ import com.fx.user.application.`in`.dto.UserLoginCommand
 import com.fx.user.application.`in`.dto.UserOAuthCommand
 import com.fx.user.application.`in`.dto.UserSignUpCommand
 import com.fx.user.application.out.*
+import com.fx.user.application.out.message.MessageProducerUseCase
+import com.fx.user.application.out.persistence.ProfilePersistencePort
+import com.fx.user.application.out.persistence.UserPersistencePort
+import com.fx.user.application.out.security.JwtProviderPort
+import com.fx.user.application.out.security.PasswordEncoderPort
 import com.fx.user.domain.Profile
 import com.fx.user.domain.TokenInfo
 import com.fx.user.domain.User

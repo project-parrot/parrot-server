@@ -5,7 +5,7 @@ import com.fx.global.dto.Context
 import com.fx.post.adapter.out.web.impl.dto.MediaUrlResponse
 import com.fx.user.adapter.out.web.client.MediaFeignClient
 import com.fx.user.adapter.out.web.impl.dto.MediaUrlCommand
-import com.fx.user.application.out.MediaWebPort
+import com.fx.user.application.out.web.MediaWebPort
 
 @WebOutputAdapter
 class MediaWebAdapter(

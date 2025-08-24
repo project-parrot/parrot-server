@@ -3,7 +3,7 @@ package com.fx.user.adapter.security
 import com.fx.global.annotation.hexagonal.SecurityAdapter
 import com.fx.global.dto.UserRole
 import com.fx.user.adapter.security.dto.AuthenticatedUser
-import com.fx.user.application.out.JwtProviderPort
+import com.fx.user.application.out.security.JwtProviderPort
 import com.fx.user.exception.UserException
 import com.fx.user.exception.errorcode.UserErrorCode
 import jakarta.servlet.http.Cookie

@@ -4,11 +4,11 @@ import com.fx.global.annotation.hexagonal.PersistenceAdapter
 import com.fx.user.adapter.out.persistence.entity.FollowEntity
 import com.fx.user.adapter.out.persistence.repository.FollowQueryRepository
 import com.fx.user.adapter.out.persistence.repository.FollowRepository
-import com.fx.user.application.out.FollowPersistencePort
+import com.fx.user.application.out.persistence.FollowPersistencePort
 import com.fx.user.domain.Follow
 import com.fx.user.domain.FollowQuery
 import com.fx.user.domain.FollowStatus
-import com.fx.user.domain.FollowUserInfo
+import com.fx.user.application.out.persistence.dto.FollowUserInfo
 
 @PersistenceAdapter
 class FollowPersistenceAdapter(
