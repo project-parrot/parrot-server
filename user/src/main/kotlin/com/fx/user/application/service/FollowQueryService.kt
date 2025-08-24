@@ -70,7 +70,6 @@ class FollowQueryService(
         }
     }
 
-
     private fun mapMediaUrls(followUserInfoList: List<FollowUserInfo>): List<FollowUserInfo> {
 
         val referenceIdList: List<Long> = followUserInfoList.mapNotNull { it.userId }
@@ -85,7 +84,7 @@ class FollowQueryService(
 
         return followUserInfoList.map { user ->
             user.copy(
-                profileImageUrl = user.mediaId?.let { mediaUrlMap[it] }
+                profileImageUrl = mediaUrlMap[user.userId]
             )
         }
     }
