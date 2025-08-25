@@ -62,3 +62,12 @@ url:
   scheme: ${FILE_URL_SCHEME}
   host: ${FILE_URL_HOST}
   prefix: ${FILE_URL_PREFIX}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
