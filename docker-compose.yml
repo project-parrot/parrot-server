@@ -42,6 +42,8 @@ services:
       dockerfile: ./user/Dockerfile
     image: ${DOCKER_USER_IMAGE_NAME}
     container_name: user-service
+    ports:
+      - 0:${USER_PORT}
     networks:
       - parrot-network
 #    env_file:
@@ -78,6 +80,8 @@ services:
       dockerfile: ./post/Dockerfile
     image: ${DOCKER_POST_IMAGE_NAME}
     container_name: post-service
+    ports:
+      - 0:${POST_PORT}
     networks:
       - parrot-network
 #    env_file:
@@ -101,6 +105,8 @@ services:
       dockerfile: ./media/Dockerfile
     image: ${DOCKER_MEDIA_IMAGE_NAME}
     container_name: media-service
+    ports:
+      - 0:${MEDIA_PORT}
     networks:
       - parrot-network
 #    env_file:
