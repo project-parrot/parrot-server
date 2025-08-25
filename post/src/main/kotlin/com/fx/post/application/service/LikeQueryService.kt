@@ -37,37 +37,36 @@ class LikeQueryService(
         }
     }
 
-    override fun getMyLikedPosts(likeQueryCommand: LikeQueryCommand): List<PostInfo> {
-        val posts = postPersistencePort.getLikedPosts(LikeQuery.searchCondition(likeQueryCommand, false))
+    override fun getMyLikedPosts(likeQueryCommand: LikeQueryCommand): List<PostInfo> =
+         enrichPosts(
+             postPersistencePort.getLikedPosts(
+                 LikeQuery.searchCondition(likeQueryCommand, false)
+             )
+         )
 
-        val mappedList = mappedByMediaUrls(posts)
+    private fun enrichPosts(posts: List<PostInfo>): List<PostInfo> =
+        posts
+            .attachMediaInfos()
+            .attachProfileInfos()
 
-        return mappedByProfile(mappedList)
+    private fun List<PostInfo>.attachMediaInfos(): List<PostInfo> {
+        if (isEmpty()) return emptyList()
+
+        val mediaMap = mediaWebPort.getUrls(Context.POST, map { it.id })
+            ?.associate { it.referenceId to it.mediaInfos }
+            .orEmpty()
+
+        return map { post -> post.copy(mediaInfos = mediaMap[post.id].orEmpty()) }
     }
 
-    private fun mappedByMediaUrls(posts: List<PostInfo>): List<PostInfo> {
-        if (posts.isEmpty()) return emptyList()
+    private fun List<PostInfo>.attachProfileInfos(): List<PostInfo> {
+        if (isEmpty()) return emptyList()
 
-        val postIds = posts.map { it.id }
-
-        val mediaUrlCommands = mediaWebPort.getUrls(Context.POST, postIds)
-
-        val mediaMap = mediaUrlCommands?.associate { it.referenceId to it.mediaInfos }
-
-        return posts.map { post ->
-            val infos = mediaMap?.get(post.id).orEmpty()
-            post.copy(mediaInfos = infos)
-        }
-    }
-
-    private fun mappedByProfile(posts: List<PostInfo>): List<PostInfo> {
-        if (posts.isEmpty()) return emptyList()
-
-        val userMap: Map<Long, ProfileCommand> = userWebPort.getUsersInfo(posts.map { it.userId }.distinct())
+        val userMap = userWebPort.getUsersInfo(map { it.userId }.distinct())
             .orEmpty()
             .associateBy { it.userId }
 
-        return posts.map { post ->
+        return map { post ->
             val userInfo = userMap[post.userId]
             post.copy(
                 nickname = userInfo?.nickname,
