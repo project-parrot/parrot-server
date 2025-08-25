@@ -83,7 +83,9 @@ public class PostQueryRepository {
     private BooleanExpression userIdCondition(Long userId, List<Long> userIds) {
         if (userId != null) {
             return postEntity.userId.eq(userId);
-        } else if (userIds != null && !userIds.isEmpty()) {
+        } else if (userIds != null) {
+            if (userIds.isEmpty())
+                return postEntity.id.isNull();
             return postEntity.userId.in(userIds);
         } else {
             return null;

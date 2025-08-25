@@ -16,50 +16,53 @@ import org.springframework.stereotype.Service
 class PostQueryService(
     private val postPersistencePort: PostPersistencePort,
     private val mediaWebPort: MediaWebPort,
-    private val postQueryRepository: PostQueryRepository,
     private val userWebPort: UserWebPort
 ) : PostQueryUseCase {
 
     override fun getFollowersPosts(postQueryCommand: PostQueryCommand): List<PostInfo> {
         val followingUsers = userWebPort.getFollowersInfo(postQueryCommand.userId!!)
-        val postQueryCommandWithFollowers = postQueryCommand.copy(userId = null, userIds = followingUsers)
-        val posts = postQueryRepository.findPosts(PostQuery.searchCondition(postQueryCommandWithFollowers, false))
-
-        val mappedList = mappedByMediaUrls(posts)
-
-        return mappedByProfile(mappedList)
+        if (followingUsers.isNullOrEmpty()) {
+            return emptyList()
+        }
+        return enrichPosts(
+            postPersistencePort.getPosts(
+                PostQuery.searchCondition(postQueryCommand.copy(userId = null, userIds = followingUsers), false)
+            )
+        )
     }
 
-    override fun getUserPosts(postQueryCommand: PostQueryCommand): List<PostInfo> {
-        val posts = PostQuery.searchCondition(postQueryCommand, false)
-        val mappedList =  mappedByMediaUrls(postPersistencePort.getPosts(posts))
+    override fun getUserPosts(postQueryCommand: PostQueryCommand): List<PostInfo> =
+        enrichPosts(
+            postPersistencePort.getPosts(
+                PostQuery.searchCondition(postQueryCommand, false)
+            )
+        )
 
-        return mappedByProfile(mappedList)
-    }
+    private fun enrichPosts(posts: List<PostInfo>): List<PostInfo> =
+        posts
+            .attachMediaInfos()
+            .attachProfileInfos()
 
-    private fun mappedByMediaUrls(posts: List<PostInfo>): List<PostInfo> {
-        if (posts.isEmpty()) return emptyList()
+    private fun List<PostInfo>.attachMediaInfos(): List<PostInfo> {
+        if (isEmpty()) return emptyList()
 
-        val postIds = posts.map { it.id }
+        val mediaMap = mediaWebPort.getUrls(Context.POST, map { it.id })
+            ?.associate { it.referenceId to it.mediaInfos }
+            .orEmpty()
 
-        val mediaUrlCommands = mediaWebPort.getUrls(Context.POST, postIds)
-
-        val mediaMap = mediaUrlCommands?.associate { it.referenceId to it.mediaInfos }
-
-        return posts.map { post ->
-            val infos = mediaMap?.get(post.id).orEmpty()
-            post.copy(mediaInfos = infos)
+        return map { post ->
+            post.copy(mediaInfos = mediaMap[post.id].orEmpty())
         }
     }
 
-    private fun mappedByProfile(posts: List<PostInfo>): List<PostInfo> {
-        if (posts.isEmpty()) return emptyList()
+    private fun List<PostInfo>.attachProfileInfos(): List<PostInfo> {
+        if (isEmpty()) return emptyList()
 
-        val userMap: Map<Long, ProfileCommand> = userWebPort.getUsersInfo(posts.map { it.userId }.distinct())
+        val userMap: Map<Long, ProfileCommand> = userWebPort.getUsersInfo(map { it.userId }.distinct())
             .orEmpty()
             .associateBy { it.userId }
 
-        return posts.map { post ->
+        return map { post ->
             val userInfo = userMap[post.userId]
             post.copy(
                 nickname = userInfo?.nickname,
@@ -67,4 +70,5 @@ class PostQueryService(
             )
         }
     }
+
 }
