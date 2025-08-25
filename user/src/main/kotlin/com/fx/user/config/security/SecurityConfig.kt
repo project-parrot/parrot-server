@@ -1,5 +1,6 @@
 package com.fx.user.config.security
 
+import com.fx.user.adapter.out.security.HttpCookieOAuth2AuthorizationRequestAdapter
 import com.fx.user.adapter.security.CustomOAuth2UserService
 import com.fx.user.adapter.security.CustomSuccessHandler
 import com.fx.user.adapter.security.JwtAuthenticationFilter
@@ -18,7 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig(
     private val jwtProviderPort: JwtProviderPort,
     private val customOAuth2UserService: CustomOAuth2UserService,
-    private val customSuccessHandler: CustomSuccessHandler
+    private val customSuccessHandler: CustomSuccessHandler,
+    private val httpCookieOAuth2AuthorizationRequestAdapter: HttpCookieOAuth2AuthorizationRequestAdapter
 ) {
 
     @Bean
@@ -28,11 +30,15 @@ class SecurityConfig(
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
             .oauth2Login { oauth2 ->
-                oauth2.userInfoEndpoint { userInfoEndpointConfig ->
-                    userInfoEndpointConfig.userService(
-                        customOAuth2UserService
-                    )
-                }
+                oauth2
+                    .authorizationEndpoint { endpoint ->
+                        endpoint.authorizationRequestRepository(
+                            httpCookieOAuth2AuthorizationRequestAdapter
+                        )
+                    }
+                    .userInfoEndpoint { userInfoEndpointConfig ->
+                        userInfoEndpointConfig.userService(customOAuth2UserService)
+                    }
                     .successHandler(customSuccessHandler)
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
@@ -53,8 +59,8 @@ class SecurityConfig(
                 exceptions
                     .authenticationEntryPoint { request, response, authException ->
                         response.contentType = "application/json"
-                        response.status = HttpServletResponse.SC_UNAUTHORIZED
-                        response.writer.write("{\"error\": \"Unauthorized\"}")
+                        response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+                        response.writer.write("{\"error\": \"Unauthorized or Server Error\"}")
                     }
             }
 
