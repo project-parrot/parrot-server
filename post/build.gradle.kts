@@ -41,6 +41,10 @@ dependencies {
 
     implementation(project(":global"))
 
+    // Prometheus
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+
     //Kafka
     implementation("org.springframework.kafka:spring-kafka")
     // Embedded Kafka
