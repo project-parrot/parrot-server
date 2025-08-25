@@ -17,7 +17,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 class CustomSuccessHandler(
     private val jwtProviderPort: JwtProviderPort,
     @Value("\${jwt.access-token.plus-hour}") private val accessTokenPlusHour: Int,
-    @Value("\${jwt.refresh-token.plus-hour}") private val refreshTokenPlusHour: Int
+    @Value("\${jwt.refresh-token.plus-hour}") private val refreshTokenPlusHour: Int,
+    @Value("\${oauth.client.redirect.url}") private val oauthClientRedirectUrl: String
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     override fun onAuthenticationSuccess(
@@ -37,7 +38,7 @@ class CustomSuccessHandler(
         response?.apply {
             addCookie(createCookie("accessToken", tokenInfo.accessToken, (accessTokenPlusHour * 60 * 60)))
             addCookie(createCookie("refreshToken", tokenInfo.refreshToken, (refreshTokenPlusHour * 60 * 60)))
-            sendRedirect("http://localhost:3000/")
+            sendRedirect(oauthClientRedirectUrl)
         }
 
     }
