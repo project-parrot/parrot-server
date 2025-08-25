@@ -68,6 +68,7 @@ services:
       - GATEWAY_PORT
       - SWAGGER_HOST
       - KAFKA_BOOTSTRAP_URL
+      - OAUTH_CLIENT_REDIRECT_URL
     #volumes:
     #  - /home/ubuntu/parrot/logs/user-service:/logs
   
