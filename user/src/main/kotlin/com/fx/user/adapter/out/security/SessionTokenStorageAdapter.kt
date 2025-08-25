@@ -1,4 +1,4 @@
-package com.fx.user.adapter.out.token
+package com.fx.user.adapter.out.security
 
 import com.fx.global.annotation.hexagonal.TokenStorageAdapter
 import com.fx.user.application.out.security.TokenStoragePort
