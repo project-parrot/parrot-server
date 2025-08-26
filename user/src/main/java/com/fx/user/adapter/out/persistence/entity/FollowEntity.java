@@ -7,6 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -15,7 +16,12 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "follow",
     indexes = {
-        @Index(name = "idx_follower_following_status", columnList = "followerId, ,followingId status") // 특정 팔로우 존재 여부 확인 idx
+        @Index(name = "idx_follower_status_id", columnList = "followerId, status, id"),
+        @Index(name = "idx_following_status_id", columnList = "followingId, status, id"),
+        @Index(name = "idx_follower_following_status", columnList = "followerId, followingId, status") // 특정 팔로우 존재 여부 확인 idx
+    },
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_follower_following", columnNames = {"followerId", "followingId"})
     }
 )
 @SuperBuilder
