@@ -12,7 +12,7 @@ class KafkaMessageConsumerAdapter(
     private val mediaCommandUseCase: MediaCommandUseCase,
 ) : MessageConsumerUseCase {
 
-    @KafkaListener(topics = ["media-mapping"], groupId = "\\\${kafka.consumer.group-id}")
+    @KafkaListener(topics = ["media-mapping"], groupId = "\${spring.kafka.consumer.group-id}")
     override fun consumeMessage(mediaMappingEventDto: MediaMappingEventDto) {
         if (mediaMappingEventDto.context == Context.PROFILE) {
             val mediaIds = mediaMappingEventDto.mediaIds

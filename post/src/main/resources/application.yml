@@ -40,3 +40,12 @@ eureka:
     fetch-registry: true
     serviceUrl:
       defaultZone: ${EUREKA_DEFAULT_ZONE}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}

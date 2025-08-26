@@ -46,7 +46,8 @@ class SecurityConfig(
                 auth
                     .requestMatchers(
                         "/open-api/**",
-                        "/internal/**"
+                        "/internal/**",
+                        "/actuator/prometheus"
                     )
                     .permitAll()
                     .anyRequest().authenticated()
