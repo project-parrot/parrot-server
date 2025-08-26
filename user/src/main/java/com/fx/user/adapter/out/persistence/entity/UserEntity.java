@@ -2,9 +2,11 @@ package com.fx.user.adapter.out.persistence.entity;
 
 import com.fx.global.dto.UserRole;
 import com.fx.user.domain.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +14,15 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@Table(name = "user")
+@Table(name = "user",
+    indexes = {
+        @Index(name="idx_user_email", columnList = "email"),
+    })
 @SuperBuilder
 @NoArgsConstructor
-public class UserEntity extends BaseEntity{
+public class UserEntity extends BaseEntity {
 
+    @Column(unique = true)
     private String email;
 
     private String password;
