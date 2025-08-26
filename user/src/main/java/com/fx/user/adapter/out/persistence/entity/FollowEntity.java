@@ -5,6 +5,7 @@ import com.fx.user.domain.FollowStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,11 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@Table(name = "follow")
+@Table(name = "follow",
+    indexes = {
+        @Index(name = "idx_follower_following_status", columnList = "followerId, ,followingId status") // 특정 팔로우 존재 여부 확인 idx
+    }
+)
 @SuperBuilder
 @NoArgsConstructor
 public class FollowEntity extends BaseEntity {
