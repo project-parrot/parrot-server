@@ -8,12 +8,10 @@ spring:
   profiles:
     include: swagger
 
-  datasource:
-    url: ${MYSQL_URL}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
+  data:
+    mongodb:
+      database: ${MONGO_DATABASE}
+      uri: ${MONGO_URI}
 
 eureka:
   instance:
