@@ -6,7 +6,7 @@ import com.fx.user.adapter.`in`.web.dto.user.TokenResponse
 import com.fx.user.adapter.`in`.web.dto.user.UserIdResponse
 import com.fx.user.adapter.`in`.web.dto.user.UserLoginRequest
 import com.fx.user.adapter.`in`.web.dto.user.UserSignUpRequest
-import com.fx.user.application.`in`.UserCommandUseCase
+import com.fx.user.application.port.`in`.UserCommandUseCase
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus

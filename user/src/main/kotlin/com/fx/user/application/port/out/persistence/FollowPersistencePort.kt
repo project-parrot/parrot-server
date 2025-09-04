@@ -1,9 +1,9 @@
-package com.fx.user.application.out.persistence
+package com.fx.user.application.port.out.persistence
 
 import com.fx.user.domain.Follow
 import com.fx.user.domain.FollowQuery
 import com.fx.user.domain.FollowStatus
-import com.fx.user.application.out.persistence.dto.FollowUserInfo
+import com.fx.user.application.port.out.persistence.dto.FollowUserInfo
 
 interface FollowPersistencePort {
 

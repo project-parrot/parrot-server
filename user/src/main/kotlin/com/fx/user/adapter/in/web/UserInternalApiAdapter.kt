@@ -1,8 +1,8 @@
 package com.fx.user.adapter.`in`.web
 
 import com.fx.user.adapter.`in`.web.dto.profile.InternalProfileInfoResponse
-import com.fx.user.application.`in`.FollowCommandUseCase
-import com.fx.user.application.`in`.ProfileQueryUseCase
+import com.fx.user.application.port.`in`.FollowCommandUseCase
+import com.fx.user.application.port.`in`.ProfileQueryUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

@@ -5,8 +5,8 @@ import com.fx.user.adapter.security.dto.AuthenticatedUser
 import com.fx.user.adapter.security.dto.GoogleOAuthDto
 import com.fx.user.adapter.security.dto.NaverOAuthDto
 import com.fx.user.adapter.security.dto.OAuth2Dto
-import com.fx.user.application.`in`.UserCommandUseCase
-import com.fx.user.application.`in`.dto.UserOAuthCommand
+import com.fx.user.application.port.`in`.UserCommandUseCase
+import com.fx.user.application.port.`in`.dto.UserOAuthCommand
 import com.fx.user.exception.UserException
 import com.fx.user.exception.errorcode.UserErrorCode
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService

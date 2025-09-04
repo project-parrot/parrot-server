@@ -1,4 +1,4 @@
-package com.fx.user.application.out.security
+package com.fx.user.application.port.out.security
 
 interface PasswordEncoderPort {
 

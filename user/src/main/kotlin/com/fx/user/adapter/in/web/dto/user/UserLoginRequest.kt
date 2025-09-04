@@ -1,6 +1,6 @@
 package com.fx.user.adapter.`in`.web.dto.user
 
-import com.fx.user.application.`in`.dto.UserLoginCommand
+import com.fx.user.application.port.`in`.dto.UserLoginCommand
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern

@@ -1,4 +1,4 @@
-package com.fx.user.application.out.persistence.dto
+package com.fx.user.application.port.out.persistence.dto
 
 import com.fx.user.adapter.out.web.impl.dto.MediaInfo
 import com.fx.user.domain.FollowStatus

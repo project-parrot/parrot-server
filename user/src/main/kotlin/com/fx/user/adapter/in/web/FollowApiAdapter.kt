@@ -6,8 +6,8 @@ import com.fx.user.adapter.`in`.web.dto.follow.FollowResponse
 import com.fx.user.adapter.`in`.web.dto.follow.FollowSearchParam
 import com.fx.user.adapter.`in`.web.dto.follow.FollowUserResponse
 import com.fx.user.adapter.security.dto.AuthenticatedUser
-import com.fx.user.application.`in`.FollowCommandUseCase
-import com.fx.user.application.`in`.FollowQueryUseCase
+import com.fx.user.application.port.`in`.FollowCommandUseCase
+import com.fx.user.application.port.`in`.FollowQueryUseCase
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort

@@ -1,4 +1,4 @@
-package com.fx.user.application.`in`
+package com.fx.user.application.port.`in`
 
 import com.fx.user.domain.ProfileInfo
 

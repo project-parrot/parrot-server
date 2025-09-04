@@ -4,7 +4,7 @@ import com.fx.user.adapter.out.security.HttpCookieOAuth2AuthorizationRequestAdap
 import com.fx.user.adapter.security.CustomOAuth2UserService
 import com.fx.user.adapter.security.CustomSuccessHandler
 import com.fx.user.adapter.security.JwtAuthenticationFilter
-import com.fx.user.application.out.security.JwtProviderPort
+import com.fx.user.application.port.out.security.JwtProviderPort
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

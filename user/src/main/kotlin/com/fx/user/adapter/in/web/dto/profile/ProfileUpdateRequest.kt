@@ -1,6 +1,6 @@
 package com.fx.user.adapter.`in`.web.dto.profile
 
-import com.fx.user.application.`in`.dto.ProfileUpdateCommand
+import com.fx.user.application.port.`in`.dto.ProfileUpdateCommand
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size

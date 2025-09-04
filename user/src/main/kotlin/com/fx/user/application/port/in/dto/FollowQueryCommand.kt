@@ -1,4 +1,4 @@
-package com.fx.user.application.`in`.dto
+package com.fx.user.application.port.`in`.dto
 
 import org.jetbrains.annotations.NotNull
 import org.springframework.data.domain.Pageable

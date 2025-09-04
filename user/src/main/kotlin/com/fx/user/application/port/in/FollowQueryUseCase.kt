@@ -1,7 +1,7 @@
-package com.fx.user.application.`in`
+package com.fx.user.application.port.`in`
 
-import com.fx.user.application.`in`.dto.FollowQueryCommand
-import com.fx.user.application.out.persistence.dto.FollowUserInfo
+import com.fx.user.application.port.`in`.dto.FollowQueryCommand
+import com.fx.user.application.port.out.persistence.dto.FollowUserInfo
 import jakarta.validation.Valid
 import org.springframework.validation.annotation.Validated
 

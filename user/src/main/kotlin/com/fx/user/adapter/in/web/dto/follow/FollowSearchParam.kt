@@ -1,6 +1,6 @@
 package com.fx.user.adapter.`in`.web.dto.follow
 
-import com.fx.user.application.`in`.dto.FollowQueryCommand
+import com.fx.user.application.port.`in`.dto.FollowQueryCommand
 import org.springframework.data.domain.Pageable
 
 data class FollowSearchParam(

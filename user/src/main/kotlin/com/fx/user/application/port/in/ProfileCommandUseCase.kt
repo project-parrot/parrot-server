@@ -1,6 +1,6 @@
-package com.fx.user.application.`in`
+package com.fx.user.application.port.`in`
 
-import com.fx.user.application.`in`.dto.ProfileUpdateCommand
+import com.fx.user.application.port.`in`.dto.ProfileUpdateCommand
 import jakarta.validation.Valid
 import org.springframework.validation.annotation.Validated
 

@@ -1,7 +1,7 @@
 package com.fx.user.adapter.out.security
 
 import com.fx.global.annotation.hexagonal.TokenStorageAdapter
-import com.fx.user.application.out.security.TokenStoragePort
+import com.fx.user.application.port.out.security.TokenStoragePort
 import jakarta.servlet.http.HttpSession
 import java.util.*
 

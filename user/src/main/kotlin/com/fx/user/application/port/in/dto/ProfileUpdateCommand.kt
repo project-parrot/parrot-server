@@ -1,4 +1,4 @@
-package com.fx.user.application.`in`.dto
+package com.fx.user.application.port.`in`.dto
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull

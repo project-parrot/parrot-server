@@ -1,8 +1,8 @@
-package com.fx.user.application.`in`
+package com.fx.user.application.port.`in`
 
-import com.fx.user.application.`in`.dto.UserLoginCommand
-import com.fx.user.application.`in`.dto.UserOAuthCommand
-import com.fx.user.application.`in`.dto.UserSignUpCommand
+import com.fx.user.application.port.`in`.dto.UserLoginCommand
+import com.fx.user.application.port.`in`.dto.UserOAuthCommand
+import com.fx.user.application.port.`in`.dto.UserSignUpCommand
 import com.fx.user.domain.TokenInfo
 import com.fx.user.domain.User
 import jakarta.validation.Valid
