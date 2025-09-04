@@ -16,7 +16,7 @@ public class BaseDocument {
 
     @Id
     @Builder.Default
-    protected Long id = null;
+    protected String id = null;
 
     @CreatedDate
     @Builder.Default
