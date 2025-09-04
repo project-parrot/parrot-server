@@ -29,7 +29,6 @@ repositories {
 extra["springCloudVersion"] = "2025.0.0"
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -39,6 +38,9 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
     implementation ("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta") // QueryDSL
     implementation(project(":global"))
+
+    // Mongo
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     // Prometheus
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -51,13 +53,14 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-    annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:jakarta") // QueryDSL
-    annotationProcessor("jakarta.annotation:jakarta.annotation-api") // QueryDSL
-    annotationProcessor("jakarta.persistence:jakarta.persistence-api") // QueryDSL
 
-    runtimeOnly("com.mysql:mysql-connector-j")
-
-
+    // QueryDSL
+    implementation("com.querydsl:querydsl-mongodb:${queryDslVersion}") {
+        exclude(group = "org.mongodb", module = "mongo-java-driver")
+    }
+    annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:general")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
