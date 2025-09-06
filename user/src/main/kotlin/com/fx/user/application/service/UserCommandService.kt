@@ -6,7 +6,7 @@ import com.fx.user.application.port.`in`.UserCommandUseCase
 import com.fx.user.application.port.`in`.dto.UserLoginCommand
 import com.fx.user.application.port.`in`.dto.UserOAuthCommand
 import com.fx.user.application.port.`in`.dto.UserSignUpCommand
-import com.fx.user.application.port.out.message.MessageProducerUseCase
+import com.fx.user.application.port.out.message.MessageProducerPort
 import com.fx.user.application.port.out.persistence.ProfilePersistencePort
 import com.fx.user.application.port.out.persistence.UserPersistencePort
 import com.fx.user.application.port.out.security.JwtProviderPort
@@ -27,7 +27,7 @@ class UserCommandService(
     private val profilePersistencePort: ProfilePersistencePort,
     private val jwtProviderPort: JwtProviderPort,
     private val passwordEncoderPort: PasswordEncoderPort,
-    private val messageProducerUseCase: MessageProducerUseCase
+    private val messageProducerPort: MessageProducerPort
 ) : UserCommandUseCase {
 
     @Transactional
@@ -53,7 +53,7 @@ class UserCommandService(
             val savedProfile = profilePersistencePort.save(
                 Profile.createProfile(userId, signUpCommand.nickname)
             )
-            messageProducerUseCase.sendMapping(
+            messageProducerPort.sendMapping(
                 MediaMappingEventDto(context = Context.PROFILE, referenceId = savedProfile.id, userId = userId, mediaIds = mediaIds)
             )
         } ?: throw UserException(UserErrorCode.USER_ID_NULL)
