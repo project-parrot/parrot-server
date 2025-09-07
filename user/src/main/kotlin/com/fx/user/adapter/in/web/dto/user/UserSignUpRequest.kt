@@ -1,12 +1,15 @@
 package com.fx.user.adapter.`in`.web.dto.user
 
-import com.fx.user.application.`in`.dto.UserSignUpCommand
+import com.fx.user.application.port.`in`.dto.UserSignUpCommand
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 
 data class UserSignUpRequest(
+
+    @field:NotBlank(message = "이메일 인증 후 임시토큰을 입력해야 합니다.")
+    val tempToken: String,
 
     @field:NotBlank(message = "이메일은 필수입니다.")
     @field:Email(message ="이메일 형식이 올바르지 않습니다.")
@@ -32,6 +35,7 @@ data class UserSignUpRequest(
 ) {
     fun toCommand(): UserSignUpCommand {
         return UserSignUpCommand(
+            tempToken = this.tempToken,
             email = this.email,
             password = this.password,
             phone = this.phone,

@@ -1,15 +1,10 @@
 package com.fx.user.application.service
 
-import com.fx.global.dto.Context
-import com.fx.user.application.`in`.FollowCommandUseCase
-import com.fx.user.application.`in`.dto.FollowQueryCommand
-import com.fx.user.application.out.persistence.FollowPersistencePort
-import com.fx.user.application.out.web.MediaWebPort
-import com.fx.user.application.out.persistence.ProfilePersistencePort
+import com.fx.user.application.port.`in`.FollowCommandUseCase
+import com.fx.user.application.port.out.persistence.FollowPersistencePort
+import com.fx.user.application.port.out.persistence.ProfilePersistencePort
 import com.fx.user.domain.Follow
-import com.fx.user.domain.FollowQuery
 import com.fx.user.domain.FollowStatus
-import com.fx.user.application.out.persistence.dto.FollowUserInfo
 import com.fx.user.exception.FollowException
 import com.fx.user.exception.ProfileException
 import com.fx.user.exception.errorcode.FollowErrorCode

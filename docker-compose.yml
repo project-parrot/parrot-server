@@ -71,6 +71,10 @@ services:
       - SWAGGER_HOST
       - KAFKA_BOOTSTRAP_URL
       - OAUTH_CLIENT_REDIRECT_URL
+      - MAIL_HOST
+      - MAIL_PORT
+      - MAIL_USERNAME
+      - MAIL_PASSWORD
     #volumes:
     #  - /home/ubuntu/parrot/logs/user-service:/logs
   

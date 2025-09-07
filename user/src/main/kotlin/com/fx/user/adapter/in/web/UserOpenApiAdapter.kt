@@ -6,7 +6,7 @@ import com.fx.user.adapter.`in`.web.dto.user.TokenResponse
 import com.fx.user.adapter.`in`.web.dto.user.UserIdResponse
 import com.fx.user.adapter.`in`.web.dto.user.UserLoginRequest
 import com.fx.user.adapter.`in`.web.dto.user.UserSignUpRequest
-import com.fx.user.application.`in`.UserCommandUseCase
+import com.fx.user.application.port.`in`.UserCommandUseCase
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -22,7 +22,7 @@ class UserOpenApiAdapter(
     private val userCommandUseCase: UserCommandUseCase
 ) {
 
-    @Operation(summary = "회원가입")
+    @Operation(summary = "회원가입", description = "회원가입 API 를 사용하기 전 `POST /open-api/v1/email`, `POST /open-api/v1/email/verify` API 를 통해 TempToken 을 발급받아야 합니다.")
     @PostMapping("/signup")
     fun signUp(
         @RequestBody @Valid signUpRequest: UserSignUpRequest

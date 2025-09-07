@@ -1,8 +1,8 @@
 package com.fx.user.domain
 
 import com.fx.global.dto.UserRole
-import com.fx.user.application.`in`.dto.UserOAuthCommand
-import com.fx.user.application.`in`.dto.UserSignUpCommand
+import com.fx.user.application.port.`in`.dto.UserOAuthCommand
+import com.fx.user.application.port.`in`.dto.UserSignUpCommand
 import java.time.LocalDateTime
 
 data class User(

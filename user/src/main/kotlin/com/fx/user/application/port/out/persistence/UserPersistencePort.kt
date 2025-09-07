@@ -1,0 +1,15 @@
+package com.fx.user.application.port.out.persistence
+
+import com.fx.user.domain.User
+
+interface UserPersistencePort {
+
+    fun save(user: User): User
+
+    fun existsByEmail(email: String): Boolean
+
+    fun findByEmail(email: String): User?
+
+    fun findByOauthId(oauthId: String): User?
+
+}

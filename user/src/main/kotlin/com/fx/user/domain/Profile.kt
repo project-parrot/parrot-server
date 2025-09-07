@@ -1,6 +1,6 @@
 package com.fx.user.domain
 
-import com.fx.user.application.`in`.dto.ProfileUpdateCommand
+import com.fx.user.application.port.`in`.dto.ProfileUpdateCommand
 import java.time.LocalDateTime
 
 data class Profile(

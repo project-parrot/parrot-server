@@ -3,6 +3,7 @@ package com.fx.user.adapter.out.persistence.entity;
 import com.fx.user.domain.Profile;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,18 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
-@Table(name = "profile")
+@Table(name = "profile",
+    indexes = {
+        @Index(name = "idx_profile_userId", columnList = "userId"),
+        @Index(name = "idx_profile_nickname", columnList = "nickname")
+    })
 @SuperBuilder
 @NoArgsConstructor
 public class ProfileEntity extends BaseEntity {
 
     private Long userId;
 
+    @Column(unique = true)
     private String nickname;
 
     private String statusMessage;

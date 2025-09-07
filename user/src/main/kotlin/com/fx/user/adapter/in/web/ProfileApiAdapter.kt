@@ -5,8 +5,8 @@ import com.fx.global.api.Api
 import com.fx.user.adapter.`in`.web.dto.profile.ProfileInfoResponse
 import com.fx.user.adapter.`in`.web.dto.profile.ProfileUpdateRequest
 import com.fx.user.adapter.security.dto.AuthenticatedUser
-import com.fx.user.application.`in`.ProfileCommandUseCase
-import com.fx.user.application.`in`.ProfileQueryUseCase
+import com.fx.user.application.port.`in`.ProfileCommandUseCase
+import com.fx.user.application.port.`in`.ProfileQueryUseCase
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity

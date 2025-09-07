@@ -2,10 +2,10 @@ package com.fx.user.application.service
 
 import com.fx.global.dto.Context
 import com.fx.user.adapter.out.web.impl.dto.MediaInfo
-import com.fx.user.application.`in`.ProfileQueryUseCase
-import com.fx.user.application.out.persistence.FollowPersistencePort
-import com.fx.user.application.out.web.MediaWebPort
-import com.fx.user.application.out.persistence.ProfilePersistencePort
+import com.fx.user.application.port.`in`.ProfileQueryUseCase
+import com.fx.user.application.port.out.persistence.FollowPersistencePort
+import com.fx.user.application.port.out.web.MediaWebPort
+import com.fx.user.application.port.out.persistence.ProfilePersistencePort
 import com.fx.user.domain.FollowStatus
 import com.fx.user.domain.ProfileInfo
 import com.fx.user.exception.ProfileException
