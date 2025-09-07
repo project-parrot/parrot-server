@@ -4,7 +4,7 @@ import com.fx.global.dto.Context
 import com.fx.global.dto.MediaMappingEventDto
 import com.fx.user.application.port.`in`.ProfileCommandUseCase
 import com.fx.user.application.port.`in`.dto.ProfileUpdateCommand
-import com.fx.user.application.port.out.message.MessageProducerUseCase
+import com.fx.user.application.port.out.message.MessageProducerPort
 import com.fx.user.application.port.out.persistence.ProfilePersistencePort
 import com.fx.user.exception.ProfileException
 import com.fx.user.exception.errorcode.ProfileErrorCode
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 @Service
 class ProfileCommandService(
     private val profilePersistencePort: ProfilePersistencePort,
-    private val messageProducerUseCase: MessageProducerUseCase
+    private val messageProducerPort: MessageProducerPort
 ): ProfileCommandUseCase {
 
     @Transactional
@@ -32,7 +32,7 @@ class ProfileCommandService(
 
         val mediaIds = updateCommand.mediaId?.let { listOf(it) } ?: emptyList()
 
-        messageProducerUseCase.sendMapping(
+        messageProducerPort.sendMapping(
             MediaMappingEventDto(context = Context.PROFILE, referenceId = updatedProfile.id, userId = updatedProfile.userId, mediaIds = mediaIds)
         )
 
