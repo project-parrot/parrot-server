@@ -3,7 +3,6 @@ package com.fx.user.adapter.out.persistence
 import com.fx.global.annotation.hexagonal.CacheAdapter
 import com.fx.user.application.port.out.persistence.SignUpVerificationPort
 import org.springframework.data.redis.core.StringRedisTemplate
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @CacheAdapter
@@ -23,19 +22,17 @@ class SignUpVerificationAdapter(
         redisTemplate.delete("verification:$email")
     }
 
-
-    override fun saveTempEmail(email: String, code: String): String {
-        val token = UUID.randomUUID().toString()
-        redisTemplate.opsForValue().set("tempEmail:$token", email, 10, TimeUnit.MINUTES)
+    override fun saveTempToken(email: String, token: String): String {
+        redisTemplate.opsForValue().set("tempToken:$token", email, 10, TimeUnit.MINUTES)
         return token
     }
 
     override fun getEmailByToken(token: String): String? {
-        return redisTemplate.opsForValue().get("tempEmail:$token")
+        return redisTemplate.opsForValue().get("tempToken:$token")
     }
 
-    override fun deleteTempEmail(token: String) {
-        redisTemplate.delete("tempEmail:$token")
+    override fun deleteTempToken(token: String) {
+        redisTemplate.delete("tempToken:$token")
     }
 
 }

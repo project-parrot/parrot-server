@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Size
 
 data class UserSignUpCommand(
 
+    @field:NotBlank(message = "이메일 인증 후 임시토큰을 입력해야 합니다.")
+    val tempToken: String,
+
     @field:NotBlank(message = "이메일은 필수입니다.")
     @field:Email(message ="이메일 형식이 올바르지 않습니다.")
     @field:Size(max = 200, message = "이메일은 200자 이내여야 합니다.")

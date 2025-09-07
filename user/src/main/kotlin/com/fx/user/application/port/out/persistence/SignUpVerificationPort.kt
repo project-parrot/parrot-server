@@ -1,7 +1,5 @@
 package com.fx.user.application.port.out.persistence
 
-import kotlin.time.Duration
-
 interface SignUpVerificationPort {
 
     /**
@@ -30,7 +28,7 @@ interface SignUpVerificationPort {
      * @param code 인증 코드
      * @return 회원가입 완료용 토큰
      */
-    fun saveTempEmail(email: String, code: String): String
+    fun saveTempToken(email: String, token: String): String
 
     /**
      * 토큰으로 이메일 조회
@@ -38,8 +36,8 @@ interface SignUpVerificationPort {
     fun getEmailByToken(token: String): String?
 
     /**
-     * 임시 유저 삭제
+     * 임시 이메일 삭제
      */
-    fun deleteTempEmail(token: String)
+    fun deleteTempToken(token: String)
 
 }

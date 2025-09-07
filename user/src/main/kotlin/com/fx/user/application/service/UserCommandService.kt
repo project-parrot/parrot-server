@@ -8,14 +8,17 @@ import com.fx.user.application.port.`in`.dto.UserOAuthCommand
 import com.fx.user.application.port.`in`.dto.UserSignUpCommand
 import com.fx.user.application.port.out.message.MessageProducerPort
 import com.fx.user.application.port.out.persistence.ProfilePersistencePort
+import com.fx.user.application.port.out.persistence.SignUpVerificationPort
 import com.fx.user.application.port.out.persistence.UserPersistencePort
 import com.fx.user.application.port.out.security.JwtProviderPort
 import com.fx.user.application.port.out.security.PasswordEncoderPort
 import com.fx.user.domain.Profile
 import com.fx.user.domain.TokenInfo
 import com.fx.user.domain.User
+import com.fx.user.exception.EmailVerificationException
 import com.fx.user.exception.ProfileException
 import com.fx.user.exception.UserException
+import com.fx.user.exception.errorcode.EmailVerificationErrorCode
 import com.fx.user.exception.errorcode.ProfileErrorCode
 import com.fx.user.exception.errorcode.UserErrorCode
 import org.springframework.stereotype.Service
@@ -27,11 +30,19 @@ class UserCommandService(
     private val profilePersistencePort: ProfilePersistencePort,
     private val jwtProviderPort: JwtProviderPort,
     private val passwordEncoderPort: PasswordEncoderPort,
-    private val messageProducerPort: MessageProducerPort
+    private val messageProducerPort: MessageProducerPort,
+    private val signUpVerificationPort: SignUpVerificationPort
 ) : UserCommandUseCase {
 
     @Transactional
     override fun signUp(signUpCommand: UserSignUpCommand): User {
+
+        // 이메일 인증 후 발급받은 토큰 조회
+        val savedEmail = signUpVerificationPort.getEmailByToken(signUpCommand.tempToken)
+            ?: throw EmailVerificationException(EmailVerificationErrorCode.TOKEN_NOT_FOUND)
+
+        if (savedEmail != signUpCommand.email)
+            throw EmailVerificationException(EmailVerificationErrorCode.UNAUTHORIZED_VERIFICATION_ACCESS)
 
         // email, nickname 존재시 예외
         if (userPersistencePort.existsByEmail(signUpCommand.email)) {
@@ -53,11 +64,14 @@ class UserCommandService(
             val savedProfile = profilePersistencePort.save(
                 Profile.createProfile(userId, signUpCommand.nickname)
             )
-            messageProducerPort.sendMapping(
-                MediaMappingEventDto(context = Context.PROFILE, referenceId = savedProfile.id, userId = userId, mediaIds = mediaIds)
-            )
+            if (mediaIds.isNotEmpty()) {
+                messageProducerPort.sendMapping(MediaMappingEventDto(context = Context.PROFILE, referenceId = savedProfile.id, userId = userId, mediaIds = mediaIds)
+                )
+            }
         } ?: throw UserException(UserErrorCode.USER_ID_NULL)
 
+        // 토큰 삭제
+        signUpVerificationPort.deleteTempToken(signUpCommand.tempToken)
         return savedUser
     }
 
