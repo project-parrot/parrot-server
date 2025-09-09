@@ -4,9 +4,9 @@ import com.fx.chat.adapter.out.persistence.document.ChatRoomUserDocument
 import com.fx.chat.adapter.out.persistence.repository.ChatRoomUserMongoRepository
 import com.fx.chat.application.port.out.ChatRoomUserPersistencePort
 import com.fx.chat.domain.ChatRoomUser
-import com.fx.global.annotation.hexagonal.PersistenceAdapter
+import org.springframework.stereotype.Component
 
-@PersistenceAdapter
+@Component
 class ChatRoomUserPersistenceAdapter(
     private val chatRoomUserMongoRepository: ChatRoomUserMongoRepository
 ) : ChatRoomUserPersistencePort {
