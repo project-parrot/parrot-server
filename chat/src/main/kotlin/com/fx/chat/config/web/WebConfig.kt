@@ -1,25 +1,25 @@
 package com.fx.chat.config.web
 
-import com.fx.global.interceptor.AuthorizationInterceptor
-import com.fx.global.resolver.AuthenticatedUserResolver
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.method.support.HandlerMethodArgumentResolver
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.reactive.config.WebFluxConfigurer
+import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer
+import org.springframework.web.server.WebFilter
 
 @Configuration
 class WebConfig(
-    private val authorizationInterceptor: AuthorizationInterceptor,
-) : WebMvcConfigurer {
+    private val reactiveAuthenticatedUserResolver: ReactiveAuthenticatedUserResolver
+) : WebFluxConfigurer {
 
-
-    override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver?>) {
-        resolvers.add(AuthenticatedUserResolver())
+    override fun configureArgumentResolvers(configurer: ArgumentResolverConfigurer) {
+        configurer.addCustomResolver(reactiveAuthenticatedUserResolver)
     }
 
-    override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(authorizationInterceptor)
-            .addPathPatterns("/**")
-            .excludePathPatterns("/open-api/**")
+    @Bean
+    fun reactiveAuthorizationFilter(
+        reactiveAuthorizationInterceptor: ReactiveAuthorizationInterceptor
+    ): WebFilter {
+        return reactiveAuthorizationInterceptor
     }
+
 }
