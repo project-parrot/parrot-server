@@ -5,13 +5,16 @@ import com.fx.chat.adapter.out.persistence.repository.ChatRoomUserMongoRepositor
 import com.fx.chat.application.port.out.ChatRoomUserPersistencePort
 import com.fx.chat.domain.ChatRoomUser
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
 
 @Component
 class ChatRoomUserPersistenceAdapter(
     private val chatRoomUserMongoRepository: ChatRoomUserMongoRepository
 ) : ChatRoomUserPersistencePort {
 
-    override fun saveChatRoomUser(chatRoomUser: ChatRoomUser) =
-        chatRoomUserMongoRepository.save(ChatRoomUserDocument.from(chatRoomUser)).toDomain()
+    override fun saveChatRoomUsers(chatRoomUsers: List<ChatRoomUser>): Mono<List<ChatRoomUser>> =
+        chatRoomUserMongoRepository.saveAll(chatRoomUsers.map { ChatRoomUserDocument.from(it) })
+            .map { it.toDomain() }
+            .collectList()
 
 }

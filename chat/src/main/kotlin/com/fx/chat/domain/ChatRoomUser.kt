@@ -11,4 +11,19 @@ data class ChatRoomUser(
     val createdAt: LocalDateTime? = null,
     val updatedAt: LocalDateTime? = null
 
-)
+) {
+
+    companion object {
+
+        fun createChatRoomUser(chatRoomId: String, userIds: Set<Long>): List<ChatRoomUser> =
+            userIds.map { userId ->
+                ChatRoomUser(
+                    chatRoomId = chatRoomId,
+                    userId = userId
+                )
+
+            }
+
+    }
+
+}

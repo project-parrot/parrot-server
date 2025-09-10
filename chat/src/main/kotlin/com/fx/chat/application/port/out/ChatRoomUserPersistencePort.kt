@@ -1,9 +1,10 @@
 package com.fx.chat.application.port.out
 
 import com.fx.chat.domain.ChatRoomUser
+import reactor.core.publisher.Mono
 
 interface ChatRoomUserPersistencePort {
 
-    fun saveChatRoomUser(chatRoomUser: ChatRoomUser): ChatRoomUser
+    fun saveChatRoomUsers(chatRoomUsers: List<ChatRoomUser>): Mono<List<ChatRoomUser>>
 
 }
