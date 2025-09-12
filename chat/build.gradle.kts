@@ -47,10 +47,9 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
     // Swagger
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.9")
 
-
-    implementation(project(":global"))
+    implementation(project(":reactive-global"))
 
     // Prometheus
     implementation("org.springframework.boot:spring-boot-starter-actuator")
