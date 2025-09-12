@@ -7,6 +7,8 @@ import com.fx.chat.application.port.out.web.UserWebPort
 import com.fx.chat.domain.ChatRoom
 import com.fx.chat.domain.ChatRoomType
 import com.fx.chat.domain.ChatRoomUser
+import com.fx.chat.exception.ChatRoomException
+import com.fx.chat.exception.errorcode.ChatRoomErrorCode
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
@@ -27,24 +29,24 @@ class ChatRoomCommandService(
         if (!chatRoomId.isNullOrEmpty()) {
             return@coroutineScope chatRoomPersistencePort.findById(chatRoomId)
                 .awaitSingleOrNull()
-                ?: throw IllegalArgumentException("존재하지 않는 채팅방입니다.")
+                ?: throw ChatRoomException(ChatRoomErrorCode.CHAT_ROOM_NOT_FOUND)
         }
 
         // 2. 없으면 새 채팅방 생성
         if (targetUserIds.isNullOrEmpty()) {
-            throw IllegalArgumentException("채팅방이 없으면 targetUserIds가 필요합니다.")
+            throw ChatRoomException(ChatRoomErrorCode.TARGET_USER_IDS_REQUIRED)
         }
 
         // 3. 자기 자신 포함
         val participants = (targetUserIds + requesterId).toSet()
         if (participants.size < 2) {
-            throw IllegalArgumentException("채팅방을 만들려면 다른 사용자가 필요합니다.")
+            throw ChatRoomException(ChatRoomErrorCode.PARTICIPANT_NOT_ENOUGH)
         }
 
         // 4. 유효 사용자 체크
         val usersExist = userWebPort.existsUsers(targetUserIds)
         if (!usersExist) {
-            throw RuntimeException("존재하지 않는 사용자가 포함되어 있습니다.")
+            throw ChatRoomException(ChatRoomErrorCode.INVALID_PARTICIPANT)
         }
 
         // 5. 채팅방 저장
