@@ -17,11 +17,13 @@ class UserPersistenceAdapter(
     override fun existsByEmail(email: String): Boolean =
         userRepository.existsByEmail(email)
 
-
     override fun findByEmail(email: String): User? =
         userRepository.findByEmail(email)?.orElse(null)?.toDomain()
 
     override fun findByOauthId(oauthId: String): User? =
         userRepository.findByOauthId(oauthId).orElse(null)?.toDomain()
+
+    override fun findAllById(userIds: List<Long>): List<Long> =
+        userRepository.findAllById(userIds).map { it.toDomain().id!! }
 
 }

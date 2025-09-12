@@ -1,4 +1,4 @@
-package com.fx.chat.config.web
+package com.fx.global.filter
 
 import com.fx.global.exception.UnauthorizedException
 import com.fx.global.exception.errorcode.UnauthorizedErrorCode
@@ -12,10 +12,12 @@ import reactor.core.publisher.Mono
 
 @Order(1)
 @Component
-class ReactiveAuthorizationInterceptor(
-    private val X_USER_ID: String = "X-User-Id",
-    private val X_USER_ROLE: String = "X-User-Role"
-) : WebFilter {
+class ReactiveAuthorizationFilter: WebFilter {
+
+    companion object {
+        private const val X_USER_ID = "X-User-Id"
+        private const val X_USER_ROLE = "X-User-Role"
+    }
 
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void?> {
         val request = exchange.request
@@ -24,7 +26,7 @@ class ReactiveAuthorizationInterceptor(
             return chain.filter(exchange)
         }
 
-        if (request.path.value().startsWith("/static/") || request.path.value().startsWith("/resources/")) {
+        if (request.path.value().startsWith("/open-api/") || request.path.value().startsWith("/static/") || request.path.value().startsWith("/resources/")) {
             return chain.filter(exchange)
         }
 
@@ -34,7 +36,7 @@ class ReactiveAuthorizationInterceptor(
         val userRole = request.headers.getFirst(X_USER_ROLE)
             ?: return Mono.error(UnauthorizedException(UnauthorizedErrorCode.MISSING_USER_ROLE_HEADER))
 
-        // WebFlux에서는 RequestAttributes 대신 exchange.attributes에 저장
+        // WebFlux 에서는 RequestAttributes 대신 exchange.attributes에 저장
         exchange.attributes[X_USER_ID] = userId
         exchange.attributes[X_USER_ROLE] = userRole
 

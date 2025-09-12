@@ -10,4 +10,13 @@ data class ChatRoom(
     val createdAt: LocalDateTime? = null,
     val updatedAt: LocalDateTime? = null
 
-)
+) {
+    companion object {
+
+        fun createRoom(type: ChatRoomType): ChatRoom =
+            ChatRoom(
+                type = type
+            )
+
+    }
+}

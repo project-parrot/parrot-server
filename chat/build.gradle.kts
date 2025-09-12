@@ -35,20 +35,21 @@ dependencies {
     // WebFlux
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
+    // Coroutine
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.3")
+
+    // Reactive Mongo
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     // Swagger
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.9")
 
-    implementation ("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta") // QueryDSL
-
-    implementation(project(":global"))
-
-    // Mongo
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation(project(":reactive-global"))
 
     // Prometheus
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -63,12 +64,13 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
 
     // QueryDSL
-    implementation("com.querydsl:querydsl-mongodb:${queryDslVersion}") {
-        exclude(group = "org.mongodb", module = "mongo-java-driver")
-    }
-    annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:general")
-    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
-    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+//    implementation("com.querydsl:querydsl-mongodb:${queryDslVersion}") {
+//        exclude(group = "org.mongodb", module = "mongo-java-driver")
+//    }
+//    implementation ("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta") // QueryDSL
+//    annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:general")
+//    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+//    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -105,21 +107,21 @@ tasks.getByName<Jar>("jar") {
     enabled = false
 }
 
-val querydslDir = "src/main/generated"
-
-sourceSets {
-    getByName("main").java.srcDirs(querydslDir)
-}
-
-tasks.withType<JavaCompile> {
-    options.generatedSourceOutputDirectory = file(querydslDir)
-
-    // 위의 설정이 안되면 아래 설정 사용
-    // options.generatedSourceOutputDirectory.set(file(querydslDir))
-}
-
-tasks.named("clean") {
-    doLast {
-        file(querydslDir).deleteRecursively()
-    }
-}
+//val querydslDir = "src/main/generated"
+//
+//sourceSets {
+//    getByName("main").java.srcDirs(querydslDir)
+//}
+//
+//tasks.withType<JavaCompile> {
+//    options.generatedSourceOutputDirectory = file(querydslDir)
+//
+//    // 위의 설정이 안되면 아래 설정 사용
+//    // options.generatedSourceOutputDirectory.set(file(querydslDir))
+//}
+//
+//tasks.named("clean") {
+//    doLast {
+//        file(querydslDir).deleteRecursively()
+//    }
+//}

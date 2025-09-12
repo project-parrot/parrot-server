@@ -13,6 +13,9 @@ spring:
       database: ${MONGO_DATABASE}
       uri: ${MONGO_URI}
 
+user-service:
+  url: ${USER_SERVICE_URL}
+
 eureka:
   instance:
     prefer-ip-address: true
