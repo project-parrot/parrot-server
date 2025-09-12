@@ -20,8 +20,8 @@ class ChatRoomApiAdapter(
     @GetMapping("/enter")
     suspend fun createOrEnterChatRoom(
         @AuthenticatedUser authUser: AuthUser,
-        @RequestParam(required = false) chatRoomId: String?,
-        @RequestParam(required = false) targetUserIds: List<Long>?
+        @RequestParam(name ="chatRoomId", required = false) chatRoomId: String?,
+        @RequestParam(name ="targetUserIds", required = false) targetUserIds: List<Long>?
     ): ResponseEntity<Api<ChatRoom>> =
         Api.OK(chatRoomCommandUseCase.createOrEnterChatRoom(authUser.userId, chatRoomId, targetUserIds))
 

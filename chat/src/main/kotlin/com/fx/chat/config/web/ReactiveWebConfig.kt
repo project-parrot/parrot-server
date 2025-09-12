@@ -1,5 +1,6 @@
 package com.fx.chat.config.web
 
+import com.fx.global.filter.ReactiveAuthorizationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.config.WebFluxConfigurer
@@ -7,8 +8,9 @@ import org.springframework.web.reactive.result.method.annotation.ArgumentResolve
 import org.springframework.web.server.WebFilter
 
 @Configuration
-class WebConfig(
-    private val reactiveAuthenticatedUserResolver: ReactiveAuthenticatedUserResolver
+class ReactiveWebConfig(
+    private val reactiveAuthenticatedUserResolver: ReactiveAuthenticatedUserResolver,
+    private val reactiveAuthorizationFilter: ReactiveAuthorizationFilter
 ) : WebFluxConfigurer {
 
     override fun configureArgumentResolvers(configurer: ArgumentResolverConfigurer) {
@@ -16,10 +18,7 @@ class WebConfig(
     }
 
     @Bean
-    fun reactiveAuthorizationFilter(
-        reactiveAuthorizationInterceptor: ReactiveAuthorizationInterceptor
-    ): WebFilter {
-        return reactiveAuthorizationInterceptor
-    }
+    fun authorizationWebFilter(): WebFilter =
+        reactiveAuthorizationFilter
 
 }

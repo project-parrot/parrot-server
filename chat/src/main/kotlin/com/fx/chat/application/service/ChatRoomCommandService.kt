@@ -3,6 +3,7 @@ package com.fx.chat.application.service
 import com.fx.chat.application.port.`in`.ChatRoomCommandUseCase
 import com.fx.chat.application.port.out.ChatRoomPersistencePort
 import com.fx.chat.application.port.out.ChatRoomUserPersistencePort
+import com.fx.chat.application.port.out.web.UserWebPort
 import com.fx.chat.domain.ChatRoom
 import com.fx.chat.domain.ChatRoomType
 import com.fx.chat.domain.ChatRoomUser
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service
 class ChatRoomCommandService(
     private val chatRoomPersistencePort: ChatRoomPersistencePort,
     private val chatRoomUserPersistencePort: ChatRoomUserPersistencePort,
-//    private val userWebPort: UserWebPort
+    private val userWebPort: UserWebPort
 ) : ChatRoomCommandUseCase{
 
     override suspend fun createOrEnterChatRoom(
@@ -41,10 +42,10 @@ class ChatRoomCommandService(
         }
 
         // 4. 유효 사용자 체크
-//        val invalidUserExists = userWebPort.existsUser(targetUserIds)
-//        if (invalidUserExists) {
-//            throw RuntimeException("존재하지 않는 사용자가 포함되어 있습니다.")
-//        }
+        val usersExist = userWebPort.existsUsers(targetUserIds)
+        if (!usersExist) {
+            throw RuntimeException("존재하지 않는 사용자가 포함되어 있습니다.")
+        }
 
         // 5. 채팅방 저장
         val newRoom =

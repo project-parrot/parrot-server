@@ -12,4 +12,6 @@ interface UserPersistencePort {
 
     fun findByOauthId(oauthId: String): User?
 
+    fun findAllById(userIds: List<Long>): List<Long>
+
 }
