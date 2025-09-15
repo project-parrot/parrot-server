@@ -7,4 +7,6 @@ interface ChatRoomUserPersistencePort {
 
     fun saveChatRoomUsers(chatRoomUsers: List<ChatRoomUser>): Mono<List<ChatRoomUser>>
 
+    fun findByChatRoomIdAndUserId(chatRoomId: String, userId: Long): Mono<ChatRoomUser>
+
 }

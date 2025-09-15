@@ -17,4 +17,7 @@ class ChatRoomUserPersistenceAdapter(
             .map { it.toDomain() }
             .collectList()
 
+    override fun findByChatRoomIdAndUserId(chatRoomId: String, userId: Long): Mono<ChatRoomUser> =
+        chatRoomUserMongoRepository.findByChatRoomIdAndUserId(chatRoomId, userId).map { it.toDomain() }
+
 }
