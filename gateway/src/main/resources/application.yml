@@ -38,6 +38,15 @@ spring:
               filters:
                 - RewritePath=/chat-service/(?<segment>.*), /$\{segment}
 
+            - id: chat-service-ws
+              uri: lb://chat-service
+              predicates:
+                - Path=/chat-service/api/ws/**
+              filters:
+                - RewritePath=/chat-service/api/ws/(?<segment>.*), /api/ws/$\{segment}
+              metadata:
+                websocket: true
+
             - id: post-service
               uri: lb://post-service
               predicates:

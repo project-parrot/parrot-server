@@ -42,6 +42,9 @@ dependencies {
     // Reactive Mongo
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 
+    // Reactive Redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")

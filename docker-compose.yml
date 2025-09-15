@@ -137,6 +137,30 @@ services:
       - /home/ubuntu/parrot/images:/parrot/images
     #  - /home/ubuntu/parrot/logs/post-service:/logs
 
+  chat-service:
+    build:
+      context: .
+      dockerfile: ./chat/Dockerfile
+    image: ${DOCKER_CHAT_IMAGE_NAME}
+    container_name: chat-service
+    ports:
+      - 0:${CHAT_PORT}
+    networks:
+      - parrot-network
+    environment:
+      - CHAT_PORT
+      - MONGO_DATABASE
+      - MONGO_URI
+      - REDIS_HOST
+      - REDIS_PORT
+      - REDIS_PASSWORD
+      - USER_SERVICE_URL
+      - EUREKA_DEFAULT_ZONE
+      - GATEWAY_HOST
+      - GATEWAY_PORT
+      - SWAGGER_HOST
+      - KAFKA_BOOTSTRAP_URL
+
 networks:
   parrot-network:
     external: true
